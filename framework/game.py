@@ -51,13 +51,17 @@ class Game:
 
         self.__prepare_game()
 
+    def info(self, msg):
+        if self.log:
+            self.logger.info(msg)
+
     def __draw_card(self):
         if self.deck_size is not 0:
             self.deck_size -= 1
-            if self.deck_size is 0:
+            if self.log and self.deck_size is 0:
                 msg1 = 'Last card has been drawn,'
                 msg2 = 'each player gets one more turn'
-                self.__info('{0} {1}'.format(msg1, msg2))
+                self.info('{0} {1}'.format(msg1, msg2))
             return self.deck.pop()
         else:
             return None
@@ -86,16 +90,17 @@ class Game:
 
         self.hands_history.append(self.hands)
 
-        self.__info('Preparing game... Done.\n')
-        self.__info('Hands have been dealt as follows:')
+        self.info('Preparing game... Done.\n')
+        self.info('Hands have been dealt as follows:')
 
-        for hand in self.hands:
-            self.__info('{0}: {1}'.format(
-                self.players[hand.player_number].name,
-                hand)
-            )
+        if self.log:
+            for hand in self.hands:
+                self.info('{0}: {1}'.format(
+                    self.players[hand.player_number].name,
+                    hand)
+                )
 
-        self.__info('\nBeginning game...\n')
+        self.info('\nBeginning game...\n')
 
     @staticmethod
     def __get_card_by_position(hand, hand_position):
@@ -103,10 +108,6 @@ class Game:
             lambda c: c.hand_position == hand_position,
             hand
         )
-
-    def __info(self, msg):
-        if self.log:
-            self.logger.info(msg)
 
     def __prev_player_number(self):
         if self.player_turn is 0:
@@ -157,7 +158,7 @@ class Game:
         if self.log:
             player = self.players[number]
             hand = self.__get_player_hand_by_number(number).current_knowledge()
-            self.__info('Current knowledge of {0}: {1}'.format(player, hand))
+            self.info('Current knowledge of {0}: {1}'.format(player, hand))
 
     def make_move(self):
         assert(self.lives != 0)
@@ -190,7 +191,7 @@ class Game:
                 self.board_state[card.real_suit] += 1
                 self.score += 1
                 self.played.append(card)
-                self.__info(
+                self.info(
                     '{0} correctly played {1}'.format(
                         self.players[self.player_turn],
                         card
@@ -201,7 +202,7 @@ class Game:
                 card.misplayed = True
                 self.lives -= 1
                 self.discarded.append(card)
-                self.__info(
+                self.info(
                     '{0} misplayed {1}, {2} lives remaining'.format(
                         self.players[self.player_turn],
                         card,
@@ -222,7 +223,7 @@ class Game:
 
             self.discarded.append(card)
             self.hints = min(self.hints + 1, MAX_HINTS)
-            self.__info(
+            self.info(
                 '{0} discarded {1}, the number of hints is currently {2}'.format(
                     self.players[self.player_turn],
                     card,
@@ -243,7 +244,7 @@ class Game:
                 pretty_print = hint.name.capitalize()
 
             self.hints -= 1
-            self.__info(
+            self.info(
                 '{0} hinted {1} to {2}, {3} hints remaining'.format(
                     self.players[self.player_turn],
                     pretty_print,
@@ -269,12 +270,12 @@ class Game:
 
         if self.game_over:
             if self.score is MAX_SCORE:
-                self.__info('\nPerfect victory!')
+                self.info('\nPerfect victory!')
             elif self.game_ended_by_timeout:
-                self.__info(
+                self.info(
                     '\nTimed out! Total points: {0}'.format(self.score))
             else:
-                self.__info(
+                self.info(
                     '\nGame over! Total points: {0}'.format(self.score))
 
         else:

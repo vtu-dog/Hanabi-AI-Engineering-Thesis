@@ -33,7 +33,13 @@ class Card:
         self.played_on_turn = None
 
     def __eq__(self, other):
-        pass
+        if self.real_rank is None or self.real_suit is None:
+            return False
+
+        if other.real_rank is None or other.real_suit is None:
+            return False
+
+        return self.real_rank is other.real_rank and self.real_suit is other.real_suit
 
     def __str__(self):
         if self.real_rank is None and self.real_suit is None:
