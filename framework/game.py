@@ -102,13 +102,6 @@ class Game:
 
         self.info('\nBeginning game...\n')
 
-    @staticmethod
-    def __get_card_by_position(hand, hand_position):
-        return first_occurrence(
-            lambda c: c.hand_position == hand_position,
-            hand
-        )
-
     def __prev_player_number(self):
         if self.player_turn is 0:
             return self.number_of_players - 1
@@ -179,10 +172,7 @@ class Game:
 
         if choice is Choice.PLAY:
             hand_position = move.details
-            card = Game.__get_card_by_position(
-                self.current_player_hand,
-                hand_position
-            )
+            card = self.current_player_hand[hand_position]
 
             card.played_on_turn = self.current_turn
             card.hand_position = None
@@ -212,10 +202,7 @@ class Game:
 
         if choice is Choice.DISCARD:
             hand_position = move.details
-            card = Game.__get_card_by_position(
-                self.current_player_hand,
-                hand_position
-            )
+            card = self.current_player_hand[hand_position]
 
             card.played_on_turn = self.current_turn
             card.discarded = True
