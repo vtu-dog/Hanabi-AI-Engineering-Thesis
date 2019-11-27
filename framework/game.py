@@ -225,16 +225,11 @@ class Game:
             for card in hand:
                 card.reveal_info_from_hint(hint)
 
-            if type(hint) is Rank:
-                pretty_print = hint.value
-            else:
-                pretty_print = hint.name.capitalize()
-
             self.hints -= 1
             self.info(
                 '{0} hinted {1} to {2}, {3} hints remaining'.format(
                     self.players[self.player_turn],
-                    pretty_print,
+                    hint.pretty_print(),
                     self.players[player_number],
                     self.hints
                 )

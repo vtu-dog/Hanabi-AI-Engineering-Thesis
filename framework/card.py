@@ -73,7 +73,10 @@ class Card:
             self.revealed_suit = self.real_suit
 
     def is_playable(self, board_state):
-        if self.real_suit is None or self.real_rank is None:
-            return False
+        if self.revealed_suit is None or self.revealed_rank is None:
+            if self.real_suit is None or self.real_rank is None:
+                return False
+            else:
+                return board_state[self.real_suit] + 1 == self.real_rank.value
         else:
-            return board_state[self.real_suit] + 1 == self.real_rank.value
+            return board_state[self.revealed_suit] + 1 == self.revealed_rank.value
