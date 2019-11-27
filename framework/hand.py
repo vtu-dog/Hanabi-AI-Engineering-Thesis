@@ -40,3 +40,11 @@ class Hand:
     def replace(self, card, hand_position):
         card.hand_position = hand_position
         self.cards[hand_position] = card
+
+    def playable_cards(self, board_state):
+        res = []
+        for card in self:
+            if card.is_playable(board_state.board_state):
+                res.append(card)
+
+        return res

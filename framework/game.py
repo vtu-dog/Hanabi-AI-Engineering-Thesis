@@ -273,7 +273,7 @@ class Game:
                 self.info('\nPerfect victory!')
             elif self.game_ended_by_timeout:
                 self.info(
-                    '\nTimed out! Total points: {0}'.format(self.score))
+                    '\nTime\'s up! Total points: {0}'.format(self.score))
             else:
                 self.info(
                     '\nGame over! Total points: {0}'.format(self.score))

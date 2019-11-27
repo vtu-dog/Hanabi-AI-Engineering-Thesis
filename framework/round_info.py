@@ -24,23 +24,5 @@ class RoundInfo:
             card.hide_info()
         return temp_hand
 
-    def playable_cards(self, player_number, cheating=False):
-        if cheating:
-            hand = self.__full_info_player_hand
-        else:
-            if player_number == self.player_turn:
-                hand = self.player_hand
-            else:
-                hand = first_occurrence(
-                    lambda p: p.player_number == player_number,
-                    self.other_players_hands
-                )
-
-        assert(hand is not None)
-
-        res = []
-        for card in hand:
-            if card.is_playable(self.board_state):
-                res.append(card)
-
-        return res
+    def true_hand_info(self):
+        return self.__full_info_player_hand

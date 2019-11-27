@@ -10,9 +10,7 @@ class Cheater(BasePlayer):
         self.name = 'Cheater'
 
     def play(self, round_info):
-        possible_plays = round_info.playable_cards(
-            self.player_number, cheating=True
-        )
+        possible_plays = round_info.true_hand_info().playable_cards(round_info)
 
         if len(possible_plays) == 0:
             return ChoiceDetails(
