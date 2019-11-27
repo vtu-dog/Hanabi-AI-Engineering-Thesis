@@ -11,6 +11,9 @@ class Rank(Enum):
     FOUR = 4
     FIVE = 5
 
+    def __str__(self):
+        return self.value
+
 
 class Suit(Enum):
     BLUE = auto()
@@ -18,6 +21,9 @@ class Suit(Enum):
     RED = auto()
     WHITE = auto()
     YELLOW = auto()
+
+    def __str__(self):
+        return self.name.capitalize()
 
 
 class Card:

@@ -229,7 +229,7 @@ class Game:
             self.info(
                 '{0} hinted {1} to {2}, {3} hints remaining'.format(
                     self.players[self.player_turn],
-                    hint.pretty_print(),
+                    hint,
                     self.players[player_number],
                     self.hints
                 )
