@@ -17,6 +17,7 @@ class RoundInfo:
         self.board_state = round.board_state
         self.played = round.played
         self.discarded = round.discarded
+        self.history = round.history
         self.number_of_players = round.number_of_players
         self.current_deck_size = len(round.deck)
 

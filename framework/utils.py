@@ -30,6 +30,7 @@ class Choice(Enum):
 
 ChoiceDetails = namedtuple('ChoiceDetails', ['choice', 'details'])
 HintDetails = namedtuple('HintDetails', ['player_number', 'hint'])
+PlayDetails = namedtuple('PlayDetails', ['choice', 'details'])
 
 
 def first_occurrence(fun, lst):

@@ -36,6 +36,7 @@ class Game:
 
         self.played = []
         self.discarded = []
+        self.history = []
 
         self.hands = []
         self.hands_history = []
@@ -162,6 +163,7 @@ class Game:
             card.hand_position = None
 
             if card.is_playable(self):
+                self.history.append(PlayDetails(choice, card))
                 self.board_state[card.real_suit] += 1
                 self.score += 1
                 self.played.append(card)
@@ -174,6 +176,7 @@ class Game:
 
             else:
                 card.misplayed = True
+                self.history.append(PlayDetails(choice, card))
                 self.lives -= 1
                 self.discarded.append(card)
                 self.info(
@@ -192,6 +195,7 @@ class Game:
             card.discarded = True
             card.hand_position = None
 
+            self.history.append(PlayDetails(choice, card))
             self.discarded.append(card)
             self.hints = min(self.hints + 1, MAX_HINTS)
             self.info(
@@ -209,6 +213,7 @@ class Game:
             for card in hand:
                 card.reveal_info_from_hint(hint)
 
+            self.history.append(PlayDetails(choice, move.details))
             self.hints -= 1
             self.info(
                 '{0} hinted {1} to {2}, {3} hints remaining'.format(
