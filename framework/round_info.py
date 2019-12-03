@@ -17,6 +17,7 @@ class RoundInfo:
         self.board_state = round.board_state
         self.played = round.played
         self.discarded = round.discarded
+        self.current_deck_size = len(round.deck)
 
     def hide_hand(self, hand):
         temp_hand = deepcopy(hand)
