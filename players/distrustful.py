@@ -12,7 +12,7 @@ class Distrustful(BasePlayer):
     def check_for_play(self, round_info, player_number):
         best_card = 0
         for card in round_info.player_hand:
-            if card.is_playable(round_info.board_state):
+            if card.is_playable(round_info):
                 if card.revealed_rank is 1 or card.reavealed_rank > best_card:
                     best_card = card.hand_position
 
@@ -34,7 +34,7 @@ class Distrustful(BasePlayer):
             if (card.revealed_rank is not None and card.revealed_rank < lowest_rank) or \
                (card.revealed_suit is not None and round_info.board_state[card.revealed_suit] is 5) or \
                (card.revealed_suit is not None and card.revealed_rank is not None and
-               round_info.board_state[card.revealed_suit] >= card.revealed_rank):
+                    round_info.board_state[card.revealed_suit] >= card.revealed_rank):
                 return ChoiceDetails(
                     Choice.DISCARD,
                     card.hand_position

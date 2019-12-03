@@ -41,10 +41,10 @@ class Hand:
         card.hand_position = hand_position
         self.cards[hand_position] = card
 
-    def playable_cards(self, board_state):
+    def playable_cards(self, round_info):
         res = []
         for card in self:
-            if card.is_playable(board_state.board_state):
+            if card.is_playable(round_info):
                 res.append(card)
 
         return res

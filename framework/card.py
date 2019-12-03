@@ -78,7 +78,8 @@ class Card:
         if self.real_suit == hint:
             self.revealed_suit = self.real_suit
 
-    def is_playable(self, board_state):
+    def is_playable(self, round_info):
+        board_state = round_info.board_state
         if self.revealed_suit is None or self.revealed_rank is None:
             if self.real_suit is None or self.real_rank is None:
                 return False

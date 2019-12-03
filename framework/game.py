@@ -102,24 +102,6 @@ class Game:
 
         self.info('\nBeginning game...\n')
 
-    def __prev_player_number(self):
-        if self.player_turn is 0:
-            return self.number_of_players - 1
-        else:
-            return self.player_turn - 1
-
-    def __next_player_number(self):
-        if self.number_of_players - 1 is self.player_turn:
-            return 0
-        else:
-            return self.player_turn + 1
-
-    def __get_player_hand_by_number(self, number):
-        return first_occurrence(
-            lambda p: p.player_number == number,
-            self.other_players_hands
-        )
-
     def __is_inbounds(self, lst, index):
         return 0 <= index < len(lst)
 
@@ -139,7 +121,8 @@ class Game:
                 player_number, hint = move.details
                 assert(type(hint) is Rank or type(hint) is Suit)
 
-                target_player_hand = self.__get_player_hand_by_number(
+                target_player_hand = get_player_hand_by_number(
+                    self,
                     player_number
                 )
 
@@ -150,7 +133,7 @@ class Game:
     def __print_player_knowledge(self, number):
         if self.log:
             player = self.players[number]
-            hand = self.__get_player_hand_by_number(number).current_knowledge()
+            hand = get_player_hand_by_number(self, number).current_knowledge()
             self.info('Current knowledge of {0}: {1}'.format(player, hand))
 
     def make_move(self):
@@ -177,7 +160,7 @@ class Game:
             card.played_on_turn = self.current_turn
             card.hand_position = None
 
-            if card.is_playable(self.board_state):
+            if card.is_playable(self):
                 self.board_state[card.real_suit] += 1
                 self.score += 1
                 self.played.append(card)
@@ -221,7 +204,7 @@ class Game:
         if choice is Choice.HINT:
             player_number, hint = move.details
 
-            hand = self.__get_player_hand_by_number(player_number)
+            hand = get_player_hand_by_number(self, player_number)
             for card in hand:
                 card.reveal_info_from_hint(hint)
 
@@ -243,7 +226,7 @@ class Game:
             if new_card is None:
                 self.current_player_hand.discard(hand_position)
                 if self.game_over_timer is None:
-                    self.game_over_timer = self.__prev_player_number()
+                    self.game_over_timer = prev_player_number(self)
                 elif self.game_over_timer is self.player_turn:
                     self.game_over = True
                     self.game_ended_by_timeout = True
@@ -255,7 +238,7 @@ class Game:
                 self.info('\nPerfect victory!')
             elif self.game_ended_by_timeout:
                 self.info(
-                    '\nTime\'s up! Total points: {0}'.format(self.score))
+                    '\nNo cards left in the deck! Total points: {0}'.format(self.score))
             else:
                 self.info(
                     '\nGame over! Total points: {0}'.format(self.score))
@@ -269,7 +252,7 @@ class Game:
             if choice is Choice.HINT:
                 self.__print_player_knowledge(player_number)
 
-        self.player_turn = self.__next_player_number()
+        self.player_turn = next_player_number(self)
 
         if self.player_turn is 0:
             self.current_turn += 1
