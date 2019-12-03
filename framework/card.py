@@ -37,6 +37,7 @@ class Card:
         self.misplayed = False
         self.discarded = False
         self.played_on_turn = None
+        self.drawn_on_turn = None
 
     def __eq__(self, other):
         if self.real_rank is None or self.real_suit is None:

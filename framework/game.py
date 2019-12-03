@@ -85,6 +85,7 @@ class Game:
             for hand_position in range(hand_size):
                 card = self.__draw_card()
                 card.hand_position = hand_position
+                card.drawn_on_turn = self.current_turn
                 player_hand.add(card)
             self.hands.append(player_hand)
 
