@@ -102,10 +102,11 @@ def list_remaining_playable_cards(round_info):
     remaining = {}
     for suit in Suit:
         remaining[suit] = {}
-        remaining[suit][1] = 3
-        remaining[suit][5] = 1
-        for rank in range(2,5):
-            remaining[suit][rank] = 2
+        remaining[suit][Rank.ONE] = 3
+        remaining[suit][Rank.TWO] = 2
+        remaining[suit][Rank.THREE] = 2
+        remaining[suit][Rank.FOUR] = 2
+        remaining[suit][Rank.FIVE] = 1
 
     for card in round_info.discarded:
         remaining[card.suit][card.rank] -= 1
