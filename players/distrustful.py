@@ -72,8 +72,8 @@ class Distrustful(BasePlayer):
                                 remaining[card.revealed_suit][rank] is 1 and \
                                 known[card.revealed_suit][rank] - discarded[card.revealed_suit][rank] is 0:
                             add = False
-                        if add:
-                            unmarked.append(card)
+                    if add:
+                        unmarked.append(card)
 
                 elif card.revealed_suit is None:
                     add = True
