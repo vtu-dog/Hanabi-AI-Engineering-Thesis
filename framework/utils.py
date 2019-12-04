@@ -3,7 +3,7 @@
 from collections import namedtuple
 from enum import Enum, auto
 
-from .card import Rank
+from .card import Rank, Suit
 
 
 MIN_PLAYERS = 2
@@ -37,18 +37,18 @@ def first_occurrence(fun, lst):
     return next(iter(list(filter(fun, lst))), None)
 
 
-def prev_player_number(round_info):
-    if round_info.player_turn is 0:
+def prev_player_number(round_info, player_number):
+    if player_number is 0:
         return round_info.number_of_players - 1
     else:
-        return round_info.player_turn - 1
+        return player_number - 1
 
 
-def next_player_number(round_info):
-    if round_info.number_of_players - 1 is round_info.player_turn:
+def next_player_number(round_info, player_number):
+    if round_info.number_of_players - 1 is player_number:
         return 0
     else:
-        return round_info.player_turn + 1
+        return player_number + 1
 
 
 def get_player_hand_by_number(round_info, number):
@@ -58,8 +58,71 @@ def get_player_hand_by_number(round_info, number):
     )
 
 
-def next_player_hand(round_info):
+def next_player_hand(round_info, player_number):
     return get_player_hand_by_number(
         round_info,
-        next_player_number(round_info)
+        next_player_number(round_info, player_number)
     )
+
+
+def list_all_known_cards(round_info):
+    known = {}
+    unknown_rank = {}
+    unknown_suit = {}
+    for suit in Suit:
+        known[suit] = {}
+        unknown_rank[suit] = 0
+        for rank in Rank:
+            unknown_suit[rank] = 0
+            known[suit][rank] = 0
+
+    player_hand = round_info.player_hand
+    for card in player_hand:
+        if card.revealed_rank is not None and card.revealed_suit is not None:
+            known[card.revealed_suit][card.revealed_rank] += 1
+        elif card.revealed_rank is not None:
+            unknown_suit[card.revealed_rank] += 1
+        elif card.revealed_suit is not None:
+            unknown_rank[card.revealed_suit] += 1
+
+    for player_hand in round_info.other_players_hands:
+        for card in player_hand:
+            known[card.suit][card.rank] += 1
+
+    for card in round_info.discarded:
+        known[card.suit][card.rank] += 1
+
+    for card in round_info.played:
+        known[card.suit][card.rank] += 1
+
+    return known, unknown_suit, unknown_rank
+
+
+def list_remaining_playable_cards(round_info):
+    remaining = {}
+    for suit in Suit:
+        remaining[suit] = {}
+        remaining[suit][1] = 3
+        remaining[suit][5] = 1
+        for rank in range(2,5):
+            remaining[suit][rank] = 2
+
+    for card in round_info.discarded:
+        remaining[card.suit][card.rank] -= 1
+    for card in round_info.played:
+        remaining[card.suit][card.rank] -= 1
+
+    return remaining
+
+
+def list_discarded_cards(round_info):
+    discarded = {}
+    for suit in Suit:
+        discarded[suit] = {}
+        for rank in Rank:
+            discarded[suit][rank] = 0
+
+    for card in round_info.discarded:
+        discarded[card.suit][card.rank] += 1
+
+    return discarded
