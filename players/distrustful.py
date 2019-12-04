@@ -6,7 +6,7 @@ from framework import BasePlayer, Choice, ChoiceDetails, utils, HintDetails, Car
 class Distrustful(BasePlayer):
     def __init__(self, *args):
         super(Distrustful, self).__init__(*args)
-        self.name = 'Untrustful'
+        self.name = 'Distrustful'
 
     @staticmethod
     def check_for_obvious_play(self, round_info, player_number):
@@ -16,10 +16,11 @@ class Distrustful(BasePlayer):
             player_hand = utils.get_player_hand_by_number(round_info, player_number)
 
         best_card = 0
+        best_card_rank = 6
         for card in player_hand:
-            if card.is_playable(round_info):
-                if card.revealed_rank is 1 or card.reavealed_rank > best_card:
-                    best_card = card.hand_position
+            if card.is_playable(round_info) and card.revealed_rank < best_card_rank:
+                best_card = card.hand_position
+                best_card_rank = card.revealed_rank
 
         if best_card > 0:
             return ChoiceDetails(
@@ -115,7 +116,17 @@ class Distrustful(BasePlayer):
         return False
 
     @staticmethod
-    def check_for_good_tip(self, round_info):
+    def check_for_good_tip(self, round_info, player_number):
+        if round_info.hints <= 1:
+            return False
+
+        original_player_number = player_number
+        player_number = utils.next_player_number(round_info, player_number)
+        while player_number is not original_player_number:
+            player_hand = utils.get_player_hand_by_number(round_info, player_number)
+
+            player_number = utils.next_player_number(round_info, player_number)
+
         return False
 
     def play(self, round_info):
