@@ -34,7 +34,7 @@ PlayDetails = namedtuple('PlayDetails', ['choice', 'details'])
 
 
 def first_occurrence(fun, lst):
-    return next(iter(list(filter(fun, lst))), None)
+    return next(iter(list(filter(fun, lst))))
 
 
 def prev_player_number(round_info, player_number):

@@ -234,13 +234,16 @@ class Game:
                 self.current_player_hand.discard(hand_position)
                 if self.game_over_timer is None:
                     self.game_over_timer = prev_player_number(
-                        self, self.player_turn)
-                elif self.game_over_timer is self.player_turn:
-                    self.game_over = True
-                    self.game_ended_by_timeout = True
+                        self,
+                        self.player_turn
+                    )
             else:
                 new_card.drawn_on_turn = self.current_turn
                 self.current_player_hand.replace(new_card, hand_position)
+
+        if self.game_over_timer is self.player_turn:
+            self.game_over = True
+            self.game_ended_by_timeout = True
 
         if self.game_over:
             if self.score is MAX_SCORE:
