@@ -229,7 +229,6 @@ class Game:
 
         if choice is not Choice.HINT:
             new_card = self.__draw_card()
-            new_card.drawn_on_turn = self.current_turn
 
             if new_card is None:
                 self.current_player_hand.discard(hand_position)
@@ -240,6 +239,7 @@ class Game:
                     self.game_over = True
                     self.game_ended_by_timeout = True
             else:
+                new_card.drawn_on_turn = self.current_turn
                 self.current_player_hand.replace(new_card, hand_position)
 
         if self.game_over:
