@@ -229,10 +229,13 @@ class Game:
 
         if choice is not Choice.HINT:
             new_card = self.__draw_card()
+            new_card.drawn_on_turn = self.current_turn
+
             if new_card is None:
                 self.current_player_hand.discard(hand_position)
                 if self.game_over_timer is None:
-                    self.game_over_timer = prev_player_number(self, self.player_turn)
+                    self.game_over_timer = prev_player_number(
+                        self, self.player_turn)
                 elif self.game_over_timer is self.player_turn:
                     self.game_over = True
                     self.game_ended_by_timeout = True
