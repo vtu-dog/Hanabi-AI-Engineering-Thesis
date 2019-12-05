@@ -232,7 +232,7 @@ class Game:
             if new_card is None:
                 self.current_player_hand.discard(hand_position)
                 if self.game_over_timer is None:
-                    self.game_over_timer = prev_player_number(self)
+                    self.game_over_timer = prev_player_number(self, self.player_turn)
                 elif self.game_over_timer is self.player_turn:
                     self.game_over = True
                     self.game_ended_by_timeout = True
@@ -258,7 +258,7 @@ class Game:
             if choice is Choice.HINT:
                 self.__print_player_knowledge(player_number)
 
-        self.player_turn = next_player_number(self)
+        self.player_turn = next_player_number(self, self.player_turn)
 
         if self.player_turn is 0:
             self.current_turn += 1

@@ -87,13 +87,13 @@ def list_all_known_cards(round_info):
 
     for player_hand in round_info.other_players_hands:
         for card in player_hand:
-            known[card.suit][card.rank] += 1
+            known[card.real_suit][card.real_rank] += 1
 
     for card in round_info.discarded:
-        known[card.suit][card.rank] += 1
+        known[card.real_suit][card.real_rank] += 1
 
     for card in round_info.played:
-        known[card.suit][card.rank] += 1
+        known[card.real_suit][card.real_rank] += 1
 
     return known, unknown_suit, unknown_rank
 
@@ -109,9 +109,9 @@ def list_remaining_playable_cards(round_info):
         remaining[suit][Rank.FIVE] = 1
 
     for card in round_info.discarded:
-        remaining[card.suit][card.rank] -= 1
+        remaining[card.real_suit][card.real_rank] -= 1
     for card in round_info.played:
-        remaining[card.suit][card.rank] -= 1
+        remaining[card.real_suit][card.real_rank] -= 1
 
     return remaining
 
@@ -124,6 +124,6 @@ def list_discarded_cards(round_info):
             discarded[suit][rank] = 0
 
     for card in round_info.discarded:
-        discarded[card.suit][card.rank] += 1
+        discarded[card.real_suit][card.real_rank] += 1
 
     return discarded
