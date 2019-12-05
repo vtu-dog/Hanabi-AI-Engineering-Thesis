@@ -8,7 +8,7 @@ class RoundInfo:
     def __init__(self, round):
         self.__full_info_player_hand = deepcopy(round.current_player_hand)
         self.player_hand = self.hide_hand(round.current_player_hand)
-        self.other_players_hands = round.other_players_hands
+        self.other_players_hands = deepcopy(round.other_players_hands)
         self.current_turn = round.current_turn
         self.player_turn = round.player_turn
         self.hints = round.hints

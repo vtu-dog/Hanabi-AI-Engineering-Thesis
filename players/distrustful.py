@@ -52,7 +52,6 @@ class Distrustful(BasePlayer):
             player_hand = round_info.player_hand
         else:
             player_hand = utils.get_player_hand_by_number(round_info, player_number)
-
         unmarked = []
         for card in player_hand:
             if card.revealed_rank is None and card.revealed_suit is None:
@@ -119,7 +118,7 @@ class Distrustful(BasePlayer):
                 )
         return False
 
-    def check_for_play_tip(self, round_info, player_number, hint_pass_score=2, double_hint_multiplier=1.4,
+    def check_for_play_tip(self, round_info, player_number, hint_pass_score=2, double_hint_multiplier=2,
                            distance_to_playable_multiplier=0.95, distance_to_player_multiplier=0.95):
         if round_info.hints <= 1:
             return False
@@ -178,7 +177,7 @@ class Distrustful(BasePlayer):
             if player_distance < 0:
                 player_distance += round_info.number_of_players
             card_potential = \
-                pow(distance_to_playable_multiplier, round_info.board_state[card.real_suit] - card.real_rank.value - 1) *\
+                pow(distance_to_playable_multiplier, card.real_rank.value-round_info.board_state[card.real_suit]-1) *\
                 pow(distance_to_player_multiplier, player_distance)
             if card.revealed_suit is not None and round_info.board_state[card.real_suit] - card.real_rank.value is 1:
                 card_potential *= double_hint_multiplier
@@ -232,7 +231,7 @@ class Distrustful(BasePlayer):
                         potential_discardable_suits[player_number][card.real_suit].append(card)
                     if card.revealed_rank is None:
                         potential_discardable_ranks[player_number][card.real_rank].append(card)
-            player_number = utils.next_player_number(round_info, original_player_number)
+            player_number = utils.next_player_number(round_info, player_number)
 
         max_player_number = 0
         max_potential = 0
@@ -281,7 +280,7 @@ class Distrustful(BasePlayer):
         return discard_tip
 
     def check_for_mediocre_tip(self, round_info, player_number):
-        return self.check_for_play_tip(round_info, player_number, 1.4, 2)
+        return self.check_for_play_tip(round_info, player_number, 1, 2)
 
     def play(self, round_info):
         if round_info.hints is utils.MAX_HINTS:
@@ -295,8 +294,6 @@ class Distrustful(BasePlayer):
                             self.check_for_good_tip, self.check_for_guess_discard]
 
         for action in action_order:
-            print("x")
             decision = functools.partial(action, round_info, round_info.player_turn)()
-            print(decision)
             if decision is not False:
                 return decision
