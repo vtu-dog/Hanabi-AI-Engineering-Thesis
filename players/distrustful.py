@@ -15,14 +15,14 @@ class Distrustful(BasePlayer):
         else:
             player_hand = utils.get_player_hand_by_number(round_info, player_number)
 
-        best_card = 0
+        best_card = -1
         best_card_rank = 6
         for card in player_hand:
             if card.is_playable(round_info) and card.revealed_rank.value < best_card_rank:
                 best_card = card.hand_position
                 best_card_rank = card.revealed_rank.value
 
-        if best_card > 0:
+        if best_card >= 0:
             return ChoiceDetails(
                 Choice.PLAY,
                 best_card
@@ -118,8 +118,8 @@ class Distrustful(BasePlayer):
                 )
         return False
 
-    def check_for_play_tip(self, round_info, player_number, hint_pass_score=2, double_hint_multiplier=2,
-                           distance_to_playable_multiplier=0.95, distance_to_player_multiplier=0.95):
+    def check_for_play_tip(self, round_info, player_number, hint_pass_score=2, double_hint_multiplier=2.3,
+                           distance_to_playable_multiplier=0.6, distance_to_player_multiplier=0.99):
         if round_info.hints <= 1:
             return False
 
@@ -179,15 +179,18 @@ class Distrustful(BasePlayer):
             card_potential = \
                 pow(distance_to_playable_multiplier, card.real_rank.value-round_info.board_state[card.real_suit]-1) *\
                 pow(distance_to_player_multiplier, player_distance)
-            if card.revealed_suit is not None and round_info.board_state[card.real_suit] - card.real_rank.value is 1:
+            if (card.revealed_suit is not None or card.revealed_rank is not None) and \
+                    card.real_rank.value - round_info.board_state[card.real_suit] is 1:
                 card_potential *= double_hint_multiplier
             return card_potential
 
         for player in potential_playable_ranks:
+            self.info('{0}'.format(player))
             for rank in potential_playable_ranks[player]:
                 potential = 0
                 for card in potential_playable_ranks[player][rank]:
                     potential += check_card_potential(card, player)
+                self.info('{0} {1}'.format(rank, potential))
                 if potential > max_potential:
                     max_player_number = player
                     max_potential = potential
@@ -197,6 +200,7 @@ class Distrustful(BasePlayer):
                 potential = 0
                 for card in potential_playable_suits[player][suit]:
                     potential += check_card_potential(card, player)
+                self.info('{0} {1}'.format(suit, potential))
                 if potential > max_potential:
                     max_player_number = player
                     max_potential = potential
@@ -207,10 +211,9 @@ class Distrustful(BasePlayer):
                 Choice.HINT,
                 HintDetails(max_player_number, max_hint)
             )
-
         return False
 
-    def check_for_discard_tip(self, round_info, player_number, hint_pass_score=2.5, distance_to_player_multiplier=0.95):
+    def check_for_discard_tip(self, round_info, player_number, hint_pass_score=2.5, distance_to_player_multiplier=0.99):
         original_player_number = player_number
         player_number = utils.next_player_number(round_info, original_player_number)
 
@@ -282,6 +285,9 @@ class Distrustful(BasePlayer):
     def check_for_mediocre_tip(self, round_info, player_number):
         return self.check_for_play_tip(round_info, player_number, 1, 2)
 
+    def info(self, msg):
+        self.logger.info(msg)
+
     def play(self, round_info):
         if round_info.hints is utils.MAX_HINTS:
             action_order = [self.check_for_necessary_tip, self.check_for_obvious_play, self.check_for_good_tip,
@@ -294,6 +300,7 @@ class Distrustful(BasePlayer):
                             self.check_for_good_tip, self.check_for_guess_discard]
 
         for action in action_order:
+            self.info('{0}'.format(action))
             decision = functools.partial(action, round_info, round_info.player_turn)()
             if decision is not False:
                 return decision
