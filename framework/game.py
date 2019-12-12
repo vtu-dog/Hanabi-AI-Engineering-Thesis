@@ -138,9 +138,37 @@ class Game:
             hand = get_player_hand_by_number(self, number).current_knowledge()
             self.info('Current knowledge of {0}: {1}'.format(player, hand))
 
+    def __print_current_hands(self):
+        if self.log:
+            self.info('Current player hands and their knowledge:')
+            for hand in self.hands:
+                self.info('{0}: {1}'.format(
+                    self.players[hand.player_number].name,
+                    hand)
+                )
+                self.info('{0}: {1}'.format(
+                    self.players[hand.player_number].name,
+                    hand.current_knowledge())
+                )
+
+    def __print_current_board(self):
+        if self.log:
+            self.info('Current board situation:')
+            for suit in self.board_state:
+                self.info('{0}: {1}'.format(
+                    suit,
+                    self.board_state[suit])
+                )
+
     def make_move(self):
         assert(self.lives != 0)
         assert(self.hints >= 0)
+
+        if self.log and self.player_turn == 0:
+            self.info('')
+            self.__print_current_hands()
+            self.__print_current_board()
+            self.info('')
 
         player_hands = deepcopy(self.hands)
         self.current_player_hand = player_hands[self.player_turn]

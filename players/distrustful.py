@@ -3,6 +3,8 @@
 from framework import BasePlayer, Choice, ChoiceDetails, utils, HintDetails, Card
 import functools
 
+debug = False
+
 
 class Distrustful(BasePlayer):
     def __init__(self, *args):
@@ -15,10 +17,20 @@ class Distrustful(BasePlayer):
         else:
             player_hand = utils.get_player_hand_by_number(round_info, player_number)
 
+        board_state_stars_align = round_info.board_state[utils.Suit.BLUE]+1
+        prev = False
+        for suit in round_info.board_state:
+            if prev is not False and round_info.board_state[suit] is not prev:
+                board_state_stars_align = -1
+            prev = round_info.board_state[suit]
+
         best_card = -1
         best_card_rank = 6
+
         for card in player_hand:
-            if card.is_playable(round_info) and card.revealed_rank.value < best_card_rank:
+            if (card.is_playable(round_info) or \
+                (card.revealed_rank is not None and card.revealed_rank.value is board_state_stars_align)) and \
+                    card.revealed_rank.value < best_card_rank:
                 best_card = card.hand_position
                 best_card_rank = card.revealed_rank.value
 
@@ -36,7 +48,7 @@ class Distrustful(BasePlayer):
             player_hand = utils.get_player_hand_by_number(round_info, player_number)
 
         lowest_rank = min(round_info.board_state.values())
-        for card in player_hand:  # To be upgraded to count from all known cards
+        for card in player_hand:  # To be upgraded to check suit usefulness from all known cards
             if (card.revealed_rank is not None and card.revealed_rank.value <= lowest_rank) or \
                     (card.revealed_suit is not None and round_info.board_state[card.revealed_suit] is 5) or \
                     (card.revealed_suit is not None and card.revealed_rank is not None and
@@ -105,7 +117,8 @@ class Distrustful(BasePlayer):
         discarded = next_player_hand[discarded_position]
 
         if round_info.board_state[discarded.real_suit] < discarded.real_rank.value and \
-                remaining[discarded.real_suit][discarded.real_rank] is 1:
+                remaining[discarded.real_suit][discarded.real_rank] is 1 and \
+                discarded.real_rank.value - round_info.board_state[discarded.real_suit] <= 1:
             if discarded.revealed_rank is None:
                 return ChoiceDetails(
                     Choice.HINT,
@@ -119,7 +132,7 @@ class Distrustful(BasePlayer):
         return False
 
     def check_for_play_tip(self, round_info, player_number, hint_pass_score=2, double_hint_multiplier=2.3,
-                           distance_to_playable_multiplier=0.6, distance_to_player_multiplier=0.99):
+                           distance_to_playable_multiplier=0.5, distance_to_player_multiplier=0.99):
         if round_info.hints <= 1:
             return False
 
@@ -177,7 +190,8 @@ class Distrustful(BasePlayer):
             if player_distance < 0:
                 player_distance += round_info.number_of_players
             card_potential = \
-                pow(distance_to_playable_multiplier, card.real_rank.value-round_info.board_state[card.real_suit]-1) *\
+                pow(distance_to_playable_multiplier,
+                    card.real_rank.value - round_info.board_state[card.real_suit] - 1) * \
                 pow(distance_to_player_multiplier, player_distance)
             if (card.revealed_suit is not None or card.revealed_rank is not None) and \
                     card.real_rank.value - round_info.board_state[card.real_suit] is 1:
@@ -185,12 +199,14 @@ class Distrustful(BasePlayer):
             return card_potential
 
         for player in potential_playable_ranks:
-            self.info('{0}'.format(player))
+            if debug:
+                self.info('{0}'.format(player))
             for rank in potential_playable_ranks[player]:
                 potential = 0
                 for card in potential_playable_ranks[player][rank]:
                     potential += check_card_potential(card, player)
-                self.info('{0} {1}'.format(rank, potential))
+                if debug:
+                    self.info('{0} {1}'.format(rank, potential))
                 if potential > max_potential:
                     max_player_number = player
                     max_potential = potential
@@ -200,7 +216,8 @@ class Distrustful(BasePlayer):
                 potential = 0
                 for card in potential_playable_suits[player][suit]:
                     potential += check_card_potential(card, player)
-                self.info('{0} {1}'.format(suit, potential))
+                if debug:
+                    self.info('{0} {1}'.format(suit, potential))
                 if potential > max_potential:
                     max_player_number = player
                     max_potential = potential
@@ -275,6 +292,9 @@ class Distrustful(BasePlayer):
         return False
 
     def check_for_good_tip(self, round_info, player_number):
+        if round_info.hints <= 1:
+            return False
+
         play_tip = self.check_for_play_tip(round_info, player_number)
         if play_tip is not False:
             return play_tip
@@ -283,6 +303,9 @@ class Distrustful(BasePlayer):
         return discard_tip
 
     def check_for_mediocre_tip(self, round_info, player_number):
+        if round_info.hints <= 1:
+            return False
+
         return self.check_for_play_tip(round_info, player_number, 1, 2)
 
     def info(self, msg):
@@ -300,7 +323,8 @@ class Distrustful(BasePlayer):
                             self.check_for_good_tip, self.check_for_guess_discard]
 
         for action in action_order:
-            self.info('{0}'.format(action))
+            if debug:
+                self.info('{0}'.format(action))
             decision = functools.partial(action, round_info, round_info.player_turn)()
             if decision is not False:
                 return decision
