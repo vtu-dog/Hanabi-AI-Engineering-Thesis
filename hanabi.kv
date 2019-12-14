@@ -1,0 +1,145 @@
+#:kivy 1.11.1
+
+#<Widget>:
+#    canvas.after:
+#        Line:
+#            rectangle: self.x+1,self.y+1,self.width-1,self.height-1
+
+<GameInfo>:
+    lives: lives
+    hints: hints
+    cards_left: cards_left
+
+    padding: [10, 10, 10, 10]
+    orientation: 'horizontal'
+    size_hint: 1, 0.05
+
+    Label:
+        id: lives
+        text: 'Lives: ?'
+
+    Label:
+        id: hints
+        text: 'Hints: ?'
+
+    Label:
+        id: cards_left
+        text: 'Cards left in the deck: ?'
+
+
+<GameButtons>:
+    play_toggle: play_toggle
+    discard_toggle: discard_toggle
+    hint_rank_toggle: hint_rank_toggle
+    hint_suit_toggle: hint_suit_toggle
+    next_turn_button: next_turn_button
+
+    size_hint: 1, None
+    cols: 5
+    spacing: 20
+    padding: [20, 20, 20, 20]
+
+    ToggleButton:
+        id: play_toggle
+        text: 'Play a card'
+        size_hint: 1, None
+        size: self.texture_size
+        height: self.texture_size[1]*2
+
+    ToggleButton:
+        id: discard_toggle
+        text: 'Discard a card'
+        size_hint: 1, None
+        size: self.texture_size
+        height: self.texture_size[1]*2
+
+    ToggleButton:
+        id: hint_rank_toggle
+        text: 'Hint rank'
+        size_hint: 1, None
+        size: self.texture_size
+        height: self.texture_size[1]*2
+
+    ToggleButton:
+        id: hint_suit_toggle
+        text: 'Hint suit'
+        size_hint: 1, None
+        size: self.texture_size
+        height: self.texture_size[1]*2
+
+    Button:
+        id: next_turn_button
+        text: 'Next turn'
+
+
+
+<Hand>:
+    orientation: 'vertical'
+    padding: [20, 20, 20, 20]
+    spacing: 10
+    size_hint: 1, 1
+
+    canvas:
+        Line:
+            rectangle: self.x+1,self.y+1,self.width-1,self.height-1
+
+
+<PlayerGrid>:
+    orientation: 'vertical'
+    size_hint: 0.6, 1
+
+    canvas:
+        Line:
+            rectangle: self.x+1,self.y+1,self.width-1,self.height-1
+
+
+<Players>:
+    padding: [20, 20, 20, 20]
+    spacing: 20
+    cols: 3
+
+
+<Board>:
+    padding: [10, 20, 20, 10]
+
+
+<Human>:
+    padding: [20, 20, 10, 10]
+
+
+<HanabiGame>:
+    players: players
+    human: human
+    board: board
+    game_info: game_info
+    top_grid: top_grid
+
+    size: root.size
+    padding: [0, 20, 0, 0]
+
+    canvas:
+        Color:
+            #rgb: 40/255, 40/255, 40/255
+            rgb: 30/255, 77/255, 3/255
+        Rectangle:
+            size: self.size
+
+    GameInfo:
+        id: game_info
+
+    GridLayout:
+        id: top_grid
+        cols: 2
+
+        Human:
+            id: human
+            size_hint: 1, 0.8
+
+        Board:
+            id: board
+
+    GameButtons:
+        # pass
+
+    Players:
+        id: players
