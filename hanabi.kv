@@ -1,9 +1,9 @@
 #:kivy 1.11.1
 
-#<Widget>:
-#    canvas.after:
-#        Line:
-#            rectangle: self.x+1,self.y+1,self.width-1,self.height-1
+# <Widget>:
+#     canvas.after:
+#         Line:
+#             rectangle: self.x+1,self.y+1,self.width-1,self.height-1
 
 <GameInfo>:
     lives: lives
@@ -107,19 +107,51 @@
     padding: [20, 20, 10, 10]
 
 
+<EndGamePopup>:
+    score_label: score_label
+    quit_button: quit_button
+    return_button: return_button
+
+    title: ''
+    separator_height: 0
+    size: 800, 400
+    size_hint: None, None
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text: 'Game over!'
+
+        Label:
+            id: score_label
+            text: 'Final score: n/a'
+
+        BoxLayout:
+            padding: [20, 30, 20, 20]
+            spacing: 20
+
+            Button:
+                id: quit_button
+                text: 'Quit'
+            Button:
+                id: return_button
+                text: 'Return to game'
+
 <HanabiGame>:
     players: players
     human: human
     board: board
     game_info: game_info
+    game_buttons: game_buttons
     top_grid: top_grid
 
     size: root.size
+    orientation: 'vertical'
     padding: [0, 20, 0, 0]
 
     canvas:
         Color:
-            #rgb: 40/255, 40/255, 40/255
             rgb: 30/255, 77/255, 3/255
         Rectangle:
             size: self.size
@@ -139,7 +171,7 @@
             id: board
 
     GameButtons:
-        # pass
+        id: game_buttons
 
     Players:
         id: players

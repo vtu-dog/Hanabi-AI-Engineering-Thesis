@@ -102,13 +102,13 @@ class Game:
 
         self.info('\nBeginning game...\n')
 
-    def __prev_player_number(self):
+    def prev_player_number(self):
         if self.player_turn is 0:
             return self.number_of_players - 1
         else:
             return self.player_turn - 1
 
-    def __next_player_number(self):
+    def next_player_number(self):
         if self.number_of_players - 1 is self.player_turn:
             return 0
         else:
@@ -187,6 +187,7 @@ class Game:
                         card
                     )
                 )
+                info_msg = 'Correctly played {0}'.format(card)
 
             else:
                 card.misplayed = True
@@ -199,6 +200,7 @@ class Game:
                         self.lives
                     )
                 )
+                info_msg = 'Misplayed {0}'.format(card)
 
         if choice is Choice.DISCARD:
             hand_position = move.details
@@ -217,6 +219,7 @@ class Game:
                     self.hints
                 )
             )
+            info_msg = 'Discarded {0}'.format(card)
 
         if choice is Choice.HINT:
             player_number, hint = move.details
@@ -234,6 +237,8 @@ class Game:
                     self.hints
                 )
             )
+            info_msg = 'Hinted {0} to Player {1}'.format(
+                hint, player_number + 1)
 
         if self.lives is 0 or self.score is MAX_SCORE:
             self.game_over = True
@@ -243,7 +248,7 @@ class Game:
             if new_card is None:
                 self.current_player_hand.discard(hand_position)
                 if self.game_over_timer is None:
-                    self.game_over_timer = self.__prev_player_number()
+                    self.game_over_timer = self.prev_player_number()
                 elif self.game_over_timer is self.player_turn:
                     self.game_over = True
                     self.game_ended_by_timeout = True
@@ -269,10 +274,12 @@ class Game:
             if choice is Choice.HINT:
                 self.__print_player_knowledge(player_number)
 
-        self.player_turn = self.__next_player_number()
+        self.player_turn = self.next_player_number()
 
         if self.player_turn is 0:
             self.current_turn += 1
+
+        return info_msg
 
     def is_game_over(self):
         return self.game_over
