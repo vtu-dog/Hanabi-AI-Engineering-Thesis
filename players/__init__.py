@@ -2,3 +2,4 @@
 
 from .cheater import *
 from .distrustful import *
+from .trustful import *

@@ -18,6 +18,7 @@ class RoundInfo:
         self.played = round.played
         self.discarded = round.discarded
         self.history = round.history
+        self.hands_history = round.hands_history
         self.number_of_players = round.number_of_players
         self.current_deck_size = len(round.deck)
 

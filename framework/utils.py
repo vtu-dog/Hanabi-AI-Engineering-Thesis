@@ -30,7 +30,7 @@ class Choice(Enum):
 
 ChoiceDetails = namedtuple('ChoiceDetails', ['choice', 'details'])
 HintDetails = namedtuple('HintDetails', ['player_number', 'hint'])
-PlayDetails = namedtuple('PlayDetails', ['choice', 'details'])
+PlayDetails = namedtuple('PlayDetails', ['choice', 'details', 'number_in_hand', 'deck_size'])
 
 
 def first_occurrence(fun, lst):
@@ -65,7 +65,7 @@ def next_player_hand(round_info, player_number):
     )
 
 
-def list_all_known_cards(round_info):
+def list_all_known_cards(round_info, player_number=None):
     known = {}
     unknown_rank = {}
     unknown_suit = {}
@@ -76,7 +76,14 @@ def list_all_known_cards(round_info):
             unknown_suit[rank] = 0
             known[suit][rank] = 0
 
-    player_hand = round_info.player_hand
+    if player_number is None:
+        player_number = round_info.player_turn
+
+    if player_number is round_info.player_turn:
+        player_hand = round_info.player_hand
+    else:
+        player_hand = get_player_hand_by_number(round_info, player_number)
+
     for card in player_hand:
         if card.revealed_rank is not None and card.revealed_suit is not None:
             known[card.revealed_suit][card.revealed_rank] += 1
@@ -86,8 +93,9 @@ def list_all_known_cards(round_info):
             unknown_rank[card.revealed_suit] += 1
 
     for player_hand in round_info.other_players_hands:
-        for card in player_hand:
-            known[card.real_suit][card.real_rank] += 1
+        if player_number is not player_hand.player_number:
+            for card in player_hand:
+                known[card.real_suit][card.real_rank] += 1
 
     for card in round_info.discarded:
         known[card.real_suit][card.real_rank] += 1
