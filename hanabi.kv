@@ -1,0 +1,185 @@
+#:kivy 1.11.1
+
+# <Widget>:
+#     canvas.after:
+#         Line:
+#             rectangle: self.x+1,self.y+1,self.width-1,self.height-1
+
+<GameInfo>:
+    lives: lives
+    hints: hints
+    cards_left: cards_left
+
+    padding: [10, 10, 10, 10]
+    orientation: 'horizontal'
+    size_hint: 1, 0.05
+
+    Label:
+        id: lives
+        text: 'Lives: ?'
+
+    Label:
+        id: hints
+        text: 'Hints: ?'
+
+    Label:
+        id: cards_left
+        text: 'Cards left in the deck: ?'
+
+
+<GameButtons>:
+    play_toggle: play_toggle
+    discard_toggle: discard_toggle
+    hint_rank_toggle: hint_rank_toggle
+    hint_suit_toggle: hint_suit_toggle
+    next_turn_button: next_turn_button
+
+    size_hint: 1, None
+    cols: 5
+    spacing: 20
+    padding: [20, 20, 20, 20]
+
+    ToggleButton:
+        id: play_toggle
+        text: 'Play a card'
+        size_hint: 1, None
+        size: self.texture_size
+        height: self.texture_size[1]*2
+
+    ToggleButton:
+        id: discard_toggle
+        text: 'Discard a card'
+        size_hint: 1, None
+        size: self.texture_size
+        height: self.texture_size[1]*2
+
+    ToggleButton:
+        id: hint_rank_toggle
+        text: 'Hint rank'
+        size_hint: 1, None
+        size: self.texture_size
+        height: self.texture_size[1]*2
+
+    ToggleButton:
+        id: hint_suit_toggle
+        text: 'Hint suit'
+        size_hint: 1, None
+        size: self.texture_size
+        height: self.texture_size[1]*2
+
+    Button:
+        id: next_turn_button
+        text: 'Next turn'
+
+
+
+<Hand>:
+    orientation: 'vertical'
+    padding: [20, 20, 20, 20]
+    spacing: 10
+    size_hint: 1, 1
+
+    canvas:
+        Line:
+            rectangle: self.x+1,self.y+1,self.width-1,self.height-1
+
+
+<PlayerGrid>:
+    orientation: 'vertical'
+    size_hint: 0.6, 1
+
+    canvas:
+        Line:
+            rectangle: self.x+1,self.y+1,self.width-1,self.height-1
+
+
+<Players>:
+    padding: [20, 20, 20, 20]
+    spacing: 20
+    cols: 3
+
+
+<LastCard>:
+    padding: [20, 20, 10, 10]
+    size_hint: 0.3, 1
+
+
+<Human>:
+    padding: [10, 20, 10, 10]
+
+
+<Board>:
+    padding: [10, 20, 20, 10]
+
+
+<EndGamePopup>:
+    score_label: score_label
+    quit_button: quit_button
+    return_button: return_button
+
+    title: ''
+    separator_height: 0
+    size: 800, 400
+    size_hint: None, None
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text: 'Game over!'
+
+        Label:
+            id: score_label
+            text: 'Final score: n/a'
+
+        BoxLayout:
+            padding: [20, 30, 20, 20]
+            spacing: 20
+
+            Button:
+                id: quit_button
+                text: 'Quit'
+            Button:
+                id: return_button
+                text: 'Return to game'
+
+<HanabiGame>:
+    players: players
+    last_card: last_card
+    human: human
+    board: board
+    game_info: game_info
+    game_buttons: game_buttons
+    top_grid: top_grid
+
+    size: root.size
+    orientation: 'vertical'
+    padding: [0, 20, 0, 0]
+
+    canvas:
+        Color:
+            rgb: 30/255, 77/255, 3/255
+        Rectangle:
+            size: self.size
+
+    GameInfo:
+        id: game_info
+
+    GridLayout:
+        id: top_grid
+        cols: 3
+
+        LastCard:
+            id: last_card
+
+        Human:
+            id: human
+
+        Board:
+            id: board
+
+    GameButtons:
+        id: game_buttons
+
+    Players:
+        id: players

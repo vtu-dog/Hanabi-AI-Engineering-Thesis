@@ -30,6 +30,7 @@ class Hand:
         return ', '.join([card.current_knowledge() for card in self.cards])
 
     def add(self, card):
+        card.player_number = self.player_number
         self.cards.append(card)
         self.__fix_cards()
 
@@ -39,6 +40,7 @@ class Hand:
 
     def replace(self, card, hand_position):
         card.hand_position = hand_position
+        card.player_number = self.player_number
         self.cards[hand_position] = card
 
     def playable_cards(self, round_info):

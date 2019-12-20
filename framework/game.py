@@ -191,8 +191,13 @@ class Game:
             card.hand_position = None
 
             if card.is_playable(self):
-                self.history.append(PlayDetails(choice, hand_position, card, self.deck_size))
+                self.history.append(PlayDetails(
+                    choice, hand_position, card, self.deck_size))
                 self.board_state[card.real_suit] += 1
+
+                if self.board_state[card.real_suit] == Rank.FIVE:
+                    self.hints = min(self.hints + 1, MAX_HINTS)
+
                 self.score += 1
                 self.played.append(card)
                 self.info(
@@ -201,10 +206,12 @@ class Game:
                         card
                     )
                 )
+                info_msg = 'Correctly played {0}'.format(card)
 
             else:
                 card.misplayed = True
-                self.history.append(PlayDetails(choice, hand_position, card, self.deck_size))
+                self.history.append(PlayDetails(
+                    choice, hand_position, card, self.deck_size))
                 self.lives -= 1
                 self.discarded.append(card)
                 self.info(
@@ -214,6 +221,7 @@ class Game:
                         self.lives
                     )
                 )
+                info_msg = 'Misplayed {0}'.format(card)
 
         if choice is Choice.DISCARD:
             hand_position = move.details
@@ -223,7 +231,8 @@ class Game:
             card.discarded = True
             card.hand_position = None
 
-            self.history.append(PlayDetails(choice, hand_position, card, self.deck_size))
+            self.history.append(PlayDetails(
+                choice, hand_position, card, self.deck_size))
             self.discarded.append(card)
             self.hints = min(self.hints + 1, MAX_HINTS)
             self.info(
@@ -233,6 +242,7 @@ class Game:
                     self.hints
                 )
             )
+            info_msg = 'Discarded {0}'.format(card)
 
         if choice is Choice.HINT:
             player_number, hint = move.details
@@ -241,7 +251,8 @@ class Game:
             for card in hand:
                 card.reveal_info_from_hint(hint)
 
-            self.history.append(PlayDetails(choice, move.details[0], move.details[1], self.deck_size))
+            self.history.append(PlayDetails(
+                choice, move.details[0], move.details[1], self.deck_size))
             self.hints -= 1
             self.info(
                 '{0} hinted {1} to {2}, {3} hints remaining'.format(
@@ -251,25 +262,38 @@ class Game:
                     self.hints
                 )
             )
+            info_msg = 'Hinted {0} to Player {1}'.format(
+                hint, player_number + 1)
 
         if self.lives is 0 or self.score is MAX_SCORE:
             self.game_over = True
 
+        skip_timer = False
+
         if choice is not Choice.HINT:
             new_card = self.__draw_card()
 
+            if len(self.deck) == 0:
+                if self.game_over_timer is None:
+                    self.game_over_timer = self.player_turn
+                    skip_timer = True
+
             if new_card is None:
                 self.current_player_hand.discard(hand_position)
-                if self.game_over_timer is None:
-                    self.game_over_timer = prev_player_number(
-                        self,
-                        self.player_turn
-                    )
+
             else:
                 new_card.drawn_on_turn = self.current_turn
                 self.current_player_hand.replace(new_card, hand_position)
 
-        if self.game_over_timer is self.player_turn:
+        new_hands = [self.current_player_hand] + self.other_players_hands
+        new_hands.sort(key=lambda h: h.player_number)
+        self.hands_history.append(new_hands)
+        self.hands = new_hands
+
+        if choice is Choice.HINT:
+            self.__print_player_knowledge(player_number)
+
+        if self.game_over_timer is self.player_turn and skip_timer is False:
             self.game_over = True
             self.game_ended_by_timeout = True
 
@@ -283,19 +307,12 @@ class Game:
                 self.info(
                     '\nGame over! Total points: {0}'.format(self.score))
 
-        else:
-            new_hands = [self.current_player_hand] + self.other_players_hands
-            new_hands.sort(key=lambda h: h.player_number)
-            self.hands_history.append(new_hands)
-            self.hands = new_hands
-
-            if choice is Choice.HINT:
-                self.__print_player_knowledge(player_number)
-
         self.player_turn = next_player_number(self, self.player_turn)
 
         if self.player_turn is 0:
             self.current_turn += 1
+
+        return info_msg
 
     def is_game_over(self):
         return self.game_over
