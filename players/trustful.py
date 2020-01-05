@@ -65,7 +65,7 @@ class Trustful(BasePlayer):
                 if move[0] is Choice.PLAY:
                     if move[2].real_rank.value is current_board_state[move[2].real_suit]:
                         if current_board_state[move[2].real_suit] is 5:
-                            current_lives = max(1, current_lives - 1)
+                            current_hints = max(0, current_hints - 1)
                         current_board_state[move[2].real_suit] -= 1
                         current_played.pop()
                     else:
@@ -134,8 +134,8 @@ class Trustful(BasePlayer):
                     if debug:
                         self.info("{0}".format(round_info.player_hand))
                         self.info("{0}, C: {1}, N: {2}".format(player_distance, current_round_info.player_hand,
-                                                           current_round_info.other_players_hands[
-                                                               0].current_knowledge()))
+                                                               current_round_info.other_players_hands[
+                                                                   0].current_knowledge()))
 
                     if target_player is original_player_number:
                         player_hand = round_info.player_hand
@@ -308,8 +308,6 @@ class Trustful(BasePlayer):
         return False
 
     def check_card_usefulness(self, round_info, player, card):
-        known = utils.list_all_known_cards(round_info, player)[0]
-        discarded = utils.list_discarded_cards(round_info)
         remaining = utils.list_remaining_playable_cards(round_info)
         useless = False
 
@@ -341,7 +339,6 @@ class Trustful(BasePlayer):
                 Choice.DISCARD,
                 card.hand_position
             )
-
         return False
 
     def check_for_obvious_discard(self, round_info, player_number):
@@ -410,53 +407,86 @@ class Trustful(BasePlayer):
         if round_info.hints is 0:
             return False
 
+        if player_number is round_info.player_turn:
+            player_hand = round_info.player_hand
+        else:
+            player_hand = utils.get_player_hand_by_number(round_info, player_number)
+
         remaining = utils.list_remaining_playable_cards(round_info)
         next_player_hand = utils.next_player_hand(round_info, player_number)
         next_player_number = utils.next_player_number(round_info, player_number)
+
+        if self.check_for_obvious_play(round_info, next_player_number) is not None:
+            return False
 
         play = self.check_for_hinted_play(round_info, next_player_number)
         if play is not False:
             play_position = play[1]
             played_card = next_player_hand[play_position]
+            own_play = None
+            if self.check_for_obvious_play(round_info, player_number) is not None:
+                own_play = self.check_for_obvious_play(round_info, player_number)[1]
+            if own_play is None and self.check_for_hinted_play(round_info, player_number) is not None:
+                own_play = self.check_for_hinted_play(round_info, player_number)[1]
+
             if round_info.board_state[played_card.real_suit] is not played_card.real_rank.value - 1:
-                if played_card.revealed_rank is None:
+
+                distrust = True
+                if own_play is not None and \
+                        round_info.board_state[played_card.real_suit] is played_card.real_rank.value - 2:
+                    own_card = player_hand[own_play]
+                    if (own_card.revealed_rank is not None and
+                        own_card.revealed_rank.value is played_card.real_rank.value - 1) or \
+                            (own_card.revealed_suit is not None and
+                             own_card.revealed_suit is played_card.real_suit):
+                        distrust = False
+
+                if distrust:
+                    if played_card.revealed_rank is None:
+                        return ChoiceDetails(
+                            Choice.HINT,
+                            HintDetails(utils.next_player_number(round_info, player_number), played_card.real_rank)
+                        )
+                    else:
+                        return ChoiceDetails(
+                            Choice.HINT,
+                            HintDetails(utils.next_player_number(round_info, player_number), played_card.real_suit)
+                        )
+
+        else:
+            discarded_position = self.check_for_guess_discard(round_info, next_player_number)[1]
+            discarded_card = next_player_hand[discarded_position]
+
+            if round_info.board_state[discarded_card.real_suit] < discarded_card.real_rank.value and \
+                    remaining[discarded_card.real_suit][discarded_card.real_rank] is 1 and \
+                    self.check_for_obvious_play(round_info, next_player_number) is False and \
+                    self.check_for_hinted_play(round_info, next_player_number) is False and \
+                    discarded_card.real_rank.value - round_info.board_state[discarded_card.real_suit] <= 5:
+                if discarded_card.revealed_rank is None:
                     return ChoiceDetails(
                         Choice.HINT,
-                        HintDetails(utils.next_player_number(round_info, player_number), played_card.real_rank)
+                        HintDetails(utils.next_player_number(round_info, player_number), discarded_card.real_rank)
                     )
                 else:
                     return ChoiceDetails(
                         Choice.HINT,
-                        HintDetails(utils.next_player_number(round_info, player_number), played_card.real_suit)
+                        HintDetails(utils.next_player_number(round_info, player_number), discarded_card.real_suit)
                     )
 
-        discarded_position = self.check_for_guess_discard(round_info, next_player_number)[1]
-        discarded_card = next_player_hand[discarded_position]
-
-        if round_info.board_state[discarded_card.real_suit] < discarded_card.real_rank.value and \
-                remaining[discarded_card.real_suit][discarded_card.real_rank] is 1 and \
-                self.check_for_obvious_play(round_info, next_player_number) is False and \
-                self.check_for_hinted_play(round_info, next_player_number) is False and \
-                discarded_card.real_rank.value - round_info.board_state[discarded_card.real_suit] <= 5:
-            if discarded_card.revealed_rank is None:
-                return ChoiceDetails(
-                    Choice.HINT,
-                    HintDetails(utils.next_player_number(round_info, player_number), discarded_card.real_rank)
-                )
-            else:
-                return ChoiceDetails(
-                    Choice.HINT,
-                    HintDetails(utils.next_player_number(round_info, player_number), discarded_card.real_suit)
-                )
         return False
 
     def check_for_play_tip(self, round_info, player_number, hint_pass_score=0.9, double_hint_multiplier=0.3,
-                           false_tip_penalty=-2.5, distance_to_player_multiplier=0.99, lower_rank_multiplier=1.1,
-                           information_tip_value=0.25, already_has_play_multiplier=0.5):
+                           false_tip_penalty=-2.5, distance_to_player_multiplier=0.99, lower_rank_multiplier=1.07,
+                           information_tip_value=0.25, already_has_play_multiplier=0.5, chain_bonus_multiplier=1.3):
         if round_info.hints <= 1:
             return False
 
         original_player_number = player_number
+        if player_number is round_info.player_turn:
+            original_player_hand = round_info.player_hand
+        else:
+            original_player_hand = utils.get_player_hand_by_number(round_info, player_number)
+
         player_number = utils.next_player_number(round_info, original_player_number)
         worth_hinting = {}
         predicted_board_state = {original_player_number: deepcopy(round_info.board_state)}
@@ -523,6 +553,21 @@ class Trustful(BasePlayer):
         max_potential = -5
         max_hint = 0
 
+        known = {}
+        for suit in utils.Suit:
+            known[suit] = {}
+            for rank in utils.Rank:
+                known[suit][rank] = 0
+
+        for card in original_player_hand:
+            if card.revealed_rank is not None and card.revealed_suit is not None:
+                known[card.revealed_suit][card.revealed_rank] += 1
+
+        for hand in round_info.other_players_hands:
+            if original_player_number is not hand.player_number:
+                for card in hand:
+                    known[card.real_suit][card.real_rank] += 1
+
         def check_card_potential(card, player, board_state, current_rank=None, pure_info=False):
             player_distance = player - original_player_number - 1
             if player_distance < 0:
@@ -545,15 +590,18 @@ class Trustful(BasePlayer):
                 card_potential = information_tip_value * pow(distance_to_player_multiplier, player_distance) * \
                                  pow(lower_rank_multiplier, card.real_rank.value - 1)
 
+                if (card.revealed_suit is not None or card.revealed_rank is not None) and \
+                        card.real_rank.value - board_state[card.real_suit] is 1 and \
+                        self.card_hint_type[player][card.hand_position] is "Play" and not pure_info:
+                    card_potential *= double_hint_multiplier
+
+                if card.real_rank.value <= 4 and known[card.real_suit][utils.Rank(card.real_rank.value + 1)] > 0:
+                    card_potential *= chain_bonus_multiplier
+
             elif (card.revealed_suit is None and card.revealed_rank is None) and \
                     ((current_rank is None and board_state[card.real_suit] is not card.real_rank.value - 1) or
                      (current_rank is not None and card.real_rank.value is not current_rank)):
                 card_potential += false_tip_penalty
-
-            if (card.revealed_suit is not None or card.revealed_rank is not None) and \
-                    card.real_rank.value - board_state[card.real_suit] is 1 and \
-                    self.card_hint_type[player][card.hand_position] is "Play" and not pure_info:
-                card_potential *= double_hint_multiplier
 
             if pure_info and not already_hinted and \
                     self.card_hint_type[player][card.hand_position] is "Information" and \
@@ -569,9 +617,10 @@ class Trustful(BasePlayer):
         for player in potential_playable_ranks:
             if debug:
                 self.info('{0}'.format(player))
-            player_distance = player - original_player_number - 1
+
             info_rank = None
             info_suit = None
+            player_distance = player - original_player_number - 1
             if player_distance < 0:
                 player_distance += round_info.number_of_players
 
