@@ -307,29 +307,36 @@ class Trustful(BasePlayer):
 
         return False
 
-    def check_card_usefulness(self, round_info, player, card):
+    def check_card_usefulness(self, round_info, card):
         remaining = utils.list_remaining_playable_cards(round_info)
         useless = False
 
-        if card.revealed_suit is not None:
-            useless = True
-            future_ranks_useless = False
+        point_of_uselessness = {}
+        for suit in utils.Suit:
+            point_of_uselessness[suit] = None
             for rank in utils.Rank:
-                if round_info.board_state[card.revealed_suit] < rank.value:
-                    if not future_ranks_useless and remaining[card.revealed_suit][rank] > 0:
-                        useless = False
-                    else:
-                        future_ranks_useless = True
+                if round_info.board_state[suit] < rank.value:
+                    if point_of_uselessness[suit] is None and remaining[suit][rank] is 0:
+                        point_of_uselessness[suit] = rank
+
+        if card.revealed_suit is not None:
+            if round_info.board_state[card.revealed_suit] is 5 or \
+                    (point_of_uselessness[card.revealed_suit] is not None and
+                     round_info.board_state[card.revealed_suit] + 1 is point_of_uselessness[card.revealed_suit].value):
+                useless = True
 
         if card.revealed_rank is not None:
             useless = True
             for suit in utils.Suit:
-                if round_info.board_state[suit] < card.revealed_rank.value:
-                    if remaining[suit][card.revealed_rank] > 0:
-                        useless = False
+                if round_info.board_state[suit] < card.revealed_rank.value and \
+                        (point_of_uselessness[suit] is None or
+                         point_of_uselessness[suit].value > card.revealed_rank.value):
+                    useless = False
 
         if card.revealed_suit is not None and card.revealed_rank is not None:
-            if round_info.board_state[card.revealed_suit] < card.revealed_rank.value:
+            if round_info.board_state[card.revealed_suit] < card.revealed_rank.value and \
+                    (point_of_uselessness[card.revealed_suit] is None or
+                     point_of_uselessness[card.revealed_suit].value > card.revealed_rank.value):
                 useless = False
             else:
                 useless = True
@@ -348,7 +355,7 @@ class Trustful(BasePlayer):
             player_hand = utils.get_player_hand_by_number(round_info, player_number)
 
         for card in player_hand:
-            answer = self.check_card_usefulness(round_info, player_number, card)
+            answer = self.check_card_usefulness(round_info, card)
             if answer is not False:
                 return answer
         return False
@@ -416,7 +423,7 @@ class Trustful(BasePlayer):
         next_player_hand = utils.next_player_hand(round_info, player_number)
         next_player_number = utils.next_player_number(round_info, player_number)
 
-        if self.check_for_obvious_play(round_info, next_player_number) is not None:
+        if self.check_for_obvious_play(round_info, next_player_number) is not False:
             return False
 
         play = self.check_for_hinted_play(round_info, next_player_number)
@@ -424,13 +431,12 @@ class Trustful(BasePlayer):
             play_position = play[1]
             played_card = next_player_hand[play_position]
             own_play = None
-            if self.check_for_obvious_play(round_info, player_number) is not None:
+            if self.check_for_obvious_play(round_info, player_number) is not False:
                 own_play = self.check_for_obvious_play(round_info, player_number)[1]
-            if own_play is None and self.check_for_hinted_play(round_info, player_number) is not None:
+            if own_play is None and self.check_for_hinted_play(round_info, player_number) is not False:
                 own_play = self.check_for_hinted_play(round_info, player_number)[1]
 
             if round_info.board_state[played_card.real_suit] is not played_card.real_rank.value - 1:
-
                 distrust = True
                 if own_play is not None and \
                         round_info.board_state[played_card.real_suit] is played_card.real_rank.value - 2:
@@ -459,9 +465,7 @@ class Trustful(BasePlayer):
 
             if round_info.board_state[discarded_card.real_suit] < discarded_card.real_rank.value and \
                     remaining[discarded_card.real_suit][discarded_card.real_rank] is 1 and \
-                    self.check_for_obvious_play(round_info, next_player_number) is False and \
-                    self.check_for_hinted_play(round_info, next_player_number) is False and \
-                    discarded_card.real_rank.value - round_info.board_state[discarded_card.real_suit] <= 5:
+                    self.check_card_usefulness(round_info, discarded_card) is not False:
                 if discarded_card.revealed_rank is None:
                     return ChoiceDetails(
                         Choice.HINT,
@@ -725,7 +729,7 @@ class Trustful(BasePlayer):
                 card_with_hint.revealed_rank = hint
             else:
                 card_with_hint.revealed_suit = hint
-            if self.check_card_usefulness(round_info, player, card_with_hint) is False:
+            if self.check_card_usefulness(round_info, card_with_hint) is False:
                 card_potential += false_tip_penalty
 
             return card_potential

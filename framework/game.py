@@ -195,7 +195,7 @@ class Game:
                     choice, hand_position, card, self.deck_size))
                 self.board_state[card.real_suit] += 1
 
-                if self.board_state[card.real_suit] == Rank.FIVE:
+                if card.real_rank is Rank.FIVE:
                     self.hints = min(self.hints + 1, MAX_HINTS)
 
                 self.score += 1
