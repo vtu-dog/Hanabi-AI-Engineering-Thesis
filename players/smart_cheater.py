@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import functools
-from random import choice
 from framework import BasePlayer, Choice, ChoiceDetails, utils, HintDetails
 
 

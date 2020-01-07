@@ -15,13 +15,14 @@ played_games = 0
 gsum = 0
 
 games_to_play = 1000
+best_score = 0
 while played_games < games_to_play:
     played_games += 1
 
-    #p = [players.Trustful(), players.Trustful(),
-    #     players.Trustful(), players.Trustful()]
-    p = [players.SmartCheater(), players.SmartCheater(),
-         players.SmartCheater(), players.SmartCheater()]
+    p = [players.Trustful(), players.Trustful(),
+         players.Trustful(), players.Trustful()]
+    #p = [players.Distrustful(), players.Distrustful(),
+    #     players.Distrustful(), players.Distrustful()]
 
     game = Game(p, None, log=False)
 
@@ -29,9 +30,11 @@ while played_games < games_to_play:
         game.make_move()
 
     gsum += sum(game.board_state.values())
+    if sum(game.board_state.values()) > best_score:
+        best_score = sum(game.board_state.values())
 
     if played_games % 10 == 0:
-        print(played_games, gsum / played_games)
+        print(played_games, gsum / played_games, best_score)
 
 
 print(gsum / games_to_play)

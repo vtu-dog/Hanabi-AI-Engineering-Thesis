@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import random
+
 
 class Hand:
     def __init__(self, player_number):
@@ -42,6 +44,9 @@ class Hand:
         card.hand_position = hand_position
         card.player_number = self.player_number
         self.cards[hand_position] = card
+
+    def shuffle(self):
+        random.shuffle(self.cards)
 
     def playable_cards(self, round_info):
         res = []
