@@ -206,7 +206,7 @@ class Game:
                         card
                     )
                 )
-                info_msg = 'Correctly played {0}'.format(card)
+                info_msg = 'Played {0}'.format(card)
 
             else:
                 card.misplayed = True
@@ -262,7 +262,7 @@ class Game:
                     self.hints
                 )
             )
-            info_msg = 'Hinted {0} to Player {1}'.format(
+            info_msg = 'Hinted {0} to P{1}'.format(
                 hint, player_number + 1)
 
         if self.lives is 0 or self.score is MAX_SCORE:

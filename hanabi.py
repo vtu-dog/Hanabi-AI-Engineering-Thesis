@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import os
-os.environ['KIVY_NO_CONSOLELOG'] = '1'
 
 from framework import utils, game, card, base_player
 from players import *
@@ -55,11 +53,7 @@ popups = [
 ]
 popups = [tk.OptionMenu(mainframe, choice_boxes[0], *choices[1:])] + popups
 
-for elem in popups:
-    elem.configure(background=bg)
-
 positions = [(1, 1, 2, 1), (1, 2, 2, 2), (3, 1, 4, 1), (3, 2, 4, 2)]
-
 for i, elem in enumerate(popups, 2):
     pos = positions[i - 2]
     tk.Label(
@@ -97,6 +91,13 @@ root.mainloop()
 
 from kivy.config import Config
 Config.set('graphics', 'resizable', '0')
+Config.set('graphics', 'position', 'custom')
+Config.set('graphics', 'top', '70')
+Config.set('graphics', 'left', '50')
+
+
+import kivy
+kivy.require("1.11.1")
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -131,8 +132,7 @@ class GameInfo(BoxLayout):
     def update(self, game):
         self.lives.text = 'Lives: {0}'.format(game.lives)
         self.hints.text = 'Hints: {0}'.format(game.hints)
-        self.cards_left.text = 'Cards left in the deck: {0}'.format(
-            len(game.deck))
+        self.cards_left.text = 'Cards left: {0}'.format(len(game.deck))
 
 
 class GameButtons(GridLayout):
@@ -326,7 +326,7 @@ class Hand(BoxLayout):
     def __init__(self, hand, full_info, is_tintable, **kwargs):
         super(Hand, self).__init__(**kwargs)
         self.box = BoxLayout(orientation='horizontal')
-        self.box.spacing = 5
+        self.box.spacing = '5dp'
         self.full_info = full_info
         self.cards = []
 
@@ -339,14 +339,14 @@ class Hand(BoxLayout):
             self.label = Label(
                 text='Full hand',
                 size_hint=(1, 0.25),
-                padding=(10, 10)
+                padding=('10dp', '10dp')
             )
             self.label.size = self.label.texture_size
         else:
             self.label = Label(
                 text='Revealed hand',
                 size_hint=(1, 0.25),
-                padding=(10, 100)
+                padding=('10dp', '100dp')
             )
             self.label.size = self.label.texture_size
 
@@ -357,24 +357,24 @@ class Hand(BoxLayout):
         self.add_widget(self.box)
 
     def update(self, board=False, last_card=False):
-        for card in self.cards:
-            card.update(board=board, last_card=last_card)
+        for c in self.cards:
+            c.update(board=board, last_card=last_card)
 
     def set_tintable(self):
-        for card in self.cards:
-            card.is_tintable = True
+        for c in self.cards:
+            c.is_tintable = True
 
     def set_untintable(self):
-        for card in self.cards:
-            card.is_tintable = False
+        for c in self.cards:
+            c.is_tintable = False
 
     def tint_all(self):
-        for card in self.cards:
-            card.tint()
+        for c in self.cards:
+            c.tint()
 
     def untint_all(self):
-        for card in self.cards:
-            card.untint()
+        for c in self.cards:
+            c.untint()
 
 
 class PlayerGrid(BoxLayout):
@@ -496,6 +496,7 @@ class Board(BoxLayout):
             full_info=True,
             is_tintable=False
         )
+        self.hand.padding = ['10dp', '10dp', '10dp', '10dp']
         self.hand.label.text = 'Board state'
         self.add_widget(self.hand)
 
@@ -689,29 +690,24 @@ class HanabiApp(App):
         return game
 
 
-if __name__ == '__main__':
-    window_sizes = [
-        (1600, 800, 0.9),
-        (1600, 1130, 0.7),
-        (1600, 1450, 0.4),
-        (1600, 1600, 0.3)
-    ]
+window_sizes = [
+    (800, 400, 1.1),
+    (800, 550, 0.55),
+    (750, 700, 0.38),
+    (800, 850, 0.3)
+]
 
-    players = list(
-        map(
-            lambda x: globals()[x.get()](),
-            filter(
-                lambda x: x.get() != 'None',
-                choice_boxes
-            )
+players = list(
+    map(
+        lambda x: globals()[x.get()](),
+        filter(
+            lambda x: x.get() != 'None',
+            choice_boxes
         )
     )
+)
 
-    x, y, hint = window_sizes[len(players) - 1]
+x, y, hint = window_sizes[len(players) - 1]
 
-    if platform == 'macosx':
-        x /= 2
-        y /= 2
-
-    Window.size = x, y
-    HanabiApp(players, hint).run()
+Window.size = x, y
+HanabiApp(players, hint).run()

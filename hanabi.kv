@@ -10,7 +10,6 @@
     hints: hints
     cards_left: cards_left
 
-    padding: [10, 10, 10, 10]
     orientation: 'horizontal'
     size_hint: 1, 0.05
 
@@ -24,7 +23,7 @@
 
     Label:
         id: cards_left
-        text: 'Cards left in the deck: ?'
+        text: 'Cards left: ?'
 
 
 <GameButtons>:
@@ -34,49 +33,47 @@
     hint_suit_toggle: hint_suit_toggle
     next_turn_button: next_turn_button
 
-    size_hint: 1, None
     cols: 5
-    spacing: 20
-    padding: [20, 20, 20, 20]
+    spacing: dp(10)
+    padding: [dp(10), dp(0), dp(10), dp(0)]
+    size_hint_y: None
+    height: dp(50)
 
     ToggleButton:
         id: play_toggle
         text: 'Play a card'
-        size_hint: 1, None
-        size: self.texture_size
-        height: self.texture_size[1]*2
+        size_hint_y: None
+        height: dp(40)
 
     ToggleButton:
         id: discard_toggle
         text: 'Discard a card'
-        size_hint: 1, None
-        size: self.texture_size
-        height: self.texture_size[1]*2
+        size_hint_y: None
+        height: dp(40)
 
     ToggleButton:
         id: hint_rank_toggle
         text: 'Hint rank'
-        size_hint: 1, None
-        size: self.texture_size
-        height: self.texture_size[1]*2
+        size_hint_y: None
+        height: dp(40)
 
     ToggleButton:
         id: hint_suit_toggle
         text: 'Hint suit'
-        size_hint: 1, None
-        size: self.texture_size
-        height: self.texture_size[1]*2
+        size_hint_y: None
+        height: dp(40)
 
     Button:
         id: next_turn_button
         text: 'Next turn'
-
+        size_hint_y: None
+        height: dp(40)
 
 
 <Hand>:
     orientation: 'vertical'
-    padding: [20, 20, 20, 20]
-    spacing: 10
+    padding: [dp(10), dp(10), dp(10), dp(10)]
+    spacing: 5
     size_hint: 1, 1
 
     canvas:
@@ -94,22 +91,22 @@
 
 
 <Players>:
-    padding: [20, 20, 20, 20]
-    spacing: 20
+    padding: [dp(10), dp(0), dp(10), dp(10)]
+    spacing: dp(10)
     cols: 3
 
 
 <LastCard>:
-    padding: [20, 20, 10, 10]
-    size_hint: 0.3, 1
+    padding: [dp(10), dp(20), dp(0), dp(10)]
+    size_hint: 0.35, 1
 
 
 <Human>:
-    padding: [10, 20, 10, 10]
+    padding: [dp(10), dp(20), dp(10), dp(10)]
 
 
 <Board>:
-    padding: [10, 20, 20, 10]
+    padding: [dp(0), dp(20), dp(10), dp(10)]
 
 
 <EndGamePopup>:
@@ -118,8 +115,8 @@
     return_button: return_button
 
     title: ''
-    separator_height: 0
-    size: 800, 400
+    separator_height: dp(0)
+    size: dp(400), dp(200)
     size_hint: None, None
 
     BoxLayout:
@@ -128,20 +125,26 @@
         Label:
             text: 'Game over!'
 
-        Label:
-            id: score_label
-            text: 'Final score: n/a'
+        BoxLayout:
+            padding: [dp(0), dp(0), dp(0), dp(20)]
+            Label:
+                id: score_label
+                text: 'Final score: n/a'
 
         BoxLayout:
-            padding: [20, 30, 20, 20]
-            spacing: 20
+            padding: [dp(20), dp(10), dp(20), dp(20)]
+            spacing: dp(20)
 
             Button:
                 id: quit_button
                 text: 'Quit'
+                height: self.texture_size[1]*2
+                size_hint_y: None
             Button:
                 id: return_button
                 text: 'Return to game'
+                height: self.texture_size[1]*2
+                size_hint_y: None
 
 <HanabiGame>:
     players: players
@@ -154,7 +157,7 @@
 
     size: root.size
     orientation: 'vertical'
-    padding: [0, 20, 0, 0]
+    padding: [dp(0), dp(20), dp(0), dp(0)]
 
     canvas:
         Color:
