@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import functools
 from framework import BasePlayer, Choice, ChoiceDetails, utils, HintDetails
 

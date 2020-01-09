@@ -14,17 +14,15 @@ logger.setLevel(logging.DEBUG)
 played_games = 0
 gsum = 0
 
-games_to_play = 1000
+games_to_play = 1
 best_score = 0
 while played_games < games_to_play:
     played_games += 1
 
     p = [players.Trustful(), players.Trustful(),
          players.Trustful(), players.Trustful()]
-    #p = [players.Distrustful(), players.Distrustful(),
-    #     players.Distrustful(), players.Distrustful()]
 
-    game = Game(p, None, log=False)
+    game = Game(p, logger, log=True)
 
     while game.is_game_over() is False:
         game.make_move()

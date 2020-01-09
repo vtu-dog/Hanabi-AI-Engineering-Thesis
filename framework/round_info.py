@@ -6,6 +6,7 @@ from .utils import first_occurrence
 
 class RoundInfo:
     def __init__(self, round):
+        self.log = round.log
         self.__full_info_player_hand = deepcopy(round.current_player_hand)
         self.player_hand = self.hide_hand(round.current_player_hand)
         self.other_players_hands = deepcopy(round.other_players_hands)
