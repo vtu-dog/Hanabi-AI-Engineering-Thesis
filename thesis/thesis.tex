@@ -43,28 +43,30 @@
 % ...
 %%%%%
 
+\let\cleardoublepage=\clearpage
+
 \begin{document}
 
 \chapter{Wprowadzenie}
 
 \section{Czym jest Hanabi?}
 
-Gry planszowe to forma rozrywki, która towarzyszy człowiekowi od~tysięcy lat. Były one popularne już za~czasów antycznych, czego dowodzi chociażby malowidło z~3300~r.~p.n.e, pochodzące z~grobowca Merknery, na~którym ukazano rozgrywkę Seneta. Przykładem może być także Królewska~Gra~z~Ur, której egzemplarze odnaleziono w~trakcie badań nad~starożytną Mezopotamią. Choć zostały one~w~dzisiejszych czasach w~znacznej mierze zapomniane, nie~sposób nie~wspomnieć o~innych grach z~podobnego okresu, takich~jak~warcaby czy~Go, a~także o~nieco młodszych szachach, które wciąż cieszą~się ogromną i~niesłabnącą popularnością.
+Gry planszowe to forma rozrywki, która towarzyszy człowiekowi od~tysięcy lat. Były one popularne już za~czasów antycznych, czego dowodzi chociażby malowidło z~3300~r.~p.n.e, pochodzące z~grobowca Merknery, na~którym ukazano rozgrywkę Seneta. Przykładem może być także Królewska~Gra~z~Ur, której egzemplarze odnaleziono w~trakcie badań nad~starożytną Mezopotamią. Choć gry te zostały w~dzisiejszych czasach w~znacznej mierze zapomniane, nie~sposób nie~wspomnieć o~innych z~podobnego okresu, takich~jak~warcaby czy~Go, a~także o~nieco młodszych szachach, które wciąż cieszą~się ogromną i~niesłabnącą popularnością.
 
-Każdą z~tych gier łączy aspekt rywalizacji: pod~koniec rozgrywki jednoznacznie wyszczególnia~się jednego lub~więcej graczy, których określamy mianem zwycięzców, zaś~reszta -~przegrywa. Zgoła inne podejście prezentują gry kooperacyjne, w~których zadaniem nie~jest pokonanie innych uczestników zabawy, a~osiągnięcie wspólnego celu, który gwarantuje wygraną. Można powiedzieć, że~przeciwnikiem graczy jest w~tym przypadku sama gra, która swoją konstrukcją skłania do~współpracy. Co~może zaskakiwać, pierwsze gry tego typu powstały dopiero w~drugiej połowie XX~wieku i~początkowo miały wyłacznie charakter edukacyjny. Wraz z~popularyzacją tzw. "planszówek" gry kooperacyjne w~znacznym stopniu zyskały na~popularności, a~ich forma wyewoluowała w~kierunku zabawy stawiającej na~aspekty towarzyskie, które w~znacznym stopniu ograniczają, lub~wręcz odrzucają współzawodnictwo. Przykładami takiego podejścia mogą~być Pandemic, Martwa Zima, a~także Hanabi, na~którym skupia~się nasza praca.
+Każdą z~tych gier łączy aspekt rywalizacji: pod~koniec rozgrywki jednoznacznie wyszczególnia~się jednego lub~więcej graczy, których określamy mianem zwycięzców, zaś~reszta -~przegrywa. Inne podejście prezentują gry kooperacyjne, gdzie zadaniem nie~jest pokonanie innych uczestników zabawy, a~osiągnięcie wspólnego celu, który gwarantuje wygraną. Można powiedzieć, że~przeciwnikiem graczy jest w~tym przypadku sama gra, która swoją konstrukcją skłania do~współpracy. Pierwsze gry tego typu powstały dopiero w~drugiej połowie XX~wieku i~początkowo miały wyłacznie charakter edukacyjny. Wraz z~popularyzacją tzw. "planszówek" gry kooperacyjne w~znacznym stopniu zyskały na~popularności, a~ich forma wyewoluowała w~kierunku zabawy kładącej nacisk na~aspekty towarzyskie, które w~znacznym stopniu ograniczają lub~wręcz odrzucają współzawodnictwo. Przykładami takiego podejścia mogą~być Pandemic, Martwa Zima, a~także Hanabi.
 
-Hanabi (jap. fajerwerki) to~w~pełni kooperacyjna gra planszowa, która w~2013 roku wygrała prestiżową nagrodę Spiel~des~Jahres. Gracze wcielają~się w~niej w pracowników fabryki fajerwerków, w~której to~pomieszane zostały rodzaje prochu. Celem jest złożenie w~odpowiedniej kolejności możliwie jak~największej ilości sztucznych ogni, które gracze otrzymują poprzez dobieranie kart z~potasowanej talii. Uczestnicy rozgrywki widzą karty, które są~w~posiadaniu innych graczy, lecz~nie~mogą przypatrywać~się~tym, którymi sami dysponują. Dodatkowo, komunikacja odnosząca~się do~treści kart podlega restrykcyjnym zasadom i~jest w~znacznym stopniu ograniczona, co~w~oczywisty sposób czyni rozgrywkę niebanalną. Jakie strategie należy zatem zastosować, by~wygrać? Jak można przełożyć je~na~świat algorytmów?
+Hanabi (jap. fajerwerki) to~w~pełni kooperacyjna gra planszowa, która w~2013 roku wygrała prestiżową nagrodę Spiel~des~Jahres. Gracze wcielają~się w~niej w pracowników fabryki fajerwerków, w~której omyłkowo zostały pomieszane ze~sobą różne rodzaje prochu. Celem jest złożenie w~odpowiedniej kolejności możliwie jak~największej ilości sztucznych ogni, które gracze otrzymują poprzez dobieranie kart z~potasowanej talii. Uczestnicy rozgrywki widzą karty, które są~w~posiadaniu innych graczy, lecz~nie~mogą przypatrywać~się~tym, którymi sami dysponują. Dodatkowo, komunikacja odnosząca~się do~treści kart podlega restrykcyjnym zasadom i~jest w~znacznym stopniu ograniczona, co~czyni rozgrywkę nietrywialną. Jakie strategie należy zatem zastosować, by~wygrać? Jak można przełożyć je~na~świat algorytmów?
 
 \section{Hanabi a sztuczna inteligencja}
 
-W~teorii gier istnieje pojęcie perfekcyjnego zagrania, czyli pojedynczego ruchu zależnego od~aktualnego etapu gry, który prowadzi do~stanu rozgrywki maksymalizującego oczekiwany wynik, niezależnie od~ruchów, które mogą w~odpowiedzi wykonać inni gracze. Perfekcyjne zagrania są~podstawą optymalnego planu działania, który minimalizuje możliwe straty ponoszone w~trakcie rozgrywania danej partii. Niestety, tak~silna strategia w~przypadku złożonych gier jest nieprawdopodobnie trudna do~uzyskania ze~względu na~ogromną rozpiętość drzewa możliwych do~uzyskania stanów rozgrywki. W~praktyce używa~się algorytmów: heurystycznych, regułowych, opartych na~technikach uczących, nadużywających zasad gry lub~siłowych. Przykładowo, słynny komputer Deep Blue, który w~maju 1997 roku pokonał ówczesnego mistrza świata w~szachach, Garrego Kasparova, nie~posiadał optymalnej strategii. Używał on~w~zamian metody siłowej, wspomaganej algorytmem przeszukującym alfa-beta, rozpatrując wszystkie możliwe zagrania i~wybierając~te, które dawały mu~największą przewagę lokalną. Takie podejście było możliwe z~racji na ogromną moc superkomputera, który potrafił rozpatrywać 200~milionów ruchów na~sekundę.
+W~teorii gier istnieje pojęcie perfekcyjnego zagrania, czyli pojedynczego ruchu zależnego od~aktualnego etapu gry, prowadzącego do~stanu rozgrywki maksymalizującego oczekiwany wynik, niezależnie od~ruchów, które mogą w~odpowiedzi wykonać inni gracze. Perfekcyjne zagrania są~podstawą optymalnego planu działania, minimalizującego możliwe straty ponoszone w~trakcie rozgrywania danej partii. Niestety, tak~silna strategia -~w~przypadku złożonych gier -~jest nieprawdopodobnie trudna do~uzyskania ze~względu na~ogromną rozpiętość drzewa możliwych do~uzyskania stanów rozgrywki. W~praktyce używa~się algorytmów: heurystycznych, regułowych, opartych na~technikach uczących, nadużywających zasad gry lub~siłowych. Przykładowo, słynny komputer Deep Blue, który w~maju 1997 roku pokonał ówczesnego mistrza świata w~szachach, Garrego Kasparova, nie~posiadał optymalnej strategii. Używał on~w~zamian metody siłowej, wspomaganej algorytmem przeszukującym alfa-beta, rozpatrując wszystkie możliwe zagrania i~wybierając~te, które dawały mu~największą przewagę lokalną. Takie podejście było możliwe z~racji na ogromną moc superkomputera, który potrafił rozpatrywać 200~milionów ruchów na~sekundę.
 
 Stworzenie sztucznej inteligencji do~Hanabi to~zadanie, które wymaga pokonania trudności niespotykanych w~innych grach. Jest to~następstwo kilku czynników: niepełnej informacji, losowości dobieranych kart, a~także ograniczonych zasobów, m.in. w~postaci podpowiedzi dla~innych graczy. Agenci muszą sobie ufać, gdyż gracz, który nie~chce współpracować, może w~kilku ruchach doprowadzić do~przegranej całej grupy. Ważne jest, by~nie~marnować zasobów, a~zatem sztuczna inteligencja musi być odpowiednio skoordynowana z~innymi graczami. Ponadto, znikoma ilość kart w~talii nie~pozwala na~wygraną w sytuacji, w~której zagrywane są~wyłącznie karty z~pełną informacją. Oznacza to~zatem, że~agenci muszą posiadać protokół komunikacji, który pozwala im~na~przekazywanie w~obrębie zasad gry dodatkowych, implicytnych informacji, rozumianych przez pozostałych jej~uczestników.
 
-Niniejsza praca ma~na~celu zbadanie Hanabi jako gry kooperacyjnej z~niepełną informacją. Przedstawimy techniki tworzenia agentów sztucznej inteligencji grających w~Hanabi, którzy wykonują możliwie najbardziej efektywne i zrozumiałe dla ludzi ruchy na~tyle szybko, by~umożliwić komfortową rozgrywkę z~człowiekiem na~zwykłych komputerach.
+Niniejsza praca ma~na~celu zbadanie Hanabi jako gry kooperacyjnej z~niepełną informacją. Będziemy analizować techniki tworzenia agentów sztucznej inteligencji grających w~Hanabi, którzy wykonują możliwie najbardziej efektywne i zrozumiałe dla ludzi ruchy na~tyle szybko, by~umożliwić komfortową rozgrywkę z~człowiekiem na~zwykłych komputerach.
 
 
-\chapter{Zasady gry}
+\chapter{Reguły gry}
 
 \renewcommand{\thefigure}{1}
 \begin{figure}[ht!]
@@ -75,37 +77,68 @@ Niniejsza praca ma~na~celu zbadanie Hanabi jako gry kooperacyjnej z~niepełną i
 
 \section{Wyjaśnienie zasad}
 
+Celem gry jest zdobycie możliwie największej ilości punktów poprzez poprawne zagrywanie kart. Maksymalna ilość możliwych do~uzyskania punktów wynosi dwadzieścia pięć. Po~zakończeniu gry ilość uzyskanych punktów oblicza~się poprzez zsumowanie wartości najwyższych kart z~każdego ze~stosów odpowiedniego koloru.
+
 Talia do~gry składa~się z~pięćdziesięciu kart. Każda karta jest~oznaczona jednym z~pięciu kolorów (czerwony, żółty, niebieski, biały, zielony) oraz jedną z~wartości z~zakresu od~1~do~5. Dla każdego koloru istnieją po~trzy karty o~numerze~1, po~dwie karty o~numerach 2,~3~i~4, a~także po~jednej karcie o~numerze~5.
 
-Na początku gry talia jest tasowana. Gracze rozpoczynają rozgrywkę z~ośmioma żetonami podpowiedzi i~trzema żetonami życia. Żetony te są wspólne dla wszystkich uczestników rozgrywki. Jeżeli graczy jest dwóch lub~trzech, każdy z~nich dobiera po~pięć zakrytych kart. Jeżeli jest ich~czterech lub~pięciu, dobierają po~cztery zakryte karty. Następnie gracze po kolei wykonują swoje ruchy. Ruch to~wykonanie jednej z~trzech dostępnych akcji (ruchu~nie~można~pominąć):
+Na początku gry talia jest tasowana. Gracze rozpoczynają rozgrywkę z~ośmioma żetonami podpowiedzi i~trzema żetonami życia. Żetony te są wspólne dla wszystkich uczestników rozgrywki. Jeżeli graczy jest dwóch lub~trzech, każdy z~nich dobiera po~pięć zakrytych kart. Jeżeli jest ich~czterech lub~pięciu, dobierają po~cztery zakryte karty. Następnie gracze po kolei wykonują swoje ruchy. Ruchu nie~można pominąć. Ruch to~wykonanie jednej z~trzech dostępnych akcji:
 \begin{enumerate}
 	\item Zagranie karty:
 
-	Gracz deklaruje chęć zagrania karty, wybiera zakrytą kartę ze swojej ręki, a~następnie wykłada ją~na~stół w~pozycji odkrytej. Karty muszą być~zagrywane w~kolejności rosnącej, zaczynając od~jedynki, inaczej zagranie uważa~się za~niepoprawne. Przykładowo, jeśli na~stole~nie ma~żadnych kart, można zagrać tylko te~oznaczone numerem~1. Jeżeli na~stole znajduje~się wyłącznie niebieska karta o~numerze~1 i~żółta karta o~numerze~4, można zagrać niebieską kartę o~numerze~2, żółtą kartę o~numerze~5, lub dowolną kartę innego koloru o~numerze~1. Jeżeli karta została zagrana poprawnie, jest ona dodawana do~stosu o~odpowiednim kolorze, lub~też~rozpoczyna stos swojego koloru. Jeżeli karta została zagrana niepoprawnie, jest ona~usuwana z~gry, a~gracze tracą jeden z~żetonów życia. Dodatkowo, jeżeli zagrana karta ma~numer~5, gracze otrzymują jeden żeton podpowiedzi (chyba, że~mają ich już osiem). Po~rozpatrzeniu efektów akcji gracz dobiera zakrytą kartę z~talii (jeżeli nie~jest ona~pusta).
+	Gracz deklaruje chęć zagrania karty, wybiera zakrytą ze~swojej ręki, a~następnie wykłada ją~na~stół w~pozycji odkrytej. Zagranie może być~poprawne lub~niepoprawne. Karty muszą być~zagrywane w~kolejności rosnącej, zaczynając od~jedynki, inaczej zagranie uważa~się za~niepoprawne. Przykładowo, jeśli na~stole~nie ma~żadnych kart, można poprawnie zagrać tylko te, które są oznaczone numerem~1. Jeżeli na~stole znajdują~się wyłącznie jedna niebieska karta o~numerze~1 i~stos żółtych kart, spośród których największą wartość ma~karta o~numerze~4, można poprawnie zagrać niebieską kartę o~numerze~2, żółtą kartę o~numerze~5 lub dowolną kartę innego koloru o~numerze~1. Jeżeli karta została zagrana poprawnie, jest ona dodawana do~stosu o~odpowiednim kolorze lub~też~rozpoczyna stos swojego koloru, jeżeli jest to~karta o~numerze~1. Dodatkowo, jeżeli zagrana karta ma~numer~5, gracze otrzymują jeden żeton podpowiedzi (chyba, że~mają ich już osiem). Jeżeli karta została zagrana niepoprawnie, jest ona~usuwana z~gry i~nie~jest dodawana do~żadnego ze~stosów, a~gracze tracą jeden z~żetonów życia. Po~rozpatrzeniu efektów akcji gracz dobiera zakrytą kartę z~talii (jeżeli nie~jest ona~pusta).
 	
 	\item Odrzucenie karty:
  
-	Gracz deklaruje chęć odrzucenia karty, wybiera zakrytą kartę ze swojej ręki, a~następnie wykłada ją~na~stół w~pozycji odkrytej. Karta ta~jest usuwana z~gry, bez dokładania do~któregokolwiek ze~stosów, a~gracze otrzymują jeden żeton podpowiedzi, jeżeli aktualna ilość żetonów podpowiedzi jest~mniejsza niż~osiem. W~przeciwnym wypadku odrzucenie karty nie~ma~żadnego dodatkowego efektu. Po~rozpatrzeniu efektów akcji gracz dobiera zakrytą kartę z~talii (jeżeli nie~jest ona~pusta).
+	Gracz deklaruje chęć odrzucenia karty, wybiera zakrytą ze~swojej ręki, a~następnie wykłada ją~na~stół w~pozycji odkrytej. Karta ta~jest usuwana z~gry, bez dokładania jej~do~któregokolwiek ze~stosów, a~gracze otrzymują jeden żeton podpowiedzi (jeżeli aktualna ilość żetonów podpowiedzi jest~mniejsza niż~osiem -~w~przeciwnym wypadku odrzucenie karty nie~ma~żadnego dodatkowego efektu). Po~rozpatrzeniu efektów akcji gracz dobiera zakrytą kartę z~talii (jeżeli nie~jest ona~pusta).
 
 	\item Udzielenie podpowiedzi innemu graczowi:
 
-	Gracz usuwa jeden z~żetonów podpowiedzi, wybiera innego uczestnika rozgrywki, a~następnie może udzielić mu~jednej z~dwóch informacji: wskazać wszystkie jego karty o~wybranym kolorze, lub~wszystkie jego karty o~wybranym numerze. Akcji tej nie~można wykonać, jeśli w~grze~nie ma~żadnych żetonów podpowiedzi.
+	Gracz usuwa jeden z~żetonów podpowiedzi, wybiera innego uczestnika rozgrywki, a~następnie może udzielić mu~jednej z~dwóch informacji: wskazać wszystkie jego karty o~wybranym kolorze lub~wszystkie jego karty o~wybranym numerze. Akcji tej nie~można wykonać, jeśli w~grze~nie ma~żadnych żetonów podpowiedzi.
 \end{enumerate}
 
 Jeżeli któryś z graczy dobierze ostatnią kartę z~talii, każdy uczestnik rozgrywa jedną dodatkową turę (wraz z~graczem, który dobrał ostatnią kartę), po~czym gra~się kończy.
 
-Gra natychmiast kończy~się, gdy~zostanie utracony ostatni żeton życia, lub gdy~wszystkie stosy odpowiednich kolorów zostały skompletowane (na~każdy z~nich położono kartę o~numerze~5).
+Gra natychmiast kończy~się, gdy~zostanie utracony ostatni żeton życia lub gdy~wszystkie stosy odpowiednich kolorów zostaną skompletowane (czyli na~każdy z~nich poprawnie położono kartę o~numerze~5).
 
-Po~zakończeniu gry ilość uzyskanych punktów oblicza~się poprzez zsumowanie wartości najwyższych kart z~każdego ze~stosów odpowiedniego koloru, można zatem uzyskać maksymalnie dwadzieścia pięć punktów.
+\section{Dodatkowe obserwacje}
 
-\section{Niepisane obserwacje}
+Z powodu losowej natury gry, niektórych rozdań nie~da~się wygrać z~maksymalną ilością punktów. Najprostsza taka sytuacja ma~miejsce, gdy w~rozgrywce na~dwóch graczy jeden z~nich dobierze same karty o~numerze~5, drugi dobierze wyłącznie karty o~numerze~4, a~na~górze talii znajdują~się pozostałe karty o~numerze~4.
 
-\ldots
+Ponadto, ze~względu na~ograniczony rozmiar talii, zagrywanie wyłącznie tych kart, o~których posiada~się komplet informacji, jest wysoce nieefektywne. Po~rozdaniu kart graczom talia zawiera~od~30~do~40 kart, zależnie od~liczby graczy. Aby uzyskać najwyższy wynik, należy zagrać aż~25~kart, a~zagranie każdej z~nich oznacza zmniejszenie rozmiaru talii o~jeden. Oznacza to (zakładając, że~gracze próbują uzyskać 25~punktów), że~można wykonać maksymalnie od~10~do~17 ruchów, w~których odrzuca~się kartę, wliczając w~to~tury po~opróżnieniu talii. Po~doliczeniu początkowych 8~żetonów daje to~maksymalną ilość 25~podpowiedzi. Oznacza to, że~w~grze na~dwie osoby każda podpowiedź musi jednoznacznie ujawniać średnio po~jednej karcie, lecz każda z~nich potrzebuje dwóch podpowiedzi różnego rodzaju, by~uzyskać pełną informację. Przy pięciu graczach każda podpowiedź musi średnio ujawniać już nie~jedną, a~prawie półtorej karty. Dodatkowo, jeżeli chcemy odrzucać wyłącznie karty, które można bezpiecznie usunąć z~gry, inni gracze muszą nam zakomunikować ich brak przydatności poprzez odpowiednie podpowiedzi (lub ich brak, co~jest w znacznym stopniu utrudnione przez konieczność udzielania pełnej informacji o~zawartości ręki współuczestników). Karty bezużyteczne mogą zostać ujawnione w~drodze przypadku, podczas ujawniania innych kart, lecz nie~jest to~pewne. W~rezultacie najczęściej przyjmowaną konwencją wśród graczy jest odrzucanie najstarszej karty w~ręce: jeżeli żaden z~uczestników rozgrywki nie~ostrzega przed usunięciem karty z~gry, istnieje wysokie prawdopodobieństwo, że~jest ona nieprzydatna.
+
+\chapter{Strategie}
+
+\section{Naginanie zasad gry}
+
+W~oficjalnych zasadach gry nie~ma~wyszczególnionego przymusu udzielania podpowiedzi, które ujawniałyby jakiekolwiek karty. Jeżeli wybierzemy gracza, który~nie posiada żadnych czerwonych kart i~zdecydujemy się na~podpowiedzenie mu~czerwonego koloru, tura jest pomijana za~cenę żetonu podpowiedzi. Choć taki ruch wydaje~się~nie mieć sensu, gdyż podpowiedź można wykorzystać w~produktywny sposób, otwiera on~możliwość poważnego nagięcia zasad gry. Jeżeli każdej z~możliwych podpowiedzi przypiszemy unikatową wartość numeryczną, możemy za~ich pomocą przekazywać innym graczom informacje liczbowe. Jest to~powód, dla~którego możliwość udzielania pustych podpowiedzi jest uznawana w~społeczności graczy Hanabi za~kontrowersyjną, toteż w~niektórych edycjach gry została ona zakazana.
+
+Fakt ten można wykorzystać do~stworzenia agenta, który za~pomocą pozornie bezwartościowych ruchów udziela podpowiedzi wszystkim graczom jednocześnie. Korzysta on~ze~słynnej zagadki logicznej, znanej jako problem więźniów i~kapeluszy, uogólnionej i~odpowiednio dopasowanej do~liczby graczy. Gracz, który rozgrywa aktualną turę, oblicza idealne zagrania dla~innych uczestników rozgrywki, po~czym szyfruje je~do~postaci liczbowej. Kolejni gracze, znając podaną przez poprzednika wartość, po~rozpatrzeniu optymalnych zagrań innych graczy, są~w~stanie wywnioskować, jaki ruch powinni wykonać.
+
+Według badań z 2017 roku\cite{HatPlayer}, agent ten uzyskuje maksymalną ilość punktów średnio w~92\%~rozgrywanych gier, co jest wynikiem bliskim optymalnemu. Jest to~imponujący rezultat, zarówno ze~względu na~bardzo szybkie działanie algorytmu, jak i~jego nadzwyczajną efektywność.
+
+Niestety, taki sposób gry całkowicie zawodzi, gdy jeden z~graczy wyłamie się z~konwencji narzuconej przez protokół komunikacji. Dodatkowo, algorytm działa wyłącznie w~rozgrywce na~czterech oraz pięciu graczy, gdyż głównym powodem jego sukcesu jest możliwość przekazywania w~każdej z~podpowiedzi maksymalnej ilości informacji -~zmniejszenie ilości graczy powoduje znaczne zredukowanie efektywności ruchów. Są~to~powody, dla których agent ten nie~nadaje~się do~rozgrywki z~człowiekiem.
+
+\section{Wyszukiwanie wyczerpujące}
+
+\ldots\cite{NP-Complete}
+
+\section{Podejście regułowe}
+
+\section{Algorytmy uczące}
 
 %%%%% BIBLIOGRAFIA
 
-%\begin{thebibliography}{1}
-%\bibitem{example} \ldots
-%\end{thebibliography}
+\begin{thebibliography}{1}
+
+\bibitem{HatPlayer} B. Bouzy, \textit{Playing Hanabi Near-Optimally}, 2017. URL: 
+\href{http://helios.mi.parisdescartes.fr/~bouzy/publications/bouzy-hanabi-2017.pdf}{\textbf{link}} (term. wiz. 11.01.2020)
+
+\bibitem{NP-Complete} J.-F Baffier i in., \textit{Hanabi is NP-complete, Even for Cheaters who Look at Their Cards}, 2017. URL: 
+\href{https://arxiv.org/pdf/1603.01911.pdf}{\textbf{link}} (term. wiz. 11.01.2020)
+
+\bibitem{MCTS} A. Lerer, H. Hu, J. Foerster, N. Brown, \textit{Building AI that can master complex cooperative games with hidden information}, 2019. URL: 
+\href{https://ai.facebook.com/blog/building-ai-that-can-master-complex-cooperative-games-with-hidden-information/}{\textbf{link}} (term. wiz. 11.01.2020)
+
+\end{thebibliography}
 
 \end{document}
