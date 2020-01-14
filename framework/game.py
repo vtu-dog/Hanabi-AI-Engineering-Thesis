@@ -178,6 +178,7 @@ class Game:
         ]
 
         move = self.players[self.player_turn].play(RoundInfo(self))
+        learning_player = self.players[self.player_turn].learning
 
         assert(self.__is_legal(move))
 
@@ -200,6 +201,10 @@ class Game:
 
                 self.score += 1
                 self.played.append(card)
+
+                if learning_player:
+                    self.players[self.player_turn].analyze_turn('Correct Play', card)
+
                 self.info(
                     '{0} correctly played {1}'.format(
                         self.players[self.player_turn],
@@ -212,8 +217,13 @@ class Game:
                 card.misplayed = True
                 self.history.append(PlayDetails(
                     choice, hand_position, card, self.deck_size))
+
                 self.lives -= 1
                 self.discarded.append(card)
+
+                if learning_player:
+                    self.players[self.player_turn].analyze_turn('Wrong Play', card)
+
                 self.info(
                     '{0} misplayed {1}, {2} lives remaining'.format(
                         self.players[self.player_turn],
@@ -234,7 +244,12 @@ class Game:
             self.history.append(PlayDetails(
                 choice, hand_position, card, self.deck_size))
             self.discarded.append(card)
+
+            if learning_player:
+                self.players[self.player_turn].analyze_turn('Discard', card, self.hints)
+
             self.hints = min(self.hints + 1, MAX_HINTS)
+
             self.info(
                 '{0} discarded {1}, the number of hints is currently {2}'.format(
                     self.players[self.player_turn],
@@ -248,11 +263,22 @@ class Game:
             player_number, hint = move.details
 
             hand = get_player_hand_by_number(self, player_number)
+            reveal_size = 0
             for card in hand:
-                card.reveal_info_from_hint(hint)
+                if card.real_rank is hint and card.revealed_rank is not hint:
+                    reveal_size += 1
+                if card.real_suit is hint and card.revealed_suit is not hint:
+                    reveal_size += 1
+
+            for card in hand:
+                card.reveal_info_from_hint(hint, reveal_size)
 
             self.history.append(PlayDetails(
                 choice, move.details[0], move.details[1], self.deck_size))
+
+            if learning_player:
+                self.players[self.player_turn].analyze_turn('Hint', (player_number, hint), self.hints)
+
             self.hints -= 1
             self.info(
                 '{0} hinted {1} to {2}, {3} hints remaining'.format(

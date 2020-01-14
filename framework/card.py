@@ -38,6 +38,7 @@ class Card:
         self.discarded = False
         self.played_on_turn = None
         self.drawn_on_turn = None
+        self.hint_size = 0
 
     def __eq__(self, other):
         if self.real_rank is None or self.real_suit is None:
@@ -73,11 +74,15 @@ class Card:
         self.real_rank = self.revealed_rank
         self.real_suit = self.revealed_suit
 
-    def reveal_info_from_hint(self, hint):
+    def reveal_info_from_hint(self, hint, reveal_size):
         if self.real_rank == hint:
             self.revealed_rank = self.real_rank
         if self.real_suit == hint:
             self.revealed_suit = self.real_suit
+
+        self.hint_size = reveal_size
+        if self.revealed_suit is not None and self.revealed_rank is not None:
+            self.hint_size = 1
 
     def is_playable(self, round_info):
         board_state = round_info.board_state

@@ -19,8 +19,8 @@ best_score = 0
 while played_games < games_to_play:
     played_games += 1
 
-    p = [players.Trustful(), players.Trustful(),
-         players.Trustful(), players.Trustful()]
+    p = [players.Reinforced(), players.Reinforced(),
+         players.Reinforced(), players.Reinforced()]
 
     game = Game(p, logger, log=True)
 

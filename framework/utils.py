@@ -105,6 +105,19 @@ def list_all_known_cards(round_info, player_number=None):
 
     return known, unknown_suit, unknown_rank
 
+def list_others_cards(round_info, player_number):
+    known = {}
+    for suit in Suit:
+        known[suit] = {}
+        for rank in Rank:
+            known[suit][rank] = 0
+
+    for player_hand in round_info.other_players_hands:
+        if player_number is not player_hand.player_number:
+            for card in player_hand:
+                known[card.real_suit][card.real_rank] += 1
+
+    return known
 
 def list_remaining_playable_cards(round_info):
     remaining = {}

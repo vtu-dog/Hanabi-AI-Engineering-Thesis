@@ -11,6 +11,7 @@ class BasePlayer:
     def inject_info(self, player_number, logger, name_suffix=''):
         self.player_number = player_number
         self.logger = logger
+        self.learning = False
         self.name += name_suffix
 
     def play(self, round_info):
