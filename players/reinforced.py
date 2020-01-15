@@ -16,12 +16,7 @@ class Reinforced(BasePlayer):
         self.remaining = {}
         self.known = {}
         self.point_of_uselessness = {}
-        self.own_card_states = {}
-        self.hint_states = {}
-        self.macro_states = {}
         self.oldest_card = {}
-        self.states_history = []
-        self.hand_hint_states = {}
 
     def initialize_player(self, round_info):
         self.number_of_players = round_info.number_of_players
@@ -31,9 +26,9 @@ class Reinforced(BasePlayer):
         first_time = True
         while first_time or player_number is not original_player_number:
             first_time = False
-            self.hand_hint_states[player_number] = []
+            self.learning_state.hand_hint_states[player_number] = []
             for i in range(len(round_info.player_hand)):
-                self.hand_hint_states[player_number].append([])
+                self.learning_state.hand_hint_states[player_number].append([])
             player_number = utils.next_player_number(round_info, original_player_number)
 
     def initialize_variables(self, round_info):
@@ -163,9 +158,9 @@ class Reinforced(BasePlayer):
         state = (current_alignment, future_alignment, revealed_rank, revealed_suit, remaining, hint_size,
                  card_age, oldest_card, hints)
 
-        if state not in self.own_card_states:
-            self.own_card_states[state] = [0.35, 0.35, 0.3]
-        return state, self.own_card_states[state], card.hand_position
+        if state not in self.learning_state.own_card_states:
+            self.learning_state.own_card_states[state] = [0.35, 0.35, 0.3]
+        return state, self.learning_state.own_card_states[state], card.hand_position
 
     def read_others_hands(self, round_info, player_number):
         original_player_number = player_number
@@ -332,9 +327,9 @@ class Reinforced(BasePlayer):
                     state = (rank, current_alignment, future_alignment, obviously_useless, corrected, falsely_hinted,
                              chain_bonus, last_remaining, card_age, oldest_card, player_distance, hints)
 
-                    if state not in self.own_card_states:
-                        self.hint_states[state] = [0.5, 0.5]
-                    return state, self.hint_states[state], player_number, hint
+                    if state not in self.learning_state.own_card_states:
+                        self.learning_state.hint_states[state] = [0.5, 0.5]
+                    return state, self.learning_state.hint_states[state], player_number, hint
 
                 for rank in utils.Rank:
                     if len(targets[rank]) > 0:
@@ -392,9 +387,9 @@ class Reinforced(BasePlayer):
         quality_to_heuristic(hint_quality)
 
         state = (hints, lives, deck_remains, play_quality, discard_quality, hint_quality)
-        if state not in self.macro_states:
-            self.macro_states[state] = [0.3, 0.3, 0.4]
-        return state, self.macro_states[state]
+        if state not in self.learning_state.macro_states:
+            self.learning_state.macro_states[state] = [0.3, 0.3, 0.4]
+        return state, self.learning_state.macro_states[state]
 
     def read_board(self, round_info, player_number):
         self.known = utils.list_others_cards(round_info, player_number)
@@ -476,7 +471,7 @@ class Reinforced(BasePlayer):
                         HintDetails(hint[2], hint[3])
                     )
 
-        self.states_history.append((action, used_state, play_actions, hint_actions, macro_weights))
+        self.learning_state.states_history.append((action, used_state, play_actions, hint_actions, macro_weights))
 
         return action
 
@@ -488,37 +483,37 @@ class Reinforced(BasePlayer):
         if move is 'Correct Play':
             # give large reward to last play action
             transfer_rate = 0.4
-            state = self.states_history[-1][1][0]
-            weights = self.states_history[-1][1][1]
+            state = self.learning_state.states_history[-1][1][0]
+            weights = self.learning_state.states_history[-1][1][1]
             weights[0] += transfer_rate * weights[1] + transfer_rate * weights[2]
             weights[1] *= 1 - transfer_rate
             weights[2] *= 1 - transfer_rate
-            self.own_card_states[state] = weights
+            self.learning_state.own_card_states[state] = weights
 
             # give small reward to last action of every other player
             transfer_rate = 0.05
             for i in range(-2, -self.number_of_players - 1, -1):
-                if len(self.states_history) + i >= 0:
-                    action = self.states_history[i][0][0]
-                    state = self.states_history[i][1][0]
-                    weights = self.states_history[i][1][1]
+                if len(self.learning_state.states_history) + i >= 0:
+                    action = self.learning_state.states_history[i][0][0]
+                    state = self.learning_state.states_history[i][1][0]
+                    weights = self.learning_state.states_history[i][1][1]
 
                     if action is Choice.PLAY:
                         weights[0] += transfer_rate * weights[1] + transfer_rate * weights[2]
                         weights[1] *= 1 - transfer_rate
                         weights[2] *= 1 - transfer_rate
-                        self.own_card_states[state] = weights
+                        self.learning_state.own_card_states[state] = weights
 
                     if action is Choice.DISCARD:
                         weights[1] += transfer_rate * weights[0] + transfer_rate * weights[2]
                         weights[0] *= 1 - transfer_rate
                         weights[2] *= 1 - transfer_rate
-                        self.own_card_states[state] = weights
+                        self.learning_state.own_card_states[state] = weights
 
                     if action is Choice.HINT:
                         weights[0] += transfer_rate * weights[1]
                         weights[1] *= 1 - transfer_rate
-                        self.hint_states[state] = weights
+                        self.learning_state.hint_states[state] = weights
 
             # give medium-large reward to hints that led to this play
             transfer_rate = 0.2
@@ -545,9 +540,9 @@ class Reinforced(BasePlayer):
     #def analyze_game(self, round_info):
 
     #def update_hand_hint_states(self, round_info):
-    #    last_action = self.states_history[-1][0]
+    #    last_action = self.learning_state.states_history[-1][0]
     #    if last_action[0] is Choice.PLAY or last_action[0] is Choice.DISCARD:
-    #        self.hand_hint_states[last_action[1]] = []
+    #        self.learning_state.hand_hint_states[last_action[1]] = []
     #    else:
 
     def play(self, round_info):

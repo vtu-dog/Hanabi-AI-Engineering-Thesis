@@ -2,6 +2,7 @@
 
 from .card import Rank, Suit, Card
 from .hand import Hand
+from .learning_state import LearningState
 from .round_info import RoundInfo
 from .utils import *
 
@@ -10,9 +11,11 @@ from random import shuffle
 
 
 class Game:
-    def __init__(self, players, logger, log=True):
+    def __init__(self, players, logger, log=True, learning_state=LearningState()):
         self.logger = logger
         self.log = log
+
+        self.learning_state = learning_state
 
         self.players = players
         self.number_of_players = len(players)
@@ -21,7 +24,8 @@ class Game:
         for player_number, player in enumerate(self.players):
             player.inject_info(
                 player_number,
-                logger,
+                self.logger,
+                self.learning_state,
                 ' #{0}'.format(str(player_number + 1))
             )
 
@@ -203,7 +207,8 @@ class Game:
                 self.played.append(card)
 
                 if learning_player:
-                    self.players[self.player_turn].analyze_turn('Correct Play', card)
+                    self.players[self.player_turn].analyze_turn(
+                        'Correct Play', card)
 
                 self.info(
                     '{0} correctly played {1}'.format(
@@ -222,7 +227,8 @@ class Game:
                 self.discarded.append(card)
 
                 if learning_player:
-                    self.players[self.player_turn].analyze_turn('Wrong Play', card)
+                    self.players[self.player_turn].analyze_turn(
+                        'Wrong Play', card)
 
                 self.info(
                     '{0} misplayed {1}, {2} lives remaining'.format(
@@ -246,7 +252,8 @@ class Game:
             self.discarded.append(card)
 
             if learning_player:
-                self.players[self.player_turn].analyze_turn('Discard', card, self.hints)
+                self.players[self.player_turn].analyze_turn(
+                    'Discard', card, self.hints)
 
             self.hints = min(self.hints + 1, MAX_HINTS)
 
@@ -277,7 +284,8 @@ class Game:
                 choice, move.details[0], move.details[1], self.deck_size))
 
             if learning_player:
-                self.players[self.player_turn].analyze_turn('Hint', (player_number, hint), self.hints)
+                self.players[self.player_turn].analyze_turn(
+                    'Hint', (player_number, hint), self.hints)
 
             self.hints -= 1
             self.info(
