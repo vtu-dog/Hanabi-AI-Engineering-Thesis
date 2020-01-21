@@ -7,3 +7,4 @@ from .trustful import *
 from .smart_cheater import *
 from .stopped_clock import *
 from .reinforced import *
+from .bayesian_trustful import *

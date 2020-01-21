@@ -9,20 +9,20 @@ logging.basicConfig(format='%(message)s')
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
-#players = [players.Distrustful(), players.Distrustful()]
-
 played_games = 0
 gsum = 0
 
+learn = LearningState()
 games_to_play = 1
 best_score = 0
 while played_games < games_to_play:
     played_games += 1
 
-    p = [players.Reinforced(), players.Reinforced(),
-         players.Reinforced(), players.Reinforced()]
+    p = [players.Reinforced(), players.Trustful(),
+         players.Trustful(), players.Trustful()]
 
-    game = Game(p, logger, log=True)
+    learn.states_history = []
+    game = Game(p, logger, log=True, learning_state=learn)
 
     while game.is_game_over() is False:
         game.make_move()
@@ -34,5 +34,9 @@ while played_games < games_to_play:
     if played_games % 10 == 0:
         print(played_games, gsum / played_games, best_score)
 
+    if played_games % 100 == 0:
+        learn.save_knowledge()
 
+learn.save_knowledge()
+print(learn.score_history[0])
 print(gsum / games_to_play)

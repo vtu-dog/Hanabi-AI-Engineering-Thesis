@@ -87,6 +87,7 @@ class StoppedClock(BasePlayer):
                                 Choice.HINT,
                                 HintDetails(player, card.real_rank)
                             )
+
         for player in players:
             if player is not player_number:
                 hand = utils.get_player_hand_by_number(round_info, player)
@@ -95,7 +96,6 @@ class StoppedClock(BasePlayer):
                         Choice.HINT,
                         HintDetails(player, card.real_suit)
                     )
-
 
     def play(self, round_info):
         action_order = [self.check_for_play, self.check_for_hint, self.check_for_discard]

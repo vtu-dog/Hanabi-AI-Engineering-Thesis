@@ -8,11 +8,15 @@ from copy import deepcopy
 debug = False
 
 
-class Trustful(BasePlayer):
+class BayesianTrustful(BasePlayer):
     def __init__(self, *args):
-        super(Trustful, self).__init__(*args)
-        self.name = 'Trustful'
+        super(BayesianTrustful, self).__init__(*args)
+        self.name = 'Bayesian Trustful'
         self.card_hint_type = {}
+        self.discard_tip = []
+        self.good_tip = []
+        self.risky_tip = []
+        self.information_tip = []
         self.hand_size = 5
 
     def initialize_card_hint_history(self, round_info):
@@ -28,6 +32,11 @@ class Trustful(BasePlayer):
             for x in range(len(round_info.player_hand)):
                 self.card_hint_type[player_number].append(None)
             player_number = utils.next_player_number(round_info, player_number)
+
+        self.discard_tip = self.learning_state.discard_tip_parameters
+        self.good_tip = self.learning_state.good_tip_parameters
+        self.risky_tip = self.learning_state.risky_tip_parameters
+        self.information_tip = self.learning_state.information_tip_parameters
 
     def extrapolate_board_state(self, round_info, target_player):
         player_number = utils.next_player_number(round_info, round_info.player_turn)
@@ -678,7 +687,8 @@ class Trustful(BasePlayer):
                             answer = check_card_potential(card, player, board_state)[0]
                         else:
                             answer = check_card_potential(card, player, board_state, pure_info=True)[0]
-                        if answer >= 0.95:
+                        if answer >= pow(distance_to_player_multiplier, player_distance) * \
+                                     pow(lower_rank_multiplier, 5 - card.real_rank.value):
                             board_state[card.real_suit] += 1
                         potential += answer
                     if not worth_hinting[player] and rank is not info_rank:
@@ -797,27 +807,34 @@ class Trustful(BasePlayer):
         if round_info.hints <= 1:
             return False
 
-        play_tip = self.check_for_play_tip(round_info, player_number, only_next_player=only_next_player)
+        play_tip = self.check_for_play_tip(round_info, player_number, self.good_tip[0], self.good_tip[1],
+                                           self.good_tip[2], self.good_tip[3], self.good_tip[4], self.good_tip[5],
+                                           self.good_tip[6], self.good_tip[7], only_next_player=only_next_player)
         if play_tip is not False:
             return play_tip
 
         if debug and round_info.log:
             self.info("Discard:")
-        discard_tip = self.check_for_discard_tip(round_info, player_number, only_next_player=only_next_player)
+        discard_tip = self.check_for_discard_tip(round_info, player_number, self.discard_tip[0], self.discard_tip[1],
+                                                 self.discard_tip[2], only_next_player=only_next_player)
         return discard_tip
 
     def check_for_risky_tip(self, round_info, player_number, only_next_player=False):
         if round_info.hints <= 1:
             return False
 
-        return self.check_for_play_tip(round_info, player_number, 0.9, 0.3, -1.6, only_next_player=only_next_player)
+        return self.check_for_play_tip(round_info, player_number, self.risky_tip[0], self.risky_tip[1],
+                                       self.risky_tip[2], self.risky_tip[3], self.risky_tip[4], self.risky_tip[5],
+                                       self.risky_tip[6], self.risky_tip[7], only_next_player=only_next_player)
 
     def check_for_information_tip(self, round_info, player_number, only_next_player=False):
         if round_info.hints <= 1:
             return False
 
-        return self.check_for_play_tip(round_info, player_number, hint_pass_score=0.65, information_tip_value=0.7,
-                                       already_has_play_multiplier=1.0, only_next_player=only_next_player)
+        return self.check_for_play_tip(round_info, player_number, self.information_tip[0], self.information_tip[1],
+                                       self.information_tip[2], self.information_tip[3], self.information_tip[4],
+                                       self.information_tip[5], self.information_tip[6], self.information_tip[7],
+                                       only_next_player=only_next_player)
 
     def check_for_save_tip(self, round_info, player_number):
         best_player_number = -1
@@ -894,9 +911,12 @@ class Trustful(BasePlayer):
     def play(self, round_info):
         if round_info.current_turn is 0:
             self.initialize_card_hint_history(round_info)
+
         if debug and round_info.log:
             self.info("{0}".format(self.card_hint_type))
+
         self.check_play_history(round_info)
+
         if debug and round_info.log:
             self.info("{0}".format(self.card_hint_type))
 

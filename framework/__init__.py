@@ -7,3 +7,4 @@ from .hand import *
 from .learning_state import *
 from .round_info import *
 from .utils import *
+from .bayesian_parameters import *
