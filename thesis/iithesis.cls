@@ -226,7 +226,7 @@
           {\frenchspacing\@polishabstract\selectlanguage{english}}
   \end{abstract}
   \if@long{\if@pol{\selectlanguage{polish}}{\selectlanguage{english}}}{}
-  \tableofcontents
+  \small\tableofcontents
 }
 
 \endinput
