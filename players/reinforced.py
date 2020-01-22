@@ -467,35 +467,36 @@ class Reinforced(BasePlayer):
 
             used_actions.append(used_play)
 
-        if use_random:
-            micro_decision = random.random()
-            sum_of_weights = 0
-            for hint in hint_actions:
-                sum_of_weights += 1/len(hint_actions)
-                if sum_of_weights-1/len(hint_actions) <= micro_decision <= sum_of_weights:
-                    used_hints.append(hint)
+        if round_info.hints > 0:
+            if use_random:
+                micro_decision = random.random()
+                sum_of_weights = 0
+                for hint in hint_actions:
+                    sum_of_weights += 1/len(hint_actions)
+                    if sum_of_weights-1/len(hint_actions) <= micro_decision <= sum_of_weights:
+                        used_hints.append(hint)
 
-        else:
-            max_of_weights = 0
-            used_hint = None
-            total_count = 0
+            else:
+                max_of_weights = 0
+                used_hint = None
+                total_count = 0
 
-            for hint in hint_actions:
-                total_count += hint[1][0][0]
-            total_count = math.log(total_count)
+                for hint in hint_actions:
+                    total_count += hint[1][0][0]
+                total_count = math.log(total_count)
 
-            for hint in hint_actions:
-                if round_info.log and debug:
-                    self.info("{0}".format(hint))
+                for hint in hint_actions:
+                    if round_info.log and debug:
+                        self.info("{0}".format(hint))
 
-                sum_of_weights = self.learning_state.get_chance(hint[1][0]) \
-                                 + exploration_param * math.sqrt(total_count / hint[1][0][0])
+                    sum_of_weights = self.learning_state.get_chance(hint[1][0]) \
+                                     + exploration_param * math.sqrt(total_count / hint[1][0][0])
 
-                if sum_of_weights > max_of_weights:
-                    max_of_weights = sum_of_weights
-                    used_hint = hint
+                    if sum_of_weights > max_of_weights:
+                        max_of_weights = sum_of_weights
+                        used_hint = hint
 
-            used_hints.append(used_hint)
+                used_hints.append(used_hint)
 
         macro_weights = self.decide_macro_action(round_info, used_actions, used_hints)
 
@@ -557,7 +558,7 @@ class Reinforced(BasePlayer):
             )
 
         if macro_action == "Hint":
-            used_state = used_actions[2]
+            used_state = used_hints[0]
             action = ChoiceDetails(
                 Choice.HINT,
                 HintDetails(used_hints[0][2], used_hints[0][3])

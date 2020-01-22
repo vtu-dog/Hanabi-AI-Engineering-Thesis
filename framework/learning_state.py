@@ -8,8 +8,8 @@ class LearningState:
         self.own_card_states = {}
         self.hint_states = {}
         self.macro_states = {}
-        self.score_history = [2, 2]
-        #self.load_knowledge()
+        self.score_history = [4, 4]
+        self.load_knowledge()
         self.states_history = []
         self.max_macro_size = 200
 

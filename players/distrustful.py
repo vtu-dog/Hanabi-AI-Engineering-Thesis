@@ -94,7 +94,7 @@ class Distrustful(BasePlayer):
             if card.revealed_rank is None and card.revealed_suit is None:
                 unmarked.append(card)
 
-        if len(unmarked) is 0:
+        if len(unmarked) == 0:
             known = utils.list_all_known_cards(round_info)[0]
             remaining = utils.list_remaining_playable_cards(round_info)
             discarded = utils.list_discarded_cards(round_info)
@@ -103,8 +103,8 @@ class Distrustful(BasePlayer):
                     add = True
                     for rank in utils.Rank:
                         if round_info.board_state[card.revealed_suit] < rank.value and \
-                                remaining[card.revealed_suit][rank] is 1 and \
-                                known[card.revealed_suit][rank] - discarded[card.revealed_suit][rank] is 0:
+                                remaining[card.revealed_suit][rank] == 1 and \
+                                known[card.revealed_suit][rank] - discarded[card.revealed_suit][rank] == 0:
                             add = False
                     if add:
                         unmarked.append(card)
@@ -113,13 +113,13 @@ class Distrustful(BasePlayer):
                     add = True
                     for suit in remaining:
                         if round_info.board_state[suit] < card.revealed_rank.value and \
-                                remaining[suit][card.revealed_rank] is 1 and \
-                                known[suit][card.revealed_rank] - discarded[suit][card.revealed_rank] is 0:
+                                remaining[suit][card.revealed_rank] == 1 and \
+                                known[suit][card.revealed_rank] - discarded[suit][card.revealed_rank] == 0:
                             add = False
                     if add:
                         unmarked.append(card)
 
-        if len(unmarked) is 0:
+        if len(unmarked) == 0:
             unmarked = player_hand
 
         oldest = unmarked[0]
@@ -132,7 +132,7 @@ class Distrustful(BasePlayer):
         )
 
     def check_for_necessary_tip(self, round_info, player_number):
-        if round_info.hints is 0:
+        if round_info.hints == 0:
             return False
 
         remaining = utils.list_remaining_playable_cards(round_info)
@@ -142,7 +142,7 @@ class Distrustful(BasePlayer):
         discarded = next_player_hand[discarded_position]
 
         if round_info.board_state[discarded.real_suit] < discarded.real_rank.value and \
-                remaining[discarded.real_suit][discarded.real_rank] is 1 and \
+                remaining[discarded.real_suit][discarded.real_rank] == 1 and \
                 discarded.real_rank.value - round_info.board_state[discarded.real_suit] <= 1:
             if discarded.revealed_rank is None:
                 return ChoiceDetails(
@@ -197,7 +197,7 @@ class Distrustful(BasePlayer):
             for card in player_hand:
                 already_hinted = False
                 for player in hinted_plays:
-                    if player is not player_number and hinted_plays[player][card.real_suit][card.real_rank] is not 0:
+                    if player is not player_number and hinted_plays[player][card.real_suit][card.real_rank] != 0:
                         already_hinted = True
                 if round_info.board_state[card.real_suit] < card.real_rank.value and not already_hinted:
                     if card.revealed_suit is None:
@@ -221,7 +221,7 @@ class Distrustful(BasePlayer):
                 pow(distance_to_player_multiplier, player_distance) * \
                 pow(lower_rank_multiplier, 5-card.real_rank.value)
             if (card.revealed_suit is not None or card.revealed_rank is not None) and \
-                    card.real_rank.value - round_info.board_state[card.real_suit] is 1:
+                    card.real_rank.value - round_info.board_state[card.real_suit] == 1:
                 card_potential *= double_hint_multiplier
             return card_potential
 

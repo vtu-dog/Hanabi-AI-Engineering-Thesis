@@ -76,14 +76,18 @@ class Card:
         self.real_suit = self.revealed_suit
 
     def reveal_info_from_hint(self, hint, reveal_size, state=None):
-        if self.real_rank == hint:
+        revealed = False
+        if self.real_rank == hint and self.revealed_rank is None:
             self.revealed_rank = self.real_rank
-        if self.real_suit == hint:
+            revealed = True
+        if self.real_suit == hint and self.revealed_suit is None:
             self.revealed_suit = self.real_suit
+            revealed = True
 
-        self.hint_size = reveal_size
+        if revealed:
+            self.hint_size = reveal_size
         if self.revealed_suit is not None and self.revealed_rank is not None:
-            self.hint_size = 1
+            self.hint_size = 0
 
         if state is not None:
             self.hint_states.append(state)

@@ -26,8 +26,8 @@ def play_function(d0, d1, d2, g0, g1, g2, g3, g4, g5, g6, g7, r0, r1, r2, r3, r4
     while played_games < games_to_play:
         played_games += 1
 
-        p = [players.BayesianTrustful(), players.BayesianTrustful(),
-             players.BayesianTrustful(), players.BayesianTrustful()]
+        p = [players.TrustfulParamInjection(), players.TrustfulParamInjection(),
+             players.TrustfulParamInjection(), players.TrustfulParamInjection()]
 
         game = Game(p, logger, log=False, learning_state=parameters)
 
@@ -53,18 +53,18 @@ pbounds = {'d0': (0, 5), 'd1': (-10, 0), 'd2': (0.7, 1.5),
 optimizer = bayes_opt.BayesianOptimization(
     f=play_function,
     pbounds=pbounds,
-    verbose=2, # verbose = 1 prints only when a maximum is observed, verbose = 0 is silent
+    verbose=2,
     random_state=1,
 )
 
-load_logs(optimizer, logs=["./logs2.json"])
-logger1 = JSONLogger(path="./logs4.json")
-optimizer.subscribe(Events.OPTMIZATION_STEP, logger1)
+load_logs(optimizer, logs=["./logs4.json"])
+#logger1 = JSONLogger(path="./logs4.json")
+#optimizer.subscribe(Events.OPTMIZATION_STEP, logger1)
 
 print("New optimizer is now aware of {} points.".format(len(optimizer.space)))
-optimizer.maximize(
-    init_points=0,
-    n_iter=2000,
-)
+#optimizer.maximize(
+#    init_points=0,
+#    n_iter=2000,
+#)
 
 print(optimizer.max)

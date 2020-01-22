@@ -61,9 +61,9 @@ class Game:
             self.logger.info(msg)
 
     def __draw_card(self):
-        if self.deck_size is not 0:
+        if self.deck_size != 0:
             self.deck_size -= 1
-            if self.log and self.deck_size is 0:
+            if self.log and self.deck_size == 0:
                 msg1 = 'Last card has been drawn,'
                 msg2 = 'each player gets one more turn'
                 self.info('{0} {1}'.format(msg1, msg2))
@@ -307,7 +307,7 @@ class Game:
             info_msg = 'Hinted {0} to P{1}'.format(
                 hint, player_number + 1)
 
-        if self.lives is 0 or self.score is MAX_SCORE:
+        if self.lives == 0 or self.score == MAX_SCORE:
             self.game_over = True
 
         skip_timer = False
@@ -355,7 +355,7 @@ class Game:
 
         self.player_turn = next_player_number(self, self.player_turn)
 
-        if self.player_turn is 0:
+        if self.player_turn == 0:
             self.current_turn += 1
 
         return info_msg

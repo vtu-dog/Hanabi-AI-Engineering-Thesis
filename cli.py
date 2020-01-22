@@ -18,8 +18,8 @@ best_score = 0
 while played_games < games_to_play:
     played_games += 1
 
-    p = [players.Reinforced(), players.Trustful(),
-         players.Trustful(), players.Trustful()]
+    p = [players.Reinforced(), players.Reinforced(),
+         players.Reinforced(), players.Reinforced()]
 
     learn.states_history = []
     game = Game(p, logger, log=True, learning_state=learn)

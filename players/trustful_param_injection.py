@@ -7,10 +7,10 @@ from copy import deepcopy
 debug = False
 
 
-class BayesianTrustful(BasePlayer):
+class TrustfulParamInjection(BasePlayer):
     def __init__(self, *args):
-        super(BayesianTrustful, self).__init__(*args)
-        self.name = 'Bayesian Trustful'
+        super(TrustfulParamInjection, self).__init__(*args)
+        self.name = 'Trustful Tester'
         self.card_hint_type = {}
         self.discard_tip = []
         self.good_tip = []
@@ -73,7 +73,7 @@ class BayesianTrustful(BasePlayer):
 
                 if move[0] is Choice.PLAY:
                     if move[2].real_rank.value is current_board_state[move[2].real_suit]:
-                        if current_board_state[move[2].real_suit] is 5:
+                        if current_board_state[move[2].real_suit] == 5:
                             current_hints = max(0, current_hints - 1)
                         current_board_state[move[2].real_suit] -= 1
                         current_played.pop()
@@ -101,7 +101,7 @@ class BayesianTrustful(BasePlayer):
                     if move[0] is Choice.PLAY:
                         if move[2].real_rank.value is current_board_state[move[2].real_suit] + 1:
                             current_board_state[move[2].real_suit] += 1
-                            if current_board_state[move[2].real_suit] is 5:
+                            if current_board_state[move[2].real_suit] == 5:
                                 current_hints = min(current_hints + 1, utils.MAX_HINTS)
                             current_played.append(move[2])
                         else:
@@ -113,7 +113,7 @@ class BayesianTrustful(BasePlayer):
                         current_discarded.append(move[2])
 
                     self.card_hint_type[player_number][move[1]] = None
-                    if move[3] is 0:
+                    if move[3] == 0:
                         for x in range(move[1], self.hand_size - 1):
                             self.card_hint_type[player_number][x] = self.card_hint_type[player_number][x + 1]
 
@@ -151,7 +151,7 @@ class BayesianTrustful(BasePlayer):
                     else:
                         player_hand = round_info.hands_history[i][target_player]
 
-                    if player_distance is 0:
+                    if player_distance == 0:
                         answer = self.check_for_obvious_play(current_round_info, target_player)
                         if answer is False:
                             answer = self.check_for_hinted_play(current_round_info, target_player)
@@ -252,10 +252,10 @@ class BayesianTrustful(BasePlayer):
 
         for x in range(0, len(player_hand)):
             if player_hand[x].revealed_suit is not None and player_hand[x].revealed_rank is None and \
-                    self.card_hint_type[player_number][x] is "Play":
+                    self.card_hint_type[player_number][x] == "Play":
                 hinted_suits[player_hand[x].revealed_suit] += 1
             if player_hand[x].revealed_rank is not None and player_hand[x].revealed_suit is None and \
-                    self.card_hint_type[player_number][x] is "Play":
+                    self.card_hint_type[player_number][x] == "Play":
                 hinted_ranks[player_hand[x].revealed_rank] += 1
 
         known = utils.list_all_known_cards(round_info, player_number)[0]
@@ -297,12 +297,12 @@ class BayesianTrustful(BasePlayer):
                 best_alignment = board_alignment[rank]
                 hint_type = 'rank'
 
-        if best_hint is not -1 and best_hint_size <= best_alignment + alignment_delta:
+        if best_hint != -1 and best_hint_size <= best_alignment + alignment_delta:
             for x in range(0, len(player_hand)):
                 if hint_type == 'rank':
                     if player_hand[x].revealed_rank is not None and player_hand[x].revealed_suit is None and \
                             player_hand[x].revealed_rank is best_hint and \
-                            self.card_hint_type[player_number][x] is "Play":
+                            self.card_hint_type[player_number][x] == "Play":
                         return ChoiceDetails(
                             Choice.PLAY,
                             x
@@ -310,7 +310,7 @@ class BayesianTrustful(BasePlayer):
                 else:
                     if player_hand[x].revealed_suit is not None and player_hand[x].revealed_rank is None and \
                             player_hand[x].revealed_suit is best_hint and \
-                            self.card_hint_type[player_number][x] is "Play":
+                            self.card_hint_type[player_number][x] == "Play":
                         return ChoiceDetails(
                             Choice.PLAY,
                             x
@@ -327,11 +327,11 @@ class BayesianTrustful(BasePlayer):
             point_of_uselessness[suit] = None
             for rank in utils.Rank:
                 if round_info.board_state[suit] < rank.value:
-                    if point_of_uselessness[suit] is None and remaining[suit][rank] is 0:
+                    if point_of_uselessness[suit] is None and remaining[suit][rank] == 0:
                         point_of_uselessness[suit] = rank
 
         if card.revealed_suit is not None:
-            if round_info.board_state[card.revealed_suit] is 5 or \
+            if round_info.board_state[card.revealed_suit] == 5 or \
                     (point_of_uselessness[card.revealed_suit] is not None and
                      round_info.board_state[card.revealed_suit] + 1 is point_of_uselessness[card.revealed_suit].value):
                 useless = True
@@ -382,7 +382,7 @@ class BayesianTrustful(BasePlayer):
             if card.revealed_rank is None and card.revealed_suit is None:
                 unmarked.append(card)
 
-        if len(unmarked) is 0:
+        if len(unmarked) == 0:
             known = utils.list_all_known_cards(round_info, player_number)[0]
             remaining = utils.list_remaining_playable_cards(round_info)
             discarded = utils.list_discarded_cards(round_info)
@@ -392,8 +392,8 @@ class BayesianTrustful(BasePlayer):
                     add = True
                     for rank in utils.Rank:
                         if round_info.board_state[card.revealed_suit] < rank.value and \
-                                remaining[card.revealed_suit][rank] is 1 and \
-                                known[card.revealed_suit][rank] - discarded[card.revealed_suit][rank] is 0:
+                                remaining[card.revealed_suit][rank] == 1 and \
+                                known[card.revealed_suit][rank] - discarded[card.revealed_suit][rank] == 0:
                             add = False
                     if add:
                         unmarked.append(card)
@@ -402,13 +402,13 @@ class BayesianTrustful(BasePlayer):
                     add = True
                     for suit in remaining:
                         if round_info.board_state[suit] < card.revealed_rank.value and \
-                                remaining[suit][card.revealed_rank] is 1 and \
-                                known[suit][card.revealed_rank] - discarded[suit][card.revealed_rank] is 0:
+                                remaining[suit][card.revealed_rank] == 1 and \
+                                known[suit][card.revealed_rank] - discarded[suit][card.revealed_rank] == 0:
                             add = False
                     if add:
                         unmarked.append(card)
 
-        if len(unmarked) is 0:
+        if len(unmarked) == 0:
             unmarked = player_hand
 
         oldest = unmarked[0]
@@ -422,7 +422,7 @@ class BayesianTrustful(BasePlayer):
         )
 
     def check_for_necessary_tip(self, round_info, player_number):
-        if round_info.hints is 0 or round_info.hints is utils.MAX_HINTS:
+        if round_info.hints == 0 or round_info.hints == utils.MAX_HINTS:
             return False
 
         if player_number is round_info.player_turn:
@@ -467,7 +467,7 @@ class BayesianTrustful(BasePlayer):
                 played_card = next_player_hand[played_position]
 
                 if round_info.board_state[played_card.real_suit] < played_card.real_rank.value and \
-                        remaining[played_card.real_suit][played_card.real_rank] is 1 and \
+                        remaining[played_card.real_suit][played_card.real_rank] == 1 and \
                         self.check_card_usefulness(round_info, played_card) is False:
                     distrust = True
 
@@ -607,7 +607,7 @@ class BayesianTrustful(BasePlayer):
             already_hinted = False
             if card.revealed_suit is None and card.revealed_rank is None:
                 for players in hinted_plays:
-                    if hinted_plays[players][card.real_suit][card.real_rank] is not 0:
+                    if hinted_plays[players][card.real_suit][card.real_rank] != 0:
                         already_hinted = True
 
             card_potential = pow(distance_to_player_multiplier, player_distance) *\
@@ -615,10 +615,10 @@ class BayesianTrustful(BasePlayer):
 
             if (card.revealed_suit is not None or card.revealed_rank is not None) and \
                     card.real_rank.value - board_state[card.real_suit] <= 1 and \
-                    self.card_hint_type[player][card.hand_position] is "Play":
+                    self.card_hint_type[player][card.hand_position] == "Play":
                 card_potential *= double_hint_multiplier
 
-            if card.real_rank.value <= 4 and card.real_rank.value - board_state[card.real_suit] is 1 and \
+            if card.real_rank.value <= 4 and card.real_rank.value - board_state[card.real_suit] == 1 and \
                     known[card.real_suit][utils.Rank(card.real_rank.value + 1)] > 0:
                 card_potential *= chain_bonus_multiplier
 
@@ -627,18 +627,18 @@ class BayesianTrustful(BasePlayer):
 
             if pure_info \
                     or (max(round_info.board_state.values()) < card.real_rank.value - 1 and current_rank is None) \
-                    or (self.card_hint_type[player][card.hand_position] is "Information"):
+                    or (self.card_hint_type[player][card.hand_position] == "Information"):
 
                 card_potential = information_tip_value * pow(distance_to_player_multiplier, player_distance) * \
                                  pow(lower_rank_multiplier, card.real_rank.value - 1)
 
                 if not already_hinted and \
-                        card.real_rank.value - board_state[card.real_suit] is 1 and \
-                        self.card_hint_type[player][card.hand_position] is "Information":
+                        card.real_rank.value - board_state[card.real_suit] == 1 and \
+                        self.card_hint_type[player][card.hand_position] == "Information":
                     card_potential = pow(distance_to_player_multiplier, player_distance) * \
                                      pow(lower_rank_multiplier, 5 - card.real_rank.value)
 
-                if card.real_rank.value <= 4 and card.real_rank.value - board_state[card.real_suit] is 1 and \
+                if card.real_rank.value <= 4 and card.real_rank.value - board_state[card.real_suit] == 1 and \
                         known[card.real_suit][utils.Rank(card.real_rank.value + 1)] > 0:
                     card_potential *= chain_bonus_multiplier
 
@@ -662,8 +662,8 @@ class BayesianTrustful(BasePlayer):
             if player_distance < 0:
                 player_distance += round_info.number_of_players
 
-            if player_distance is 0 or not only_next_player:
-                if player_distance is 0:
+            if player_distance == 0 or not only_next_player:
+                if player_distance == 0:
                     play = self.check_for_hinted_play(round_info, player)
                     target_hand = utils.get_player_hand_by_number(round_info, player)
                     if play is not False:
@@ -775,7 +775,7 @@ class BayesianTrustful(BasePlayer):
             if player_distance < 0:
                 player_distance += round_info.number_of_players
 
-            if player_distance is 0 or not only_next_player:
+            if player_distance == 0 or not only_next_player:
                 for rank in potential_discardable_ranks[player]:
                     potential = 0
                     for card in potential_discardable_ranks[player][rank]:
@@ -860,7 +860,7 @@ class BayesianTrustful(BasePlayer):
             discarded_position = self.check_for_guess_discard(round_info, player_number)[1]
             discarded_card = player_hand[discarded_position]
 
-            if remaining[discarded_card.real_suit][discarded_card.real_rank] is 1 and \
+            if remaining[discarded_card.real_suit][discarded_card.real_rank] == 1 and \
                     max(round_info.board_state.values()) < discarded_card.real_rank.value - 1 and \
                     discarded_card.revealed_rank is None and discarded_card.revealed_suit is None:
                 best_player_number = player_number
@@ -886,7 +886,7 @@ class BayesianTrustful(BasePlayer):
                         play_priority = True
 
                 for card in player_hand:
-                    if remaining[card.real_suit][card.real_rank] is 1 and \
+                    if remaining[card.real_suit][card.real_rank] == 1 and \
                             max(round_info.board_state.values()) < card.real_rank.value - 1 and \
                             card.revealed_rank is None and card.revealed_suit is None and \
                             best_hint_rank > card.real_rank.value:
@@ -908,7 +908,7 @@ class BayesianTrustful(BasePlayer):
         self.logger.info(msg)
 
     def play(self, round_info):
-        if round_info.current_turn is 0:
+        if round_info.current_turn == 0:
             self.initialize_card_hint_history(round_info)
 
         if debug and round_info.log:
