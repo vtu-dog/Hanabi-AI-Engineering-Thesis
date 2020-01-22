@@ -11,7 +11,7 @@ from random import shuffle
 
 
 class Game:
-    def __init__(self, players, logger, log=True, learning_state=None):
+    def __init__(self, players, logger=None, log=False, learning_state=None):
         self.logger = logger
         self.log = log
 
@@ -211,7 +211,8 @@ class Game:
                 self.played.append(card)
 
                 if learning_player:
-                    self.players[self.player_turn].analyze_turn('Correct Play', card, RoundInfo(self))
+                    self.players[self.player_turn].analyze_turn(
+                        'Correct Play', card, RoundInfo(self))
 
                 self.info(
                     '{0} correctly played {1}'.format(
@@ -230,7 +231,8 @@ class Game:
                 self.discarded.append(card)
 
                 if learning_player:
-                    self.players[self.player_turn].analyze_turn('Wrong Play', card, RoundInfo(self))
+                    self.players[self.player_turn].analyze_turn(
+                        'Wrong Play', card, RoundInfo(self))
 
                 self.info(
                     '{0} misplayed {1}, {2} lives remaining'.format(
@@ -254,7 +256,8 @@ class Game:
             self.discarded.append(card)
 
             if learning_player:
-                self.players[self.player_turn].analyze_turn('Discard', card, RoundInfo(self))
+                self.players[self.player_turn].analyze_turn(
+                    'Discard', card, RoundInfo(self))
 
             self.hints = min(self.hints + 1, MAX_HINTS)
 
@@ -289,7 +292,8 @@ class Game:
                 choice, move.details[0], move.details[1], self.deck_size))
 
             if learning_player:
-                self.players[self.player_turn].analyze_turn('Hint', (player_number, hint), RoundInfo(self))
+                self.players[self.player_turn].analyze_turn(
+                    'Hint', (player_number, hint), RoundInfo(self))
 
             self.hints -= 1
             self.info(
@@ -337,7 +341,8 @@ class Game:
 
         if self.game_over:
             if learning_player:
-                self.players[self.player_turn].analyze_game(RoundInfo(self), self.score)
+                self.players[self.player_turn].analyze_game(
+                    RoundInfo(self), self.score)
 
             if self.score is MAX_SCORE:
                 self.info('\nPerfect victory!')

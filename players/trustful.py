@@ -2,7 +2,6 @@
 
 from framework import BasePlayer, Choice, ChoiceDetails, utils, HintDetails
 import functools
-import bayes_opt
 from copy import deepcopy
 
 debug = False
