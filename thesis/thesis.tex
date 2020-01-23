@@ -17,6 +17,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{caption}
+\usepackage{float}
 
 \graphicspath{{img/}}
 \let\cleardoublepage=\clearpage
@@ -80,6 +81,8 @@ Gra natychmiast kończy~się, gdy~zostanie utracony ostatni żeton życia lub gd
 
 \section{Dodatkowe obserwacje}
 
+Partie na~dwóch graczy cechują~się bardzo wysokim stopniem trudności. Uczestnicy rozgrywki znacznie częściej muszą radzić sobie ze~skomplikowanymi sytuacjami, które wynikają z~niekorzystnych rozdań. Fakt ten jest spotęgowany przez znikomą ilość dostępnych informacji (każdy z~graczy widzi naraz tylko pięć kart), a~także łatwość wpadnięcia w~cykl, w~którym jeden z~graczy udziela podpowiedzi, a~drugi zagrywa lub odrzuca karty.
+
 Z powodu losowej natury gry, niektórych rozdań nie~da~się wygrać z~maksymalną ilością punktów. Najprostsza taka sytuacja ma~miejsce, gdy w~rozgrywce na~dwóch graczy jeden z~nich dobierze same karty o~numerze~5, drugi dobierze wyłącznie karty o~numerze~4, a~na~górze talii znajdują~się pozostałe karty o~numerze~4. Aby uzyskać dostęp do~kart o~innych numerach, gracze muszą odrzucić (lub niepoprawnie zagrać) co~najmniej sześć kart. Z~zasady szufladkowej Dirchleta można wywnioskować, że~wszystkie kopie co~najmniej jednej z~kart danego rodzaju zostaną bezpowrotnie usunięte z~gry, bez umieszczania ich na~stosie, co~uniemożliwia wygraną.
 
 Ze~względu na~ograniczony rozmiar talii, zagrywanie wyłącznie tych kart, o~których posiada~się komplet informacji, jest wysoce nieefektywne. Po~rozdaniu kart talia zawiera od~30~do~40 kart, zależnie od~liczby graczy. Aby uzyskać najwyższy wynik, należy zagrać aż~25~kart, a~zagranie każdej z~nich oznacza zmniejszenie rozmiaru talii o~jeden. Oznacza to (zakładając, że~gracze próbują uzyskać 25~punktów), że~można wykonać maksymalnie od~10~do~17 ruchów, w~których odrzuca~się kartę, wliczając w~to~tury po~opróżnieniu talii. Po~doliczeniu początkowych 8~żetonów daje to~maksymalną ilość 25~podpowiedzi. Oznacza to, że~w~grze na~dwie osoby każda podpowiedź musi jednoznacznie ujawniać średnio po~jednej karcie, lecz każda z~nich potrzebuje dwóch podpowiedzi różnego rodzaju, by~uzyskać pełną informację. Przy pięciu graczach każda podpowiedź musi średnio ujawniać już nie~jedną, a~prawie półtorej karty.
@@ -124,33 +127,15 @@ Niestety, taki sposób gry całkowicie zawodzi, gdy jeden z~graczy wyłamie się
 
 \chapter{Ujęcie praktyczne}
 
-W~celu zbadania zaprezentowanych sposobów tworzenia sztucznej inteligencji, zaimplementowaliśmy ośmiu agentów grających w Hanabi. Aby umożliwić testowanie ich możliwości, opracowaliśmy także graficzny interfejs (patrz: \hyperref[fig:gui]{Rysunek 2.1}), pozwalający użytkownikowi na~aktywne uczestnictwo w~rozgrywce, złożonej z~dowolnie dobranego przez niego składu graczy komputerowych.
+W~celu zbadania zaprezentowanych sposobów tworzenia sztucznej inteligencji, która potrafiłaby grać w~Hanabi, zaimplementowaliśmy ośmiu agentów. Aby umożliwić testowanie ich możliwości, opracowaliśmy także graficzny interfejs (patrz: \hyperref[fig:gui]{Rysunek 2.1}), pozwalający użytkownikowi na~aktywne uczestnictwo w~rozgrywce, złożonej z~dowolnie dobranego przez niego składu graczy komputerowych.
 
-Siedmiu agentów jest opartych o~systemy regułowe, różniące~się stopniem zaawansowania wdrażanych strategii. Aby usprawnić działanie jednego z~nich, użyliśmy bayesowskiej metody optymalizacji hiperparametrów, korzystającej z~procesów gaussowskich. Ostatni z~zaprezentowanych agentów stosuje algorytm uczący oparty o~funkcje heurystyczne, wspomagane metodą Monte Carlo.
+Siedmiu agentów jest opartych o~systemy regułowe, różniące~się stopniem zaawansowania wdrażanych strategii. Aby usprawnić działanie jednego z~agentów regułowych, użyliśmy bayesowskiej metody optymalizacji hiperparametrów, korzystającej z~procesów gaussowskich. Ostatni z~zaprezentowanych agentów stosuje algorytm uczący ze~wzmocnieniem, oparty o~funkcje heurystyczne generalizujące stan gry, wspomagane procesami decyzyjnymi Monte Carlo.
+
+Systemy zasad zostały oparte o~nasze własne spostrzeżenia, których doszukaliśmy~się poprzez obserwację rozgrywek ludzkich graczy i~uznaliśmy za~kluczowe do~gry na~wysokim poziomie. Każdy kolejny agent regułowy bazuje na~konceptach, które zostały użyte do~zbudowania jego poprzedników, i~usprawnia je. Takie podejście~prowadzi do~naturalnej progresji prezentowanych warstw abstrakcji.
 
 \section{Cheater}
 
-Cheater jest agentem, którego strategia polega na~bezmyślnym oszukiwaniu. Program zawsze posiada komplet informacji o~kartach, którymi dysponuje, lecz~nie wykorzystuje dostępnej mu~wiedzy w~optymalny sposób: zagrywa karty, gdy to~możliwe, w~przeciwnym wypadku losowo je~odrzuca, nie~zwracając uwagi na~fakt, że~może to~znacząco utrudnić lub nawet uniemożliwić uzyskanie wysokich wyników.
-
-\begin{table}[h!]
-	\centering
-	\begin{tabular}{ r|c|c|c|c| }
-		\multicolumn{1}{r}{}
-		 & \multicolumn{1}{c}{2 graczy}
-		 & \multicolumn{1}{c}{3 graczy}
-		 & \multicolumn{1}{c}{4 graczy}
-		 & \multicolumn{1}{c}{5 graczy} \\
-		\cline{2-5}
-		średnia & 1 & 2 & 3 & 4 \\
-		\cline{2-5}
-		mediana & 1 & 2 & 3 & 4 \\
-		\cline{2-5}
-		wariancja & 1 & 2 & 3 & 4 \\
-		\cline{2-5}
-	\end{tabular}
-	\caption{Wyniki agenta Cheater (rozmiar próby: 1000 gier)}
-	\label{table:Cheater}
-\end{table}
+Cheater jest agentem, którego strategia polega na~bezmyślnym oszukiwaniu. Program zawsze posiada komplet informacji o~kartach, którymi dysponuje, lecz~nie wykorzystuje dostępnej mu~wiedzy w~optymalny sposób: zagrywa karty, gdy to~możliwe, w~przeciwnym wypadku losowo je~odrzuca.
 
 \subsection*{Nowe pojęcia}
 
@@ -159,13 +144,14 @@ Cheater jest agentem, którego strategia polega na~bezmyślnym oszukiwaniu. Prog
 	
 	Jeżeli gracz jest w posiadaniu karty, o~której posiada komplet informacji, kartę tę~określimy jako ujawnioną.
 	
+	\newpage %
 	\item Bezpieczna akcja:
 	
 	Jeżeli gracz może wykonać ruch, który nie doprowadzi do~utraty żetonów życia, taką akcję określimy jako bezpieczną.
 	
 	\item Bezpieczne zagranie:
 	
-	Jeżeli gracz posiada ujawnioną kartę, którą może bezpiecznie (czyli poprawnie) położyć na~planszy, taką akcję nazwiemy bezpiecznym zagraniem.
+	Jeżeli gracz posiada ujawnioną kartę, którą może bezpiecznie (czyli poprawnie) położyć na~planszy, wykonanie takiej akcji nazwiemy bezpiecznym zagraniem.
 \end{itemize}
 
 \subsection*{Schemat działania}
@@ -176,9 +162,7 @@ Cheater jest agentem, którego strategia polega na~bezmyślnym oszukiwaniu. Prog
 	\item Odrzuć losową kartę.
 \end{enumerate}
 
-\section{SmartCheater}
-
-SmartCheater dodaje głębię poczynaniom agenta Cheater. Program zawsze posiada komplet informacji o~kartach, którymi dysponuje, i~wykorzystuje tę~wiedzę w~sposób bliski optymalnemu, stosując strategię przedłużającą rozgrywkę. Agent potrafi oceniać przydatność kart i~za~wszelką cenę unika ruchów, które utrudniają lub uniemożliwiają wygraną.
+\subsection*{Osiągi}
 
 \begin{table}[h!]
 	\centering
@@ -189,16 +173,24 @@ SmartCheater dodaje głębię poczynaniom agenta Cheater. Program zawsze posiada
 		 & \multicolumn{1}{c}{4 graczy}
 		 & \multicolumn{1}{c}{5 graczy} \\
 		\cline{2-5}
-		średnia & 1 & 2 & 3 & 4 \\
+		średnia & 20.61 & 22.33 & 21.76 & 22.03 \\
 		\cline{2-5}
-		mediana & 1 & 2 & 3 & 4 \\
+		mediana & 21 & 23 & 22 & 22 \\
 		\cline{2-5}
-		wariancja & 1 & 2 & 3 & 4 \\
+		wariancja & 6.49 & 4.01 & 4.45 & 3.51 \\
+		\cline{2-5}
+		odchylenie standardowe & 2.55 & 2.00 & 2.11 & 1.87 \\
 		\cline{2-5}
 	\end{tabular}
-	\caption{Wyniki agenta SmartCheater (rozmiar próby: 1000 gier)}
-	\label{table:SmartCheater}
+	\caption{Wyniki agenta Cheater (rozmiar próby: 1000 gier)}
+	\label{table:Cheater}
 \end{table}
+
+Uzyskane wyniki są~bardzo dobre, lecz cechują~się stosunkowo wysoką wariancją. Agenci są~skłonni do~odrzucania kluczowych kart i~nie~zwracają uwagi na~fakt, że~może to~znacząco utrudnić lub nawet uniemożliwić dalsze zdobywanie punktów.
+
+\section{SmartCheater}
+
+SmartCheater dodaje głębię poczynaniom agenta Cheater. Program zawsze posiada komplet informacji o~kartach, którymi dysponuje, i~wykorzystuje tę~wiedzę w~sposób bliski optymalnemu, stosując strategię przedłużającą rozgrywkę. Agent potrafi oceniać przydatność kart i~za~wszelką cenę unika ruchów, które utrudniają lub uniemożliwiają wygraną.
 
 \subsection*{Nowe pojęcia}
 
@@ -227,15 +219,13 @@ SmartCheater dodaje głębię poczynaniom agenta Cheater. Program zawsze posiada
 	\item Jeżeli posiadasz bezpieczne zagranie, wykonaj je. Pierwszeństwo nadawane jest zagraniom lawinowym, zaś w~razie konfliktu wygrywa losowa karta o~najniższym numerze.
 	\item Jeżeli możesz spasować turę, a~ruch ten~nie~przeszkodzi żadnemu z~pozostałych graczy w~wykonaniu jednej z~akcji od~2~do~5, zrób to.
 	\item Jeżeli posiadasz bezużyteczną kartę, odrzuć ją.
-	\item Jeżeli możesz, spasuj turę.
+	\item Jeżeli jest to~możliwe, spasuj turę.
 	\item Jeżeli posiadasz kartę, której kopia znajduje się w~ręce innego gracza, odrzuć ją.
 	\item Jeżeli posiadasz kartę, która nie jest krytyczna, odrzuć ją.
 	\item Odrzuć losową kartę krytyczną o~najwyższym numerze.
 \end{enumerate}
 
-\section{StoppedClock}
-
-Agent StoppedClock wykonuje losowe ruchy, które nie~mogą doprowadzić do~utraty żetonów życia. Jego postępowanie, choć bardzo chaotyczne, czasem prowadzi do~wysokich punktacji, zgodnie z~maksymą: ``nawet zepsuty zegar dwa razy na~dobę pokazuje właściwą godzinę''.
+\subsection*{Osiągi}
 
 \begin{table}[h!]
 	\centering
@@ -246,16 +236,24 @@ Agent StoppedClock wykonuje losowe ruchy, które nie~mogą doprowadzić do~utrat
 		 & \multicolumn{1}{c}{4 graczy}
 		 & \multicolumn{1}{c}{5 graczy} \\
 		\cline{2-5}
-		średnia & 1 & 2 & 3 & 4 \\
+		średnia & 24.72 & 24.93 & 24.87 & 24.86 \\
 		\cline{2-5}
-		mediana & 1 & 2 & 3 & 4 \\
+		mediana & 25 & 25 & 25 & 25 \\
 		\cline{2-5}
-		wariancja & 1 & 2 & 3 & 4 \\
+		wariancja & 0.65 & 0.11 & 0.19 & 0.19 \\
+		\cline{2-5}
+		odchylenie standardowe & 0.80 & 0.33 & 0.44 & 0.44 \\
 		\cline{2-5}
 	\end{tabular}
-	\caption{Wyniki agenta StoppedClock (rozmiar próby: 1000 gier)}
-	\label{table:StoppedClock}
+	\caption{Wyniki agenta SmartCheater (rozmiar próby: 1000 gier)}
+	\label{table:SmartCheater}
 \end{table}
+
+Jak można oczekiwać po~agencie, który posuwa~się do~oszustwa bliskiego doskonałemu, jego wyniki są~bardzo wysokie, nawet w~przypadku partii na~dwóch graczy, które cechują~się największymi dysproporcjami w~rozgrywce.
+
+\section{StoppedClock}
+
+Agent StoppedClock wykonuje losowe ruchy, które nie~mogą doprowadzić do~utraty żetonów życia. Jego postępowanie, choć bardzo chaotyczne, czasem prowadzi do~wysokich punktacji, zgodnie z~maksymą: ``nawet zepsuty zegar dwa razy na~dobę pokazuje właściwą godzinę''.
 
 \subsection*{Schemat działania}
 
@@ -267,9 +265,7 @@ Ruch agenta polega na~zbadaniu, które z~trzech dostępnych akcji mogą być wyk
 	\item Wybierz losowego gracza, który posiada co~najmniej jedną kartę o~niepełnej informacji, wylosuj jedną, po~czym losowo podpowiedz kolor lub numer wybranej karty, jeżeli nie~zostały one uprzednio ujawnione. Jeżeli wszyscy gracze posiadają komplet informacji, spasuj turę.
 \end{itemize}
 
-\section{SimpleDistrustful}
-
-Agent SimpleDistrustful imituje postępowanie człowieka, który po~raz pierwszy gra w~Hanabi: nie~posiada wysublimowanej strategii, lecz potrafi przeprowadzać kluczowe wnioskowania, które na~jego miejscu mogłyby dokonać osoby o~podstawowej znajomości zasad. Program nie~udziela redundantnych podpowiedzi, stroni od~odrzucania kart, które najprawdopodobniej mogą~się jeszcze przydać, a~także rozumie, że~pewne karty zawsze można bezpiecznie zagrać -~mimo posiadania o~nich niepełnej informacji.
+\subsection*{Osiągi}
 
 \begin{table}[h!]
 	\centering
@@ -280,27 +276,35 @@ Agent SimpleDistrustful imituje postępowanie człowieka, który po~raz pierwszy
 		 & \multicolumn{1}{c}{4 graczy}
 		 & \multicolumn{1}{c}{5 graczy} \\
 		\cline{2-5}
-		średnia & 1 & 2 & 3 & 4 \\
+		średnia & 5.95 & 6.34 & 5.46 & 4.42 \\
 		\cline{2-5}
-		mediana & 1 & 2 & 3 & 4 \\
+		mediana & 6 & 6 & 5 & 4 \\
 		\cline{2-5}
-		wariancja & 1 & 2 & 3 & 4 \\
+		wariancja & 7.08 & 5.16 & 3.86 & 3.02 \\
+		\cline{2-5}
+		odchylenie standardowe & 2.66 & 2.27 & 1.96 & 1.74 \\
 		\cline{2-5}
 	\end{tabular}
-	\caption{Wyniki agenta SimpleDistrustful (rozmiar próby: 1000 gier)}
-	\label{table:SimpleDistrustful}
+	\caption{Wyniki agenta StoppedClock (rozmiar próby: 1000 gier)}
+	\label{table:StoppedClock}
 \end{table}
+
+Agent wykonujący wyłącznie losowe ruchy jest pierwszym, który nie~oszukuje. Niestety, ma~on~nikłą szanse na~uzyskanie wysokich wyników, a~jego konstrukcja nigdy nie~pozwoli na~wygraną. Jest to~spowodowane ograniczeniem, które umożliwia programowi funkcjonowanie: wykonywane ruchy muszą być bezpieczne, co~koliduje z~ograniczoną liczbą żetonów podpowiedzi.
+
+\section{SimpleDistrustful}
+
+Agent SimpleDistrustful imituje postępowanie człowieka, który po~raz pierwszy gra w~Hanabi: wykonuje wyłącznie bezpieczne ruchy, lecz robi to~umiejętnie, gdyż potrafi przeprowadzać pewne wnioskowania, które na~jego miejscu mogłyby dokonać osoby o~podstawowej znajomości zasad. Program nie~udziela redundantnych podpowiedzi, stroni od~odrzucania kart, które mogą~się jeszcze przydać, a~także rozumie, że~niektóre karty zawsze można bezpiecznie zagrać lub odrzucić -~mimo posiadania o~nich niepełnej informacji.
 
 \subsection*{Nowe pojęcia}
 
 \begin{itemize}
 	\item Inferowalna karta:
 
-	Użyteczności niektórych kart można dociec poprzez analizę aktualnego stanu rozgrywki. Przykładowo: na~początku gry zawsze można zagrać dowolną kartę z~numerem~1, niezależnie od~tego, czy jej kolor został ujawniony. Podobnie, jeżeli nie~odrzucono ani nie zagrano żadnej karty o~numerze~4, żadna taka karta nie~może być krytyczna. Karty o~takiej właściwości nazywamy inferowalnymi, czyli dającymi~się wywnioskować.
+	Użyteczności niektórych kart można dociec poprzez analizę aktualnego stanu rozgrywki. Przykładowo: na~początku gry zawsze można zagrać dowolną kartę z~numerem~1, niezależnie od~tego, czy jej kolor został ujawniony. Podobnie, jeżeli nie~odrzucono ani nie zagrano żadnej karty o~numerze~4, żadna taka karta nie~może być krytyczna. Karty o~takiej właściwości nazywamy inferowalnymi, czyli dającymi~się wywnioskować. Karty, które są~ujawnione, są~trywialnie inferowalne.
 	
 	\item Wartościowa podpowiedź:
 	
-	Jeżeli dwóch lub więcej uczestników rozgrywki posiada kopię danej karty, warto skupić~się ujawnianiu wyłącznie jednej z~nich. Wartościowa podpowiedź to~taka, która unika powtarzania znanych informacji.
+	Zdarzają się sytuacje, w~których udzielanie pewnych informacji jest niepożądane. Przykładowo: jeżeli dwóch lub więcej uczestników rozgrywki posiada kopię danej karty, warto skupić~się ujawnianiu wyłącznie jednej z~nich. Wartościowa podpowiedź to~taka, która jest lokalnie optymalna, gdyż unika powtarzania znanych informacji.
 	
 	\item Najbliższy gracz:
 	
@@ -311,28 +315,182 @@ Agent SimpleDistrustful imituje postępowanie człowieka, który po~raz pierwszy
 \subsection*{Schemat działania}
 
 \begin{enumerate}
-	\item Jeżeli posiadasz bezpieczne lub inferowalnie bezpieczne zagranie, wykonaj je.
-	\item Jeżeli jest to~możliwe, wybierz najbliższego gracza, któremu możesz udzielić wartościowej podpowiedzi, po~czym zrób to, priorytetyzując karty o~niższych numerach.
+	\item Jeżeli posiadasz inferowalnie bezpieczne zagranie, wykonaj je.
+	\item Jeżeli jest to~możliwe, wybierz najbliższego gracza, któremu możesz udzielić wartościowej podpowiedzi, po~czym zrób to, nadając priorytet kartom o~niższych numerach.
 	\item Jeżeli posiadasz nieujawnioną kartę, odrzuć ją.
-	\item Jeżeli posiadasz inferowalną kartę, która nie jest krytyczna, odrzuć ją.
+	\item Jeżeli posiadasz kartę, która nie jest inferowalnie krytyczna, odrzuć ją.
 	\item Odrzuć losową kartę.
 \end{enumerate}
 
+\subsection*{Osiągi}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ r|c|c|c|c| }
+		\multicolumn{1}{r}{}
+		 & \multicolumn{1}{c}{2 graczy}
+		 & \multicolumn{1}{c}{3 graczy}
+		 & \multicolumn{1}{c}{4 graczy}
+		 & \multicolumn{1}{c}{5 graczy} \\
+		\cline{2-5}
+		średnia & 13.29 & 15.51 & 15.05 & 13.99 \\
+		\cline{2-5}
+		mediana & 14 & 16 & 15 & 14 \\
+		\cline{2-5}
+		wariancja & 9.54 & 1.61 & 1.27 & 0.93 \\
+		\cline{2-5}
+		odchylenie standardowe & 3.09 & 1.27 & 1.13 & 0.96 \\
+		\cline{2-5}
+	\end{tabular}
+	\caption{Wyniki agenta SimpleDistrustful (rozmiar próby: 1000 gier)}
+	\label{table:SimpleDistrustful}
+\end{table}
+
+Agent nie~uzyskuje wysokich wyników, gdyż opiera swoje działania na~przeciętnej strategii. Udzielanie wyłącznie wartościowych informacji skłania graczy do~zagrywania kart, lecz często nie~wystarcza do~ochrony kart krytycznych -~nieujawnione karty wymagają pewnej formy ochrony, gdyż mogły być dobrane dopiero niedawno.
+
 \section{Distrustful}
 
-WIP
+Agent Distrustful dopracowuje strategię stosowaną przez SimpleDistrustful. Program nadal gra zachowawczo i~nie~bierze pod uwagę możliwości udzielania ani otrzymywania implicytnych informacji, w~zamian polegając wyłącznie na~maksymalnie rozszerzonym systemie dedukcji. Dodatkowo, aby zwiększyć potencjał każdej z~akcji, agent dynamicznie dostosowuje swój sposób postępowania do~aktualnego stanu rozgrywki i~zmienia priorytety manewrów, w~zależności od~ilości pozostałych żetonów podpowiedzi.
+
+\subsection*{Nowe pojęcia}
+
+\begin{itemize}
+	\item Heurystycznie wartościowa akcja:
+	
+	Niektóre akcje, takie jak bezpieczne zagranie, są~w~oczywisty sposób korzystne dla postępu gry. Niestety, przypisanie części ruchów jednoznacznej wartości liczbowej, wskazującej na jej przydatność w~kontekście danego momentu rozgrywki, jest trudnym zadaniem, gdyż pełna analiza możliwych następstw akcji wymagałaby wysokiego nakładu mocy obliczeniowej. Aby uniknąć tego problemu, można zastosować funkcje heurystyczne, które przybliżają wartości poszukiwanych~ocen. Czasami jednak nie~istnieje ruch, który byłby dobry, dlatego każda otrzymana wartość musi także być wyższa od~pewnego ustalonego pułapu granicznego. Akcja, która uzyska najwyższą notę, a~także przejdzie test jakości, jest nazywana heurystycznie optymalną.
+	
+	\item Najstarsza karta:
+	
+	Karta, która znajduje~się w~ręce danego gracza od~największej ilości tur. W~razie konfliktu za~najstarszą kartę uznawana jest ta~wysunięta najbardziej na~lewo.
+
+\end{itemize}
+
+\subsection*{Schemat działania}
+
+Agent jest złożony z~siedmiu modułów, które są~rozważane po~kolei w~jednej z~trzech konfiguracji. Każdy moduł, poza ostatnim, może zawieść. Ich kolejność zależy od~ilości posiadanych żetonów podpowiedzi:
+
+\begin{itemize}
+	\item Mniej niż 3~żetony: sekwencja 1, 2, 5, 3, 4, 7 (moduł 6 nie jest używany).
+	\item Od~3~do~7 żetonów: sekwencja 1, 2, 3, 4, 5, 6, 7.
+	\item Dokładnie 8~żetonów: sekwencja 1, 2, 3, 4, 6, 5, 7.
+\end{itemize}
+Używane moduły to:
+
+\begin{enumerate}
+	\item ``Necessary tip'':
+	
+	Jeżeli najbliższy gracz planuje w~kolejnym ruchu odrzucić kartę krytyczną, powstrzymaj go~poprzez udzielenie odpowiedniej podpowiedzi.
+
+	\item ``Obvious play'':
+	
+	Jeżeli posiadasz inferowalnie bezpieczne zagranie, wykonaj~je, nadając priorytet kartom o~niższych numerach.
+
+	\item ``Good play tip'':
+	
+	Jeżeli posiadasz co~najmniej dwa żetony podpowiedzi i~istnieje heurystycznie wartościowa podpowiedź, która umożliwi innemu graczowi inferowalnie bezpieczne zagranie, udziel jej.
+
+	\item ``Discard tip'':
+	
+	Jeżeli posiadasz co~najmniej dwa żetony podpowiedzi i~istnieje heurystycznie wartościowa podpowiedź, która umożliwi innemu graczowi odrzucenie inferowalnie bezużytecznej karty, udziel jej.
+
+	\item ``Obvious discard'':
+	
+	Jeżeli posiadasz inferowalnie bezużyteczną kartę, odrzuć ją.
+
+	\item ``Mediocre play tip'':
+	
+	Jeżeli posiadasz co~najmniej dwa żetony podpowiedzi, spróbuj wykonać akcję modułu numer~3 (``Good play tip''), ale ze~znacznie niższym pułapem jakościowym.
+
+	\item ``Guess discard'':
+	\begin{enumerate}
+		\item Jeżeli posiadasz nieujawnione karty, odrzuć najstarszą z~nich.
+		\item Jeżeli posiadasz karty, które nie~są~inferowalnie krytyczne, odrzuć najstarszą z~nich.
+		\item Odrzuć najstarszą kartę.
+	\end{enumerate}
+
+\end{enumerate}
+
+Zmiana kolejności manewrów pozwala na~kontrolowanie priorytetów agenta: im~mniej żetonów podpowiedzi znajduje~się w~grze, tym bardziej nagląca staje~się potrzeba ich odzyskania. Nigdy~nie wiadomo, czy i~kiedy któryś z~graczy dobierze kartę wymagającą natychmiastowej interwencji w~formie dodatkowych informacji. Jest to~powód, dla którego moduły udzielające podpowiedzi do~kart niebędących krytycznymi zawodzą przy próbie wykorzystania ostatniego z~żetonów.
+
+Wagi funkcji heurystycznych zostały dobrane eksperymentalnie. Poza sprawdzaniem, czy dana podpowiedź jest wartościowa, na~werdykt algorytmu wpływają między innymi następujące czynniki:
+\begin{itemize}
+	\item stopień ujawnienia karty
+	\item ilość kart, które muszą być zagrane, zanim karta będzie bezpieczna
+	\item odległość właściciela karty od~aktualnego gracza
+	\item numer karty
+	\item wagi kart, które zostaną ujawnione wraz z~rozważaną kartą
+\end{itemize}
+
+Początkowo, moduł numer~1 (``Necessary tip'') przyjmował inną formę. Zamiast ostrzegać graczy przed odrzucaniem krytycznych kart natychmiast po~wykryciu zagrożenia, udzielenie kluczowej informacji było odwlekane aż~do~tury gracza, który jako ostatni mógł zapobiec nieszczęściu. W~praktyce doprowadzało to~do~powstawania cykli, w~których gracze naprzemiennie udzielali podpowiedzi i~odrzucali karty, przez co~częstotliwość zagrań drastycznie spadała. Choć pierwotny moduł znacznie pogarszał wyniki agenta Distrustful, jego zrewidowana wersja stanowi serce kolejnego, znacznie bardziej zaawansowanego agenta.
+
+\subsection*{Osiągi}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ r|c|c|c|c| }
+		\multicolumn{1}{r}{}
+		 & \multicolumn{1}{c}{2 graczy}
+		 & \multicolumn{1}{c}{3 graczy}
+		 & \multicolumn{1}{c}{4 graczy}
+		 & \multicolumn{1}{c}{5 graczy} \\
+		\cline{2-5}
+		średnia & 17.46 & 16.45 & 15.75 & 14.48 \\
+		\cline{2-5}
+		mediana & 18 & 16 & 16 & 14 \\
+		\cline{2-5}
+		wariancja & 2.59 & 1.26 & 1.06 & 0.84 \\
+		\cline{2-5}
+		odchylenie standardowe & 1.61 & 1.12 & 1.03 & 0.92 \\
+		\cline{2-5}
+	\end{tabular}
+	\caption{Wyniki agenta Distrustful (rozmiar próby: 1000 gier)}
+	\label{table:Distrustful}
+\end{table}
+
+Mimo znacznego wzmocnienia strategii agenta SimpleDistrustful, osiągane wyniki nadal nie~zachwycają. Gracze udzielają heurystycznie wartościowych podpowiedzi, chronią krytyczne karty poprzez system wieku i~oszczędzają żetony na~czarną godzinę -~trudno jednak doszukiwać~się między nimi głębszej współpracy, która jest kluczowa dla wysokich osiągów. Zagrywane są~wyłącznie karty inferowalnie bezpieczne, co, nawet przy bardzo ostrożnej i~wydajnej komunikacji, nie~wystarcza do~podjęcia równej walki z~szybko kurczącą~się ilością żetonów podpowiedzi. Aby przekroczyć wyczekiwany próg 20~punktów, potrzeba strategii, która dopuszcza pewne ryzyko.
 
 \section{Trustful}
 
+WIP
+
+\subsection*{Osiągi}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ r|c|c|c|c| }
+		\multicolumn{1}{r}{}
+		 & \multicolumn{1}{c}{2 graczy}
+		 & \multicolumn{1}{c}{3 graczy}
+		 & \multicolumn{1}{c}{4 graczy}
+		 & \multicolumn{1}{c}{5 graczy} \\
+		\cline{2-5}
+		średnia & 18.11 & 20.50 & 20.45 & 19.16 \\
+		\cline{2-5}
+		mediana & 19 & 21 & 20 & 19 \\
+		\cline{2-5}
+		wariancja & 10.91 & 2.65 & 2.71 & 2.64 \\
+		\cline{2-5}
+		odchylenie standardowe & 3.30 & 1.63 & 1.65 & 1.63 \\
+		\cline{2-5}
+	\end{tabular}
+	\caption{Wyniki agenta Trustful (rozmiar próby: 1000 gier)}
+	\label{table:Trustful}
+\end{table}
+
+
 \section{BayesianTrustful}
 
+WIP
+
 \section{Reinforced}
+
+WIP
 
 \chapter{Wnioski}
 
 WIP
 
-\begin{thebibliography}{3}
+\begin{thebibliography}{4}
 
 \bibitem{NP-Complete} J.-F Baffier i in., \textit{Hanabi is NP-complete, Even for Cheaters who Look at Their Cards}, 2017. URL: 
 \href{https://arxiv.org/pdf/1603.01911.pdf}{\textbf{link}} (term. wiz. 11.01.2020)
