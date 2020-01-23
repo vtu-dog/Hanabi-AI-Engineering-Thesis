@@ -7,7 +7,7 @@ from copy import deepcopy
 debug = False
 
 
-class TrustfulBase:
+class BaseTrustful:
     def __init__(self):
         self.card_hint_type = {}
         self.hand_size = 5

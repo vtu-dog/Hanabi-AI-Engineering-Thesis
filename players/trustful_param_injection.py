@@ -7,7 +7,7 @@ from copy import deepcopy
 debug = False
 
 
-class TrustfulParamInjection(BasePlayer):
+class TrustfulParamInjection:
     def __init__(self, *args):
         super(TrustfulParamInjection, self).__init__(*args)
         self.name = 'Trustful Tester'

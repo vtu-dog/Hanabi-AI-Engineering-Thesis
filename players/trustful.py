@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from .trustful_base import *
+from .base_trustful import *
 
 debug = False
 
 
-class Trustful(BasePlayer, TrustfulBase):
+class Trustful(BasePlayer, BaseTrustful):
     def __init__(self, *args):
         super(Trustful, self).__init__(*args)
         self.name = 'Trustful'
@@ -16,13 +16,15 @@ class Trustful(BasePlayer, TrustfulBase):
         if round_info.hints <= 1:
             return False
 
-        play_tip = self.check_for_play_tip(round_info, player_number, only_next_player=only_next_player)
+        play_tip = self.check_for_play_tip(
+            round_info, player_number, only_next_player=only_next_player)
         if play_tip is not False:
             return play_tip
 
         if debug and round_info.log:
             self.info("Discard:")
-        discard_tip = self.check_for_discard_tip(round_info, player_number, only_next_player=only_next_player)
+        discard_tip = self.check_for_discard_tip(
+            round_info, player_number, only_next_player=only_next_player)
         return discard_tip
 
     def check_for_risky_tip(self, round_info, player_number, only_next_player=False):
@@ -65,6 +67,7 @@ class Trustful(BasePlayer, TrustfulBase):
         for action in action_order:
             if debug and round_info.log:
                 self.info('{0}'.format(action))
-            decision = functools.partial(action, round_info, round_info.player_turn)()
+            decision = functools.partial(
+                action, round_info, round_info.player_turn)()
             if decision is not False:
                 return decision

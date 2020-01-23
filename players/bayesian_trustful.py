@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from .trustful_base import *
+from .base_trustful import *
 
 debug = False
 
 
-class TrustfulBayesian(BasePlayer, TrustfulBase):
+class BayesianTrustful(BasePlayer, BaseTrustful):
     def __init__(self, *args):
-        super(TrustfulBayesian, self).__init__(*args)
+        super(BayesianTrustful, self).__init__(*args)
         self.name = 'Bayesian Trustful'
         self.card_hint_type = {}
-        self.discard_tip = [3.9675791022130866, -1.2236154016668084, 1.1064941122662877]
+        self.discard_tip = [3.9675791022130866, -
+                            1.2236154016668084, 1.1064941122662877]
         self.good_tip = [0.6965048774115057, 0.4938063699231073, -5.096989475985786, 1.179651463460699,
                          1.1499780740878032, 0.1048895757841592, 0.0601224261044882, 1.7313274701206363]
         self.risky_tip = [3.980842278702617, 0.6920787372911628, -6.639852782714435, 0.9957316072619526,
@@ -82,6 +83,7 @@ class TrustfulBayesian(BasePlayer, TrustfulBase):
         for action in action_order:
             if debug and round_info.log:
                 self.info('{0}'.format(action))
-            decision = functools.partial(action, round_info, round_info.player_turn)()
+            decision = functools.partial(
+                action, round_info, round_info.player_turn)()
             if decision is not False:
                 return decision
