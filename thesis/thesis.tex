@@ -197,21 +197,21 @@ SmartCheater dodaje głębię poczynaniom agenta Cheater. Program zawsze posiada
 \subsection*{Nowe pojęcia}
 
 \begin{itemize}
-	\item Zagranie lawinowe:
+	\item \textbf{Zagranie lawinowe}:
 	
 	Jeżeli położenie karty na~planszy pozwala innym graczom na~wykonywanie nowych ruchów, które kontynuują dokładanie kart do~stosów, takie zagranie nazwiemy lawinowym. Przykładowo: jeżeli aktualny gracz poprawnie zagra czerwoną kartę o~numerze~1, zaś dwaj kolejni gracze posiadają kolejno czerwone~karty o~numerach~2~i~3, zagranie jest lawinowe.
 	
-	\item Bezużyteczna karta:
+	\item \textbf{Bezużyteczna karta}:
 	
-	Jeżeli nie~istnieje możliwość poprawnego zagrania karty, jest ona bezużyteczna i~może być odrzucona bez żadnych konsekwencji. Przykładowo: gdy stos kart koloru zielonego jest w~pełni ułożony, nie~można poprawnie zagrać żadnych dodatkowych kart koloru zielonego.
+	Jeżeli nie~istnieje i~nie będzie istniała możliwość poprawnego zagrania karty, jest ona bezużyteczna i~może być odrzucona bez żadnych konsekwencji. Przykładowo: gdy stos kart koloru zielonego jest w~pełni ułożony, nie~można poprawnie zagrać żadnych dodatkowych kart koloru zielonego.
 	
-	\item Karta krytyczna:
+	\item \textbf{Karta krytyczna}:
 	
-	Jeżeli karta nie~jest bezużyteczna, a~jej odrzucenie wiąże się z~niemożnością zagrania przez któregokolwiek z~graczy innej jej kopii, karta jest krytyczna. Przykładowo: każda karta o~numerze~5 jest krytyczna.
+	Jeżeli karta nie~jest bezużyteczna i~nie istnieją już inne jej kopie, które możnaby zagrać, karta jest krytyczna. Przykładowo: każda karta o~numerze~5 jest krytyczna.
 	
-	\item Spasowanie tury:
+	\item \textbf{Spasowanie tury}:
 	
-	Jeżeli na planszy znajduje~się co~najmniej jeden żeton podpowiedzi, udzielenie losowej podpowiedzi dowolnemu z~graczy jest równoznaczne ze~spasowaniem tury.
+	Jeżeli na planszy znajduje~się co~najmniej jeden żeton podpowiedzi, udzielenie losowej podpowiedzi dowolnemu z~graczy jest równoznaczne ze~spasowaniem tury, gdyż nie~jest dobierana żadna nowa karta (chyba, że dobrano ostatnią kartę z~talii).
 \end{itemize}
 
 \subsection*{Schemat działania}
@@ -241,12 +241,12 @@ Jak można oczekiwać po~agencie, który posuwa~się do~oszustwa bliskiego dosk
 
 \section{Erratic}
 
-Strategia agenta Erratic polega na~wykonywaniu serii przypadkowych ruchów.
+Strategia agenta Erratic polega na~wykonywaniu serii przypadkowych ruchów, które są~legalne.
 
 \subsection*{Schemat działania}
 
 \begin{itemize}
-	\item Wylosuj jedną legalnych akcji (zagraj kartę, odrzuć kartę, udziel podpowiedzi).
+	\item Wylosuj jedną z~legalnych akcji (zagraj kartę, odrzuć kartę, udziel podpowiedzi innemu uczestnikowi rozgrywki).
 	\item Losowo wybierz detale ruchu, po~czym go~wykonaj.
 \end{itemize}
 
@@ -261,11 +261,11 @@ Strategia agenta Erratic polega na~wykonywaniu serii przypadkowych ruchów.
 	\label{fig:Erratic}
 \end{figure}
 
-Agent wykonujący wyłącznie losowe ruchy jest pierwszym, który nie~oszukuje. Niestety, jak można było przewidywać, przegrywa on~większość gier. Jest to~spowodowane brakiem mechanizmu, który powstrzymywałby go~przed zagrywaniem kart, które nie~są~bezpieczne. Szansa na~udzielanie informacji, które w~tym przypadku są~bezużyteczne, nie~zaburza wyników, gdyż wykorzystanie żetonu podpowiedzi nie~prowadzi do~eskalacji progresu gry -~jeżeli nie~dobrano ostatniej karty z~talii.
+Agent wykonujący wyłącznie losowe ruchy jest pierwszym tu~opisanym, który nie~oszukuje. Niestety, jak można było przewidywać, przegrywa on~większość gier, uzyskując wynik 0~punktów. Jest to~spowodowane brakiem mechanizmu, który powstrzymywałby go~przed zagrywaniem kart, które nie~są~bezpieczne, toteż zagrania mają małą szansę na~bycie poprawnymi. Choć istnieje szansa na~wykonanie akcji udzielenia podpowiedzi, które w~tym przypadku są~bezużyteczne, ruch nie~zaburza wyników, gdyż wykorzystanie żetonu podpowiedzi nie~prowadzi do~eskalacji progresu gry (jeżeli nie~dobrano ostatniej karty z~talii).
 
 \section{StoppedClock}
 
-Agent StoppedClock rozszerza strategię agenta Erratic: wykonuje losowe ruchy, które nie~mogą doprowadzić do~utraty żetonów życia. Jego postępowanie, choć bardzo chaotyczne, czasem prowadzi do~wysokich punktacji, zgodnie z~maksymą: ``nawet zepsuty zegar dwa razy na~dobę pokazuje właściwą godzinę''.
+Agent StoppedClock rozszerza strategię agenta Erratic: wykonuje losowe ruchy, które nie~mogą doprowadzić do~utraty żetonów życia. Jego postępowanie, choć nadal bardzo chaotyczne, czasem prowadzi do~wysokich punktacji, zgodnie z~maksymą: ``nawet zepsuty zegar dwa razy na~dobę pokazuje właściwą godzinę''.
 
 \subsection*{Schemat działania}
 
@@ -341,33 +341,36 @@ Agent Distrustful dopracowuje strategię stosowaną przez SimpleDistrustful. Pr
 \begin{itemize}
 	\item \textbf{Pułap jakościowy}:
 	
-	Jedna z~miar używanych w~funkcjach oceniających przydatność ruchów: jeżeli uzyskana przez daną akcję nota jest niższa od~pułapu, jest ona dyskwalifikowana jako niewystarczająco pomocna. 
+	Jedna z~miar używanych w~funkcjach oceniających przydatność ruchów: jeżeli uzyskana przez daną akcję nota jest niższa od~pułapu, to~jest ona dyskwalifikowana jako niewystarczająco pomocna. 
 
 	\item \textbf{Heurystycznie wartościowa akcja}:
 	
-	Niektóre akcje, takie jak bezpieczne zagranie, są~w~oczywisty sposób korzystne dla postępu gry. Niestety, przypisanie części ruchów jednoznacznej wartości liczbowej, wskazującej na jej przydatność w~kontekście danego momentu rozgrywki, jest trudnym zadaniem, gdyż pełna analiza możliwych następstw akcji wymagałaby wysokiego nakładu mocy obliczeniowej. Aby uniknąć tego problemu, można zastosować funkcje heurystyczne, które przybliżają wartości poszukiwanych~ocen. Akcja, która uzyska najwyższą notę, a~także będzie wyższa od~zadanego pułapu jakościowego, jest nazywana heurystycznie optymalną.
+	Niektóre akcje, takie jak bezpieczne zagranie, w~oczywisty sposób mają korzystny wpływ na~uzyskanie wyższego wyniku gry. Niestety, przypisanie części ruchów jednoznacznej wartości liczbowej, wskazującej na jej przydatność w~kontekście danego momentu rozgrywki, jest trudnym zadaniem, gdyż pełna analiza możliwych następstw akcji wymagałaby wysokiego nakładu mocy obliczeniowej. Aby uniknąć tego problemu, można zastosować funkcje heurystyczne, które przybliżają wartości poszukiwanych~ocen. Akcja, która uzyska najwyższą notę, a~także będzie wyższa od~zadanego pułapu jakościowego, jest nazywana heurystycznie wartościową.
 	
 	\item \textbf{Najstarsza (najmłodsza) karta}:
 	
-	Karta, która znajduje~się w~ręce danego gracza od~największej (najmniejszej) ilości tur. W~razie konfliktu za~najstarszą (najmłodszą) kartę uznawana jest ta~wysunięta najbardziej na~lewo.
+	Karta, która znajduje~się w~ręce danego gracza od~największej (najmniejszej) ilości tur, w~porównaniu do~innych jego kart. W~razie konfliktu za~najstarszą (najmłodszą) kartę uznawana jest ta~wysunięta najbardziej na~lewo.
 
 \end{itemize}
 
 \subsection*{Schemat działania}
 
-Agent jest złożony z~siedmiu modułów, które są~rozważane po~kolei w~jednej z~trzech konfiguracji. Każdy moduł, poza ostatnim, może zawieść. Ich kolejność zależy od~ilości posiadanych żetonów podpowiedzi:
+Agent jest złożony z~siedmiu modułów, które są~rozważane po~kolei w~jednej z~trzech konfiguracji. Każdy moduł, poza ostatnim w~sekwencji, może zawieść. Ich kolejność zależy od~ilości posiadanych żetonów podpowiedzi:
 
 \begin{itemize}
 	\item Mniej niż 3~żetony: sekwencja 1, 2, 5, 3, 4, 7 (moduł 6 nie jest używany).
 	\item Od~3~do~7 żetonów: sekwencja 1, 2, 3, 4, 5, 6, 7.
 	\item Dokładnie 8~żetonów: sekwencja 1, 2, 3, 4, 6, 5, 7.
 \end{itemize}
-Używane moduły to:
+
+\newpage
+
+\noindent Używane moduły to:
 
 \begin{enumerate}
 	\item \underline{``Necessary tip''}:
 	
-	Jeżeli najbliższy gracz planuje w~kolejnym ruchu odrzucić kartę krytyczną, powstrzymaj go~poprzez udzielenie odpowiedniej podpowiedzi.
+	Jeżeli najbliższy gracz planuje w~kolejnym ruchu odrzucić kartę krytyczną, która mogłaby zostać poprawnie zagrana, powstrzymaj go~poprzez udzielenie odpowiedniej podpowiedzi.
 
 	\item \underline{``Obvious play''}:
 	
@@ -375,7 +378,7 @@ Używane moduły to:
 
 	\item \underline{``Good play tip''}:
 	
-	Jeżeli posiadasz co~najmniej dwa żetony podpowiedzi i~istnieje heurystycznie wartościowa podpowiedź, która umożliwi innemu graczowi inferowalnie bezpieczne zagranie, udziel jej.
+	Jeżeli posiadasz co~najmniej dwa żetony podpowiedzi i~istnieje heurystycznie wartościowa podpowiedź, udziel jej, nadając priorytet tym, które umożliwią inferowalnie bezpieczne zagranie.
 
 	\item \underline{``Discard tip''}:
 	
@@ -400,17 +403,17 @@ Używane moduły to:
 
 Zmiana kolejności manewrów pozwala na~kontrolowanie priorytetów agenta: im~mniej żetonów podpowiedzi znajduje~się w~grze, tym bardziej nagląca staje~się potrzeba ich odzyskania. Nigdy~nie wiadomo, czy i~kiedy któryś z~graczy dobierze kartę wymagającą natychmiastowej interwencji w~formie dodatkowych informacji. Jest to~powód, dla którego moduły udzielające podpowiedzi do~kart niebędących krytycznymi zawodzą przy próbie wykorzystania ostatniego z~żetonów.
 
-Wagi funkcji heurystycznych zostały dobrane eksperymentalnie. Poza sprawdzaniem, czy dana podpowiedź jest wartościowa, na~werdykt algorytmu wpływają między innymi następujące czynniki:
+Każda z~kart jest oceniana z~osobna przy użyciu funkcji heurystycznych. Za~ostateczną wartość podpowiedzi przyjmuje~się sumę ocen wszystkich kart, które zostaną za~jej pomocą ujawnione. Wagi funkcji heurystycznych zostały dobrane eksperymentalnie. Na~werdykt algorytmu wpływają między innymi następujące czynniki:
 \begin{itemize}
 	\item stopień ujawnienia karty
-	\item czy zagranie karty jest lawinowe
-	\item ilość kart, które muszą być zagrane, zanim karta będzie bezpieczna
-	\item odległość właściciela karty od~aktualnego gracza
 	\item numer karty
-	\item wagi kart, które zostaną ujawnione wraz z~rozważaną kartą
+	\item czy zagranie karty jest lawinowe
+	\item czy podpowiedź jest wartościowa
+	\item ilość kart, które muszą być zagrane, zanim zagranie karty będzie bezpieczne
+	\item odległość właściciela karty od~gracza udzielającego podpowiedzi
 \end{itemize}
 
-Początkowo, moduł numer~1 (``Necessary tip'') przyjmował inną formę. Zamiast ostrzegać graczy przed odrzucaniem krytycznych kart natychmiast po~wykryciu zagrożenia, udzielenie kluczowej informacji było odwlekane aż~do~tury gracza, który jako ostatni mógł zapobiec nieszczęściu. W~praktyce doprowadzało to~do~powstawania cykli, w~których gracze naprzemiennie udzielali podpowiedzi i~odrzucali karty, przez co~częstotliwość zagrań drastycznie spadała. Choć pierwotny moduł znacznie pogarszał wyniki agenta Distrustful, jego zrewidowana wersja stanowi serce kolejnego, bardziej zaawansowanego agenta.
+Początkowo, moduł numer~1 (``Necessary tip'') przyjmował inną formę. Agent był szczególnie ostrożny i~zawsze ostrzegał kolejnego gracza, jeżeli ten mógł odrzucić kartę krytyczną. W~praktyce doprowadzało to~do~powstawania cykli, w~których gracze naprzemiennie udzielali podpowiedzi i~odrzucali karty, przez co~częstotliwość zagrań drastycznie spadała. Choć pierwotny moduł znacznie pogarszał wyniki agenta Distrustful, jego zrewidowana wersja stanowi serce kolejnego, bardziej zaawansowanego agenta.
 
 \subsection*{Osiągi}
 
@@ -441,7 +444,7 @@ Poprzedników agenta Trustful nękają dwa zasadnicze problemy. Są~to: trudnoś
 	
 	\item \textbf{Podpowiedź ratunkowa}:
 	
-	Heurystycznie wartościowa podpowiedź, będąca obietnicą lub komunikatem, ignorująca pułap jakościowy heurystyki.
+	Heurystycznie wartościowa podpowiedź, będąca obietnicą lub komunikatem, która jest rozważana wyłącznie dla najbliższego gracza.
 	
 	\item \textbf{Weto}:
 	
@@ -456,11 +459,11 @@ Agent posiada dwie kategorie podpowiedzi: obietnice oraz komunikaty. Ustalenie i
 \begin{enumerate}
 	\item Jeżeli gracz otrzyma od~swojego bezpośredniego poprzednika podpowiedź obejmującą kartę, która miała zostać właśnie odrzucona, podpowiedź jest komunikatem.
 	\item Jeżeli gracz otrzyma od~swojego bezpośredniego poprzednika dowolną podpowiedź, gdy jedna z~kart objętych obietnicą miała zostać właśnie zagrana, ta~karta jest wetowana, a~typ podpowiedzi jest rozpatrywany ponownie, z~pominięciem tego punktu schematu.
-	\item Jeżeli gracz otrzyma podpowiedź wskazującą na~numer, którego poprawne zagranie byłoby niemożliwe w~turze podpowiadającego gracza, podpowiedź jest komunikatem.
+	\item Jeżeli gracz otrzyma podpowiedź wskazującą na~numer, którego poprawne zagranie byłoby inferowalnie niemożliwe w~turze podpowiadającego gracza, podpowiedź jest komunikatem.
 	\item Podpowiedź jest obietnicą.
 \end{enumerate}
 
-Podobnie jak w~przypadku agenta Distrustful, program składa~się z~dziesięciu modułów, które są~rozważane po~kolei w~jednej z~czterech konfiguracji. Każdy moduł, poza ostatnim, może zawieść. Ich kolejność zależy od~ilości posiadanych żetonów podpowiedzi:
+Podobnie jak w~przypadku agenta Distrustful, program składa~się z~dziesięciu modułów, które są~rozważane po~kolei w~jednej z~czterech konfiguracji. Każdy moduł, poza ostatnim w~sekwencji, może zawieść. Ich kolejność zależy od~ilości posiadanych żetonów podpowiedzi:
 
 \begin{itemize}
 	\item Mniej niż 3~żetony: sekwencja 1, 2, 3, 9, 4, 5, 10 (moduły 6, 7, 8 nie są używane).
@@ -489,7 +492,7 @@ Używane moduły to:
 
 	\item \underline{``Play tip''}:
 	
-	Jeżeli istnieje heurystycznie wartościowa podpowiedź lub obietnica, która umożliwi innemu graczowi bezpieczne lub inferowalnie bezpieczne zagranie, udziel jej.
+	Jeżeli istnieje heurystycznie wartościowa podpowiedź, która umożliwi innemu graczowi inferowalnie bezpieczne zagranie (lub zagranie bazujące na~obietnicy), udziel jej.
 
 	\item \underline{``Discard tip''}:
 	
@@ -501,7 +504,7 @@ Używane moduły to:
 	
 	\item \underline{``Save tip''}:
 	
-	Jeżeli istnieje podpowiedź ratunkowa ujawniająca kartę krytyczną, którą można wykonać w~trybie komunikatu, wykonaj ją.
+	Jeżeli istnieje heurystycznie wartościowa podpowiedź ujawniająca kartę krytyczną, którą można wykonać w~trybie komunikatu, udziel jej, nadając priorytet graczom, którzy nie~mają inferowalnie bezpiecznego zagrania lub dobrej obietnicy, a~także preferując karty o~niższych numerach.
 	
 	\item \underline{``Information tip''}:
 	
@@ -531,15 +534,15 @@ Poza czynnikami wyszczególnionymi podczas analizy agenta Distrustful, na~werdyk
 	\item czy karta jest pod działaniem efektu obietnicy
 	\item czy podpowiedź zniweczy przydatną obietnicę
 	\item czy podpowiedź jest ryzykowna
-	\item pozostała ilość żetonów życia
 	\item kolejność ujawnianych kart w~ręce
+	\item pozostała ilość żetonów życia
 \end{itemize}
 
-Podpowiadanie kart w~trybie obietnicy rzadko przebiega w~bezproblemowy sposób: karty tworzące częściowy porządek w~ręce gracza to~rzadkie zjawisko. Jest to~powód, dla którego funkcje heurystyczne agresywnie zaniżają noty obietnic, których pierwszy element jest niepoprawny, lecz relaksują kary dla tych podpowiedzi, które zaczynają~się w~sposób umożliwiający co~najmniej jedno bezpieczne zagranie.
+Podpowiadanie kart w~trybie obietnicy rzadko przebiega w~bezproblemowy sposób: karty tworzące dobry porządek w~ręce gracza to~rzadkie zjawisko. Jest to~powód, dla którego funkcje heurystyczne agresywnie zaniżają noty obietnic, których pierwszy element jest niepoprawny, lecz relaksują kary dla tych podpowiedzi, które zaczynają~się w~sposób umożliwiający co~najmniej jedno bezpieczne zagranie.
 
 Udzielanie podpowiedzi podlegają pewnemu rygorowi, lecz czasami potencjalny zysk z~udzielenia informacji o~wielu kartach naraz przeważa nad ryzykiem związanym z~niepoprawnością obietnicy. Ponieważ agent stara~się zachowywać co~najmniej jeden żeton podpowiedzi na~takie przypadki, ryzyko niefortunnego zagrania drastycznie spada. Niestety, nadal może dojść do~sytuacji, w~których gracze tracą żetony życia poprzez niepoprawne zagrania. Aby temu zapobiec, agent ogranicza zaufanie do~innych graczy, gdy w~grze pozostał ostatni żeton życia -~zagrywane są~wyłącznie te~karty objęte obietnicą, które zostały podpowiedziane pojedynczo. W~ten sposób całkowicie eliminowane jest ryzyko niebezpiecznych zagrań, lecz agent nadal nie~degeneruje swojej strategii do~tej znanej z~agenta Distrustful.
 
-Strategia agenta nie~jest~przystosowana do~rozgrywek dwuosobowych, gdyż udzielenie dowolnej podpowiedzi wetuje kartę, która miała szansę być właśnie zagrana. Prowadzi to~do konieczności omijania systemu obietnic. Można to~osiągnąć wyłącznie poprzez wykonywanie jednej z~pozostałych akcji, co~jest trudnym zadaniem, gdyż wiąże~się to~z koniecznością dobrej znajomości własnej ręki.
+Strategia agenta nie~jest~przystosowana do~rozgrywek dwuosobowych, gdyż udzielenie dowolnej podpowiedzi wetuje kartę, która miała szansę być właśnie zagrana -~prowadzi to~do konieczności omijania systemu wetowania obietnic. Można to~osiągnąć wyłącznie poprzez wykonanie jednej z~pozostałych akcji, co~jest trudnym zadaniem, gdyż wiąże~się ono~z koniecznością dobrej znajomości własnych kart.
 
 \subsection*{Osiągi}
 
@@ -551,7 +554,7 @@ Strategia agenta nie~jest~przystosowana do~rozgrywek dwuosobowych, gdyż udziele
 	\label{fig:Trustful}
 \end{figure}
 
-Agent Trustful nie tylko potrafi przekroczyć próg 20~punktów, ale i~zdarza mu~się~wygrać: zastosowanie protokołu implicytnej komunikacji pozwoliło wynieść osiągi sztucznej inteligencji na~nowy poziom. Niestety, strategia programu nie~jest przystosowana do~rozgrywek dwuosobowych, co~objawia~się wysoką niestabilnością algorytmu. Wartym zaobserwowania faktem, który można odczytać z~wykresu, jest wykładniczy wzrost trudności uzyskiwania kolejnych punktów, który występuje od~pewnego momentu rozgrywki.
+Agent Trustful nie tylko potrafi przekroczyć próg 20~punktów, ale i~zdarza mu~się~wygrać: zastosowanie protokołu implicytnej komunikacji pozwoliło wynieść osiągi sztucznej inteligencji na~nowy poziom. Niestety, strategia programu nie~jest przystosowana do~rozgrywek dwuosobowych, co~objawia~się wysoką niestabilnością algorytmu. Wartym zaobserwowania faktem, który można odczytać z~wykresu, jest, występujący od~pewnego momentu rozgrywki, wykładniczy wzrost trudności uzyskiwania kolejnych punktów.
 
 \section{BayesianTrustful}
 
@@ -561,13 +564,13 @@ Agent BayesianTrustful stanowi próbę odnalezienia nowych wag funkcji heurystyc
 
 Bayesowska metoda optymalizacji to~proces iteracyjny, oparty o~twierdzenie Bayesa, który korzysta z~wnioskowania statystycznego do~analizy prawdopodobieństwa hipotez. Rozważmy przestrzeń hipotez $\mathbb{H}$, której elementom $h$ przyporządkowane są~początkowe prawdopodobieństwa $P(h)$, zwane $\textit{a priori}$. Prawdopodobieństwo hipotezy $h\in\mathbb{H}$ po~dokonaniu nowej obserwacji $O$ można wyrazić wzorem $P(h|O)$, nazywanym $\textit{a posteriori}$. Metoda bayesowska pozwala na~aktualizację prawdopodobieństwa $\textit{a priori}$ hipotez w~oparciu o~nowe obserwacje. Przekłada~się to~na~możliwość dokonywania wnioskowania statystycznego na~temat rozkładu funkcji, która nie~posiada wzoru jawnego.
 
-Proces gaussowski to proces stochastyczny, który pozwala na~określenie łącznego rozkładu prawdopodobieństwa (a~także jego niepewności) wybranej rodziny nieparametrycznych funkcji $\mathbb{F}$. Polega on~na~konstrukcji prawdopodobieństw $\textit{a priori}$, które można aktualizować poprzez kolejne obserwacje, co~tworzy system przekonań o~kształcie badanych funkcji.
+Proces gaussowski to proces stochastyczny, który pozwala na~określenie łącznego rozkładu prawdopodobieństwa (oraz jego niepewności) wybranej rodziny nieparametrycznych funkcji $\mathbb{F}$. Polega on~na~konstrukcji prawdopodobieństw $\textit{a priori}$, które można aktualizować poprzez kolejne obserwacje, co~tworzy system przekonań o~kształcie badanych funkcji.
 
 \begin{figure}[H]
 	\centering
 	\captionsetup{format=hang}
 	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Gauss.png}
-	\caption[Caption]{Wizualizacja procesu gaussowskiego. Zielonymi plusami zaznaczono obserwacje, niebieskie krzywe to~poprzednie przekonania $\textit{a posteriori}$, zaś czerwona krzywa to~ich średnia. Zacieniona część wykresu wyznacza niepewność modelu. Żródło: $\cite{Gauss}$}
+	\caption[Caption]{Wizualizacja procesu gaussowskiego. Zielonymi plusami zaznaczono obserwacje, niebieskie krzywe to~poprzednie przekonania $\textit{a posteriori}$, zaś czerwona krzywa to~ich średnia wartość. Zacieniona część wykresu wyznacza niepewność modelu. Żródło: $\cite{Gauss}$}
 	\label{fig:Gauss}
 \end{figure}
 
