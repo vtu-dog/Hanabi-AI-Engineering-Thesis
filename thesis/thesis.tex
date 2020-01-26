@@ -18,6 +18,8 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{float}
+\usepackage{array}
+\usepackage{amsfonts}
 
 \graphicspath{{img/}}
 \let\cleardoublepage=\clearpage
@@ -45,13 +47,12 @@ Niniejsza praca ma~na~celu zbadanie Hanabi jako gry kooperacyjnej z~niepełną i
 
 \chapter{Reguły gry}
 
-%\renewcommand{\thefigure}{1}
 \begin{figure}[ht!]
 	\centering
 	\captionsetup{format=hang}
-	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{gui.png}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{GUI.png}
 	\caption[Caption]{Interfejs graficzny do gry Hanabi, utworzony na potrzeby projektu (twórca grafik: Jakub Podwysocki)}
-	\label{fig:gui}
+	\label{fig:GUI}
 \end{figure}
 
 \section{Wyjaśnienie zasad}
@@ -125,13 +126,24 @@ Według badań z 2017 roku\cite{HatPlayer}, agent ten uzyskuje maksymalną iloś
 
 Niestety, taki sposób gry całkowicie zawodzi, gdy jeden z~graczy wyłamie się z~konwencji narzuconej przez protokół komunikacji. Dodatkowo, algorytm działa wyłącznie w~rozgrywce na~czterech oraz pięciu graczy, gdyż głównym powodem jego sukcesu jest możliwość przekazywania w~każdej z~podpowiedzi maksymalnej ilości informacji, toteż~zmniejszenie liczby graczy powoduje znaczne zredukowanie efektywności ruchów. Są~to~powody, dla których agent ten nie~nadaje~się do~rozgrywki z~człowiekiem.
 
-\chapter{Ujęcie praktyczne}
+\chapter{Strategie w praktyce}
 
-W~celu zbadania zaprezentowanych sposobów tworzenia sztucznej inteligencji, która potrafiłaby grać w~Hanabi, zaimplementowaliśmy ośmiu agentów. Aby umożliwić testowanie ich możliwości, opracowaliśmy także graficzny interfejs (patrz: \hyperref[fig:gui]{Rysunek 2.1}), pozwalający użytkownikowi na~aktywne uczestnictwo w~rozgrywce, złożonej z~dowolnie dobranego przez niego składu graczy komputerowych.
+W~celu zbadania zaprezentowanych sposobów tworzenia sztucznej inteligencji, która potrafiłaby grać w~Hanabi, zaimplementowaliśmy dziewięciu agentów. Aby umożliwić testowanie ich możliwości, opracowaliśmy także graficzny interfejs (patrz: \hyperref[fig:GUI]{Rysunek 2.1}), pozwalający użytkownikowi na~aktywne uczestnictwo w~rozgrywce, złożonej z~dowolnie dobranego przez niego składu graczy komputerowych.
 
 Siedmiu agentów jest opartych o~systemy regułowe, różniące~się stopniem zaawansowania wdrażanych strategii. Aby usprawnić działanie jednego z~agentów regułowych, użyliśmy bayesowskiej metody optymalizacji hiperparametrów, korzystającej z~procesów gaussowskich. Ostatni z~zaprezentowanych agentów stosuje algorytm uczący ze~wzmocnieniem, oparty o~funkcje heurystyczne generalizujące stan gry, wspomagane procesami decyzyjnymi Monte Carlo.
 
 Systemy zasad zostały oparte o~nasze własne spostrzeżenia, których doszukaliśmy~się poprzez obserwację rozgrywek ludzkich graczy i~uznaliśmy za~kluczowe do~gry na~wysokim poziomie. Każdy kolejny agent regułowy bazuje na~konceptach, które zostały użyte do~zbudowania jego poprzedników, i~usprawnia je. Takie podejście~prowadzi do~naturalnej progresji prezentowanych warstw abstrakcji.
+
+\subsection*{Nomenklatura}
+
+\begin{tabular}{@{}>{$}l<{$}@{ --- }l@{}}
+	\mu & średnia arytmetyczna \\
+	\tilde{\mu} & mediana \\
+	\sigma^2 & wariancja \\
+	\sigma & odchylenie standardowe \\
+\end{tabular}
+
+\newpage
 
 \section{Cheater}
 
@@ -140,16 +152,20 @@ Cheater jest agentem, którego strategia polega na~bezmyślnym oszukiwaniu. Prog
 \subsection*{Nowe pojęcia}
 
 \begin{itemize}
-	\item Ujawniona karta:
+
+	\item \textbf{Legalna akcja}:
 	
-	Jeżeli gracz jest w posiadaniu karty, o~której posiada komplet informacji, kartę tę~określimy jako ujawnioną.
+	Jeżeli wybrana akcja może być wykonany w~danym momencie rozgrywki, jest ona legalna, niezależnie od~poprawności. Przykładowo: udzielenie informacji w~momencie, w~którym na~planszy nie~znajduje~się ani jeden żeton podpowiedzi, jest nielegalne. Jeżeli akcja jest nielegalna, korespondująca z~nią część algorytmu kończy~się niepowodzeniem.
 	
-	\newpage %
-	\item Bezpieczna akcja:
+	\item \textbf{Ujawniona karta}:
+	
+	Jeżeli gracz jest w posiadaniu karty, o~której posiada komplet informacji, kartę tę~określimy jako ujawnioną.
+	
+	\item \textbf{Bezpieczna akcja}:
 	
 	Jeżeli gracz może wykonać ruch, który nie doprowadzi do~utraty żetonów życia, taką akcję określimy jako bezpieczną.
 	
-	\item Bezpieczne zagranie:
+	\item \textbf{Bezpieczne zagranie}:
 	
 	Jeżeli gracz posiada ujawnioną kartę, którą może bezpiecznie (czyli poprawnie) położyć na~planszy, wykonanie takiej akcji nazwiemy bezpiecznym zagraniem.
 \end{itemize}
@@ -164,27 +180,13 @@ Cheater jest agentem, którego strategia polega na~bezmyślnym oszukiwaniu. Prog
 
 \subsection*{Osiągi}
 
-\begin{table}[h!]
+\begin{figure}[H]
 	\centering
-	\begin{tabular}{ r|c|c|c|c| }
-		\multicolumn{1}{r}{}
-		 & \multicolumn{1}{c}{2 graczy}
-		 & \multicolumn{1}{c}{3 graczy}
-		 & \multicolumn{1}{c}{4 graczy}
-		 & \multicolumn{1}{c}{5 graczy} \\
-		\cline{2-5}
-		średnia & 20.61 & 22.33 & 21.76 & 22.03 \\
-		\cline{2-5}
-		mediana & 21 & 23 & 22 & 22 \\
-		\cline{2-5}
-		wariancja & 6.49 & 4.01 & 4.45 & 3.51 \\
-		\cline{2-5}
-		odchylenie standardowe & 2.55 & 2.00 & 2.11 & 1.87 \\
-		\cline{2-5}
-	\end{tabular}
-	\caption{Wyniki agenta Cheater (rozmiar próby: 1000 gier)}
-	\label{table:Cheater}
-\end{table}
+	\captionsetup{format=hang}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Cheater.png}
+	\caption[Caption]{Wyniki agenta Cheater (rozmiar próby: 1000 gier)}
+	\label{fig:Cheater}
+\end{figure}
 
 Uzyskane wyniki są~bardzo dobre, lecz cechują~się stosunkowo wysoką wariancją. Agenci są~skłonni do~odrzucania kluczowych kart i~nie~zwracają uwagi na~fakt, że~może to~znacząco utrudnić lub nawet uniemożliwić dalsze zdobywanie punktów.
 
@@ -227,37 +229,47 @@ SmartCheater dodaje głębię poczynaniom agenta Cheater. Program zawsze posiada
 
 \subsection*{Osiągi}
 
-\begin{table}[h!]
+\begin{figure}[H]
 	\centering
-	\begin{tabular}{ r|c|c|c|c| }
-		\multicolumn{1}{r}{}
-		 & \multicolumn{1}{c}{2 graczy}
-		 & \multicolumn{1}{c}{3 graczy}
-		 & \multicolumn{1}{c}{4 graczy}
-		 & \multicolumn{1}{c}{5 graczy} \\
-		\cline{2-5}
-		średnia & 24.72 & 24.93 & 24.87 & 24.86 \\
-		\cline{2-5}
-		mediana & 25 & 25 & 25 & 25 \\
-		\cline{2-5}
-		wariancja & 0.65 & 0.11 & 0.19 & 0.19 \\
-		\cline{2-5}
-		odchylenie standardowe & 0.80 & 0.33 & 0.44 & 0.44 \\
-		\cline{2-5}
-	\end{tabular}
-	\caption{Wyniki agenta SmartCheater (rozmiar próby: 1000 gier)}
-	\label{table:SmartCheater}
-\end{table}
+	\captionsetup{format=hang}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{SmartCheater.png}
+	\caption[Caption]{Wyniki agenta SmartCheater (rozmiar próby: 1000 gier)}
+	\label{fig:SmartCheater}
+\end{figure}
 
-Jak można oczekiwać po~agencie, który posuwa~się do~oszustwa bliskiego doskonałemu, jego wyniki są~bardzo wysokie, nawet w~przypadku partii na~dwóch graczy, które cechują~się największymi dysproporcjami w~rozgrywce.
+Jak można oczekiwać po~agencie, który posuwa~się do~oszustwa bliskiego doskonałemu, jego wyniki są~bardzo wysokie -~nawet w~przypadku partii na~dwóch graczy, które cechują~się największymi dysproporcjami w~rozgrywce. Warto zauważyć, że~istnieją rozdania cechujące~się tak wysokim stopniem trudności, że nawet ten agent uzyskuje w~nich mniej niż 20~punktów.
 
-\section{StoppedClock}
+\section{Erratic}
 
-Agent StoppedClock wykonuje losowe ruchy, które nie~mogą doprowadzić do~utraty żetonów życia. Jego postępowanie, choć bardzo chaotyczne, czasem prowadzi do~wysokich punktacji, zgodnie z~maksymą: ``nawet zepsuty zegar dwa razy na~dobę pokazuje właściwą godzinę''.
+Strategia agenta Erratic polega na~wykonywaniu serii przypadkowych ruchów.
 
 \subsection*{Schemat działania}
 
-Ruch agenta polega na~zbadaniu, które z~trzech dostępnych akcji mogą być wykonane, a~następnie wylosowaniu i~wykonaniu jednej z~nich. Ponieważ tylko druga i~trzecia akcja mogą wzajemnie~się wykluczać, gracz zawsze będzie w~stanie wykonać co~najmniej jeden z~ruchów. Dostępne akcje to:
+\begin{itemize}
+	\item Wylosuj jedną legalnych akcji (zagraj kartę, odrzuć kartę, udziel podpowiedzi).
+	\item Losowo wybierz detale ruchu, po~czym go~wykonaj.
+\end{itemize}
+
+
+\subsection*{Osiągi}
+
+\begin{figure}[H]
+	\centering
+	\captionsetup{format=hang}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Erratic.png}
+	\caption[Caption]{Wyniki agenta Erratic (rozmiar próby: 1000 gier)}
+	\label{fig:Erratic}
+\end{figure}
+
+Agent wykonujący wyłącznie losowe ruchy jest pierwszym, który nie~oszukuje. Niestety, jak można było przewidywać, przegrywa on~większość gier. Jest to~spowodowane brakiem mechanizmu, który powstrzymywałby go~przed zagrywaniem kart, które nie~są~bezpieczne. Szansa na~udzielanie informacji, które w~tym przypadku są~bezużyteczne, nie~zaburza wyników, gdyż wykorzystanie żetonu podpowiedzi nie~prowadzi do~eskalacji progresu gry -~jeżeli nie~dobrano ostatniej karty z~talii.
+
+\section{StoppedClock}
+
+Agent StoppedClock rozszerza strategię agenta Erratic: wykonuje losowe ruchy, które nie~mogą doprowadzić do~utraty żetonów życia. Jego postępowanie, choć bardzo chaotyczne, czasem prowadzi do~wysokich punktacji, zgodnie z~maksymą: ``nawet zepsuty zegar dwa razy na~dobę pokazuje właściwą godzinę''.
+
+\subsection*{Schemat działania}
+
+Ruch agenta polega na~zbadaniu, które z~trzech dostępnych akcji są~legalne, a~następnie wylosowaniu i~wykonaniu jednej z~nich. Ponieważ tylko druga i~trzecia akcja mogą wzajemnie~się wykluczać, gracz zawsze będzie w~stanie wykonać co~najmniej jeden z~ruchów. Dostępne akcje to:
 
 \begin{itemize}
 	\item Jeżeli posiadasz bezpieczne zagranie, wykonaj je.
@@ -267,29 +279,15 @@ Ruch agenta polega na~zbadaniu, które z~trzech dostępnych akcji mogą być wyk
 
 \subsection*{Osiągi}
 
-\begin{table}[h!]
+\begin{figure}[H]
 	\centering
-	\begin{tabular}{ r|c|c|c|c| }
-		\multicolumn{1}{r}{}
-		 & \multicolumn{1}{c}{2 graczy}
-		 & \multicolumn{1}{c}{3 graczy}
-		 & \multicolumn{1}{c}{4 graczy}
-		 & \multicolumn{1}{c}{5 graczy} \\
-		\cline{2-5}
-		średnia & 5.95 & 6.34 & 5.46 & 4.42 \\
-		\cline{2-5}
-		mediana & 6 & 6 & 5 & 4 \\
-		\cline{2-5}
-		wariancja & 7.08 & 5.16 & 3.86 & 3.02 \\
-		\cline{2-5}
-		odchylenie standardowe & 2.66 & 2.27 & 1.96 & 1.74 \\
-		\cline{2-5}
-	\end{tabular}
-	\caption{Wyniki agenta StoppedClock (rozmiar próby: 1000 gier)}
-	\label{table:StoppedClock}
-\end{table}
+	\captionsetup{format=hang}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{StoppedClock.png}
+	\caption[Caption]{Wyniki agenta StoppedClock (rozmiar próby: 1000 gier)}
+	\label{fig:StoppedClock}
+\end{figure}
 
-Agent wykonujący wyłącznie losowe ruchy jest pierwszym, który nie~oszukuje. Niestety, ma~on~nikłą szanse na~uzyskanie wysokich wyników, a~jego konstrukcja nigdy nie~pozwoli na~wygraną. Jest to~spowodowane ograniczeniem, które umożliwia programowi funkcjonowanie: wykonywane ruchy muszą być bezpieczne, co~koliduje z~ograniczoną liczbą żetonów podpowiedzi.
+Agent ma~on~nikłą szanse na~uzyskanie wysokich wyników, a~jego konstrukcja nigdy nie~pozwoli na~wygraną. Jest to~spowodowane ograniczeniem, które umożliwia programowi funkcjonowanie: wykonywane ruchy muszą być bezpieczne, co~koliduje z~ograniczoną liczbą żetonów podpowiedzi.
 
 \section{SimpleDistrustful}
 
@@ -298,15 +296,15 @@ Agent SimpleDistrustful imituje postępowanie człowieka, który po~raz pierwszy
 \subsection*{Nowe pojęcia}
 
 \begin{itemize}
-	\item Inferowalna karta:
+	\item \textbf{Inferowalna karta}:
 
-	Użyteczności niektórych kart można dociec poprzez analizę aktualnego stanu rozgrywki. Przykładowo: na~początku gry zawsze można zagrać dowolną kartę z~numerem~1, niezależnie od~tego, czy jej kolor został ujawniony. Podobnie, jeżeli nie~odrzucono ani nie zagrano żadnej karty o~numerze~4, żadna taka karta nie~może być krytyczna. Karty o~takiej właściwości nazywamy inferowalnymi, czyli dającymi~się wywnioskować. Karty, które są~ujawnione, są~trywialnie inferowalne.
+	Użyteczności niektórych kart można dociec poprzez analizę aktualnego stanu rozgrywki. Przykładowo: na~początku gry zawsze można zagrać dowolną kartę z~numerem~1, niezależnie od~tego, czy jej kolor został ujawniony. Podobnie, jeżeli nie~odrzucono ani nie zagrano żadnej karty o~numerze~4, żadna taka karta nie~może być krytyczna. Karty o~takiej właściwości nazywamy inferowalnymi, czyli dającymi~się wywnioskować. Karty ujawnione są~trywialnie inferowalne.
 	
-	\item Wartościowa podpowiedź:
+	\item \textbf{Wartościowa podpowiedź}:
 	
 	Zdarzają się sytuacje, w~których udzielanie pewnych informacji jest niepożądane. Przykładowo: jeżeli dwóch lub więcej uczestników rozgrywki posiada kopię danej karty, warto skupić~się ujawnianiu wyłącznie jednej z~nich. Wartościowa podpowiedź to~taka, która jest lokalnie optymalna, gdyż unika powtarzania znanych informacji.
 	
-	\item Najbliższy gracz:
+	\item \textbf{Najbliższy gracz}:
 	
 	Uczestnik rozgrywki, który po~zakończeniu akcji aktualnego gracza wykona ruch najwcześniej.
 	
@@ -324,44 +322,34 @@ Agent SimpleDistrustful imituje postępowanie człowieka, który po~raz pierwszy
 
 \subsection*{Osiągi}
 
-\begin{table}[h!]
+\begin{figure}[H]
 	\centering
-	\begin{tabular}{ r|c|c|c|c| }
-		\multicolumn{1}{r}{}
-		 & \multicolumn{1}{c}{2 graczy}
-		 & \multicolumn{1}{c}{3 graczy}
-		 & \multicolumn{1}{c}{4 graczy}
-		 & \multicolumn{1}{c}{5 graczy} \\
-		\cline{2-5}
-		średnia & 13.29 & 15.51 & 15.05 & 13.99 \\
-		\cline{2-5}
-		mediana & 14 & 16 & 15 & 14 \\
-		\cline{2-5}
-		wariancja & 9.54 & 1.61 & 1.27 & 0.93 \\
-		\cline{2-5}
-		odchylenie standardowe & 3.09 & 1.27 & 1.13 & 0.96 \\
-		\cline{2-5}
-	\end{tabular}
-	\caption{Wyniki agenta SimpleDistrustful (rozmiar próby: 1000 gier)}
-	\label{table:SimpleDistrustful}
-\end{table}
+	\captionsetup{format=hang}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{SimpleDistrustful.png}
+	\caption[Caption]{Wyniki agenta SimpleDistrustful (rozmiar próby: 1000 gier)}
+	\label{fig:SimpleDistrustful}
+\end{figure}
 
-Agent nie~uzyskuje wysokich wyników, gdyż opiera swoje działania na~przeciętnej strategii. Udzielanie wyłącznie wartościowych informacji skłania graczy do~zagrywania kart, lecz często nie~wystarcza do~ochrony kart krytycznych -~nieujawnione karty wymagają pewnej formy ochrony, gdyż mogły być dobrane dopiero niedawno.
+Agent nie~uzyskuje wysokich wyników, gdyż opiera swoje działania na~przeciętnej strategii. Udzielanie wyłącznie wartościowych informacji skłania graczy do~zagrywania kart, lecz często nie~wystarcza do~ochrony kart krytycznych -~nieujawnione karty wymagają pewnej formy ochrony, gdyż mogły być dobrane dopiero niedawno. Szczególnie zawodzą wyniki rozgrywek dla dwóch graczy, które cechują~się nadzwyczaj wysoką niestabilnością.
 
 \section{Distrustful}
 
-Agent Distrustful dopracowuje strategię stosowaną przez SimpleDistrustful. Program nadal gra zachowawczo i~nie~bierze pod uwagę możliwości udzielania ani otrzymywania implicytnych informacji, w~zamian polegając wyłącznie na~maksymalnie rozszerzonym systemie dedukcji. Dodatkowo, aby zwiększyć potencjał każdej z~akcji, agent dynamicznie dostosowuje swój sposób postępowania do~aktualnego stanu rozgrywki i~zmienia priorytety manewrów, w~zależności od~ilości pozostałych żetonów podpowiedzi.
+Agent Distrustful dopracowuje strategię stosowaną przez SimpleDistrustful. Program nadal gra zachowawczo, lecz ma~do~dyspozycji maksymalnie rozszerzony system dedukcji. Aby zminimalizować prawdopodobieństwo odrzucania kart krytycznych, został on~dodatkowo usprawniony o~konwencję, która chroni najnowsze karty poprzez nadawanie im~wysokich priorytetów. Aby zwiększyć potencjalną przydatność każdej z~dokonywanych akcji, agent dynamicznie dostosowuje swój sposób postępowania do~aktualnego stanu rozgrywki i~zmienia priorytety manewrów, w~zależności od~ilości pozostałych żetonów podpowiedzi. Pozwala to~na~dopasowywanie przyjmowanej taktyki, przy jednoczesnym zachowaniu zasad ugruntowanych przez narzuconą strategię.
 
 \subsection*{Nowe pojęcia}
 
 \begin{itemize}
-	\item Heurystycznie wartościowa akcja:
+	\item \textbf{Pułap jakościowy}:
 	
-	Niektóre akcje, takie jak bezpieczne zagranie, są~w~oczywisty sposób korzystne dla postępu gry. Niestety, przypisanie części ruchów jednoznacznej wartości liczbowej, wskazującej na jej przydatność w~kontekście danego momentu rozgrywki, jest trudnym zadaniem, gdyż pełna analiza możliwych następstw akcji wymagałaby wysokiego nakładu mocy obliczeniowej. Aby uniknąć tego problemu, można zastosować funkcje heurystyczne, które przybliżają wartości poszukiwanych~ocen. Czasami jednak nie~istnieje ruch, który byłby dobry, dlatego każda otrzymana wartość musi także być wyższa od~pewnego ustalonego pułapu granicznego. Akcja, która uzyska najwyższą notę, a~także przejdzie test jakości, jest nazywana heurystycznie optymalną.
+	Jedna z~miar używanych w~funkcjach oceniających przydatność ruchów: jeżeli uzyskana przez daną akcję nota jest niższa od~pułapu, jest ona dyskwalifikowana jako niewystarczająco pomocna. 
+
+	\item \textbf{Heurystycznie wartościowa akcja}:
 	
-	\item Najstarsza karta:
+	Niektóre akcje, takie jak bezpieczne zagranie, są~w~oczywisty sposób korzystne dla postępu gry. Niestety, przypisanie części ruchów jednoznacznej wartości liczbowej, wskazującej na jej przydatność w~kontekście danego momentu rozgrywki, jest trudnym zadaniem, gdyż pełna analiza możliwych następstw akcji wymagałaby wysokiego nakładu mocy obliczeniowej. Aby uniknąć tego problemu, można zastosować funkcje heurystyczne, które przybliżają wartości poszukiwanych~ocen. Akcja, która uzyska najwyższą notę, a~także będzie wyższa od~zadanego pułapu jakościowego, jest nazywana heurystycznie optymalną.
 	
-	Karta, która znajduje~się w~ręce danego gracza od~największej ilości tur. W~razie konfliktu za~najstarszą kartę uznawana jest ta~wysunięta najbardziej na~lewo.
+	\item \textbf{Najstarsza (najmłodsza) karta}:
+	
+	Karta, która znajduje~się w~ręce danego gracza od~największej (najmniejszej) ilości tur. W~razie konfliktu za~najstarszą (najmłodszą) kartę uznawana jest ta~wysunięta najbardziej na~lewo.
 
 \end{itemize}
 
@@ -377,31 +365,31 @@ Agent jest złożony z~siedmiu modułów, które są~rozważane po~kolei w~jedne
 Używane moduły to:
 
 \begin{enumerate}
-	\item ``Necessary tip'':
+	\item \underline{``Necessary tip''}:
 	
 	Jeżeli najbliższy gracz planuje w~kolejnym ruchu odrzucić kartę krytyczną, powstrzymaj go~poprzez udzielenie odpowiedniej podpowiedzi.
 
-	\item ``Obvious play'':
+	\item \underline{``Obvious play''}:
 	
 	Jeżeli posiadasz inferowalnie bezpieczne zagranie, wykonaj~je, nadając priorytet kartom o~niższych numerach.
 
-	\item ``Good play tip'':
+	\item \underline{``Good play tip''}:
 	
 	Jeżeli posiadasz co~najmniej dwa żetony podpowiedzi i~istnieje heurystycznie wartościowa podpowiedź, która umożliwi innemu graczowi inferowalnie bezpieczne zagranie, udziel jej.
 
-	\item ``Discard tip'':
+	\item \underline{``Discard tip''}:
 	
 	Jeżeli posiadasz co~najmniej dwa żetony podpowiedzi i~istnieje heurystycznie wartościowa podpowiedź, która umożliwi innemu graczowi odrzucenie inferowalnie bezużytecznej karty, udziel jej.
 
-	\item ``Obvious discard'':
+	\item \underline{``Obvious discard''}:
 	
 	Jeżeli posiadasz inferowalnie bezużyteczną kartę, odrzuć ją.
 
-	\item ``Mediocre play tip'':
+	\item \underline{``Mediocre play tip''}:
 	
 	Jeżeli posiadasz co~najmniej dwa żetony podpowiedzi, spróbuj wykonać akcję modułu numer~3 (``Good play tip''), ale ze~znacznie niższym pułapem jakościowym.
 
-	\item ``Guess discard'':
+	\item \underline{``Guess discard''}:
 	\begin{enumerate}
 		\item Jeżeli posiadasz nieujawnione karty, odrzuć najstarszą z~nich.
 		\item Jeżeli posiadasz karty, które nie~są~inferowalnie krytyczne, odrzuć najstarszą z~nich.
@@ -415,94 +403,252 @@ Zmiana kolejności manewrów pozwala na~kontrolowanie priorytetów agenta: im~mn
 Wagi funkcji heurystycznych zostały dobrane eksperymentalnie. Poza sprawdzaniem, czy dana podpowiedź jest wartościowa, na~werdykt algorytmu wpływają między innymi następujące czynniki:
 \begin{itemize}
 	\item stopień ujawnienia karty
+	\item czy zagranie karty jest lawinowe
 	\item ilość kart, które muszą być zagrane, zanim karta będzie bezpieczna
 	\item odległość właściciela karty od~aktualnego gracza
 	\item numer karty
 	\item wagi kart, które zostaną ujawnione wraz z~rozważaną kartą
 \end{itemize}
 
-Początkowo, moduł numer~1 (``Necessary tip'') przyjmował inną formę. Zamiast ostrzegać graczy przed odrzucaniem krytycznych kart natychmiast po~wykryciu zagrożenia, udzielenie kluczowej informacji było odwlekane aż~do~tury gracza, który jako ostatni mógł zapobiec nieszczęściu. W~praktyce doprowadzało to~do~powstawania cykli, w~których gracze naprzemiennie udzielali podpowiedzi i~odrzucali karty, przez co~częstotliwość zagrań drastycznie spadała. Choć pierwotny moduł znacznie pogarszał wyniki agenta Distrustful, jego zrewidowana wersja stanowi serce kolejnego, znacznie bardziej zaawansowanego agenta.
+Początkowo, moduł numer~1 (``Necessary tip'') przyjmował inną formę. Zamiast ostrzegać graczy przed odrzucaniem krytycznych kart natychmiast po~wykryciu zagrożenia, udzielenie kluczowej informacji było odwlekane aż~do~tury gracza, który jako ostatni mógł zapobiec nieszczęściu. W~praktyce doprowadzało to~do~powstawania cykli, w~których gracze naprzemiennie udzielali podpowiedzi i~odrzucali karty, przez co~częstotliwość zagrań drastycznie spadała. Choć pierwotny moduł znacznie pogarszał wyniki agenta Distrustful, jego zrewidowana wersja stanowi serce kolejnego, bardziej zaawansowanego agenta.
 
 \subsection*{Osiągi}
 
-\begin{table}[H]
+\begin{figure}[H]
 	\centering
-	\begin{tabular}{ r|c|c|c|c| }
-		\multicolumn{1}{r}{}
-		 & \multicolumn{1}{c}{2 graczy}
-		 & \multicolumn{1}{c}{3 graczy}
-		 & \multicolumn{1}{c}{4 graczy}
-		 & \multicolumn{1}{c}{5 graczy} \\
-		\cline{2-5}
-		średnia & 17.46 & 16.45 & 15.75 & 14.48 \\
-		\cline{2-5}
-		mediana & 18 & 16 & 16 & 14 \\
-		\cline{2-5}
-		wariancja & 2.59 & 1.26 & 1.06 & 0.84 \\
-		\cline{2-5}
-		odchylenie standardowe & 1.61 & 1.12 & 1.03 & 0.92 \\
-		\cline{2-5}
-	\end{tabular}
-	\caption{Wyniki agenta Distrustful (rozmiar próby: 1000 gier)}
-	\label{table:Distrustful}
-\end{table}
+	\captionsetup{format=hang}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Distrustful.png}
+	\caption[Caption]{Wyniki agenta Distrustful (rozmiar próby: 1000 gier)}
+	\label{fig:Distrustful}
+\end{figure}
 
-Mimo znacznego wzmocnienia strategii agenta SimpleDistrustful, osiągane wyniki nadal nie~zachwycają. Gracze udzielają heurystycznie wartościowych podpowiedzi, chronią krytyczne karty poprzez system wieku i~oszczędzają żetony na~czarną godzinę -~trudno jednak doszukiwać~się między nimi głębszej współpracy, która jest kluczowa dla wysokich osiągów. Zagrywane są~wyłącznie karty inferowalnie bezpieczne, co, nawet przy bardzo ostrożnej i~wydajnej komunikacji, nie~wystarcza do~podjęcia równej walki z~szybko kurczącą~się ilością żetonów podpowiedzi. Aby przekroczyć wyczekiwany próg 20~punktów, potrzeba strategii, która dopuszcza pewne ryzyko.
+Mimo znacznego wzmocnienia strategii agenta SimpleDistrustful, osiągane wyniki nadal nie~zachwycają. Gracze udzielają heurystycznie wartościowych podpowiedzi, chronią krytyczne karty poprzez system wieku i~oszczędzają żetony na~czarną godzinę -~trudno jednak doszukiwać~się między nimi głębszej współpracy, która jest kluczowa dla wysokich osiągów. Zagrywane są~wyłącznie karty inferowalnie bezpieczne, co, nawet przy bardzo ostrożnej i~wydajnej komunikacji, nie~wystarcza do~podjęcia równej walki z~szybko kurczącą~się ilością żetonów podpowiedzi. Aby przekroczyć wyczekiwany próg średniej ilości 20~punktów, potrzeba strategii, która dopuszcza pewne ryzyko.
 
 \section{Trustful}
 
-WIP
+Poprzedników agenta Trustful nękają dwa zasadnicze problemy. Są~to: trudność związana z~efektywnym przekazywaniem informacji, a~także wystrzeganie~się zagrań, które nie są~bezpieczne. Obie te~przeszkody można pokonać poprzez ustanowienie protokołu komunikacji, który nadaje niektórym akcjom dodatkowego, implicytnego znaczenia, rozumianego przez pozostałych uczestników rozgrywki. Podpowiedzi udzielane przez agenta przekazują nie~tylko informacje o~kartach, ale i~plan działania na~kolejne tury. Aby obejść problem ograniczonej ilości żetonów podpowiedzi, program potrafi, przy spełnieniu odpowiednich warunków, wykonywać ruchy, które nie~są~inferowalne, lecz mają bardzo wysokie prawdopodobieństwo bycia bezpiecznymi.
+
+\subsection*{Nowe pojęcia}
+
+\begin{itemize}
+	\item \textbf{Obietnica}:
+	
+	Jeżeli agent udzieli informacji, która, zgodnie z~protokołem komunikacji, wyznacza plan zagrywania kolejnych kart, taką podpowiedź nazywamy obietnicą.
+	
+	\item \textbf{Komunikat}:
+	
+	Podpowiedź, która nie jest obietnicą.
+	
+	\item \textbf{Podpowiedź ratunkowa}:
+	
+	Heurystycznie wartościowa podpowiedź, będąca obietnicą lub komunikatem, ignorująca pułap jakościowy heurystyki.
+	
+	\item \textbf{Weto}:
+	
+	Akt zdjęcia efektu obietnicy z~karty. Jeżeli istnieje podpowiedź ratunkowa, która umożliwia danemu graczowi wykonanie jakiegoś ruchu, weto polega na~jej udzieleniu, w~przeciwnym wypadku weta dokonuje~się poprzez ujawnienie danej karty.
+
+\end{itemize}
+
+\subsection*{Schemat działania}
+
+Agent posiada dwie kategorie podpowiedzi: obietnice oraz komunikaty. Ustalenie ich typu odbywa~się według następującego schematu:
+
+\begin{enumerate}
+	\item Jeżeli gracz otrzyma od~swojego bezpośredniego poprzednika podpowiedź obejmującą kartę, która miała zostać właśnie odrzucona, podpowiedź jest komunikatem.
+	\item Jeżeli gracz otrzyma od~swojego bezpośredniego poprzednika dowolną podpowiedź, gdy jedna z~kart objętych obietnicą miała zostać właśnie zagrana, ta~karta jest wetowana, a~typ podpowiedzi jest rozpatrywany ponownie, z~pominięciem tego punktu schematu.
+	\item Jeżeli gracz otrzyma podpowiedź wskazującą na~numer, którego poprawne zagranie byłoby niemożliwe w~turze podpowiadającego gracza, podpowiedź jest komunikatem.
+	\item Podpowiedź jest obietnicą.
+\end{enumerate}
+
+Podobnie jak w~przypadku agenta Distrustful, program składa~się z~dziesięciu modułów, które są~rozważane po~kolei w~jednej z~czterech konfiguracji. Każdy moduł, poza ostatnim, może zawieść. Ich kolejność zależy od~ilości posiadanych żetonów podpowiedzi:
+
+\begin{itemize}
+	\item Mniej niż 3~żetony: sekwencja 1, 2, 3, 9, 4, 5, 10 (moduły 6, 7, 8 nie są używane).
+	\item Od~3~do~5 żetonów: sekwencja 1, 2, 3, 4, 5, 9, 10 (moduły 6, 7, 8 nie są używane).
+	\item 6~lub~7 żetonów: sekwencja 1, 2, 3, 4, 5, 9, 6, 7, 10 (moduł 8 nie jest używany).
+	\item Dokładnie 8~żetonów: sekwencja 1, 2, 3, 4, 5, 6, 7, 8, 9, 10.
+\end{itemize}
+Używane moduły to:
+
+\begin{enumerate}
+	\item \underline{``Necessary tip''}:
+
+	Rozważ możliwe ruchy najbliższego gracza:
+	\begin{enumerate}
+		\item Jeżeli może niepoprawnie zagrać kartę objętą obietnicą, lecz posiadasz inferowalnie bezpieczne zagranie, które sprawia, że~będzie ona zagrana poprawnie, wykonaj je -~w~przeciwnym wypadku zawetuj kartę.
+		\item Jeżeli może odrzucić kartę krytyczną, lecz istnieje podpowiedź ratunkowa, która umożliwia mu~wykonanie innego ruchu, udziel jej -~w~przeciwnym wypadku ujawnij kartę, priorytetyzując informację o~numerze.
+	\end{enumerate}
+
+	\item \underline{``Obvious play''}:
+	
+	Jeżeli posiadasz inferowalnie bezpieczne zagranie, wykonaj~je, nadając priorytet kartom o~niższych numerach.
+	
+	\item \underline{``Hinted play''}:
+
+	Jeżeli posiadasz karty objęte obietnicą, których zagranie nie~może być w~oczywisty sposób niepoprawne, zagraj tę~najbardziej wysuniętą na~lewo, nadając priorytet kartom o~ujawnionym numerze i~wybierając spośród nich te, których numer jest najniższy.
+
+	\item \underline{``Play tip''}:
+	
+	Jeżeli istnieje heurystycznie wartościowa podpowiedź lub obietnica, która umożliwi innemu graczowi bezpieczne lub inferowalnie bezpieczne zagranie, udziel jej.
+
+	\item \underline{``Discard tip''}:
+	
+	Jeżeli istnieje heurystycznie wartościowa podpowiedź, która umożliwi innemu graczowi odrzucenie inferowalnie bezużytecznej karty, udziel jej.
+
+	\item \underline{``Risky tip''}:
+	
+	Spróbuj wykonać akcję modułu numer~4 (``Play tip'') z~obniżoną karą za~błędne obietnice i~zwiększonym pułapem jakościowym.
+	
+	\item \underline{``Save tip''}:
+	
+	Jeżeli istnieje podpowiedź ratunkowa ujawniająca kartę krytyczną, którą można wykonać w~trybie komunikatu, wykonaj ją.
+	
+	\item \underline{``Information tip''}:
+	
+	Spróbuj wykonać akcję modułu numer~4 (``Play tip'') ze~zwiększoną nagrodą za~udzielanie podpowiedzi w~trybie komunikatu.
+	
+	\item \underline{``Obvious discard''}:
+	
+	Jeżeli posiadasz inferowalnie bezużyteczną kartę, odrzuć ją.
+
+	\item \underline{``Guess discard''}:
+	\begin{enumerate}
+		\item Jeżeli posiadasz nieujawnione karty, odrzuć najstarszą z~nich.
+		\item Jeżeli posiadasz karty, które nie~są~inferowalnie krytyczne, odrzuć najstarszą z~nich.
+		\item Odrzuć najstarszą kartę.
+	\end{enumerate}
+
+\end{enumerate}
+
+Wagi funkcji heurystycznych ponownie zostały dobrane eksperymentalnie, lecz sposób oceny akcji znacznie różni~się od~tego znanego z~agenta Distrustful. Z~racji na~ambiwalencję udzielanych typów podpowiedzi, należy uważać nie~tylko na~jakość przekazywanych informacji, ale i~ich znaczenie w~kontekście protokołu komunikacji.
+
+Poza czynnikami wyszczególnionymi podczas analizy agenta Distrustful, na~werdykt algorytmu wpływają między innymi:
+
+\begin{itemize}
+	\item czy podpowiedź jest obietnicą
+	\item czy komunikat zostanie uznany za~obietnicę, mimo, że~tego nie~chcemy
+	\item czy karta może stać~się grywalna w~turze danego gracza
+	\item czy karta jest pod działaniem efektu obietnicy
+	\item czy podpowiedź zniweczy przydatną obietnicę
+	\item czy podpowiedź jest ryzykowna
+	\item pozostała ilość żetonów życia
+	\item kolejność ujawnianych kart w~ręce
+\end{itemize}
+
+Podpowiadanie kart w~trybie obietnicy rzadko przebiega w~bezproblemowy sposób: karty tworzące częściowy porządek w~ręce gracza to~rzadkie zjawisko. Jest to~powód, dla którego funkcje heurystyczne agresywnie zaniżają noty obietnic, których pierwszy element jest niepoprawny, lecz relaksują kary dla tych podpowiedzi, które zaczynają~się w~sposób umożliwiający co~najmniej jedno bezpieczne zagranie.
+
+Udzielanie podpowiedzi podlegają pewnemu rygorowi, lecz czasami potencjalny zysk z~udzielenia informacji o~wielu kartach naraz przeważa nad ryzykiem związanym z~niepoprawnością obietnicy. Ponieważ agent stara~się zachowywać co~najmniej jeden żeton podpowiedzi na~takie przypadki, ryzyko niefortunnego zagrania drastycznie spada. Niestety, nadal może dojść do~sytuacji, w~których gracze tracą żetony życia poprzez niepoprawne zagrania. Aby temu zapobiec, agent ogranicza zaufanie do~innych graczy, gdy w~grze pozostał ostatni żeton życia -~zagrywane są~wyłącznie te~karty objęte obietnicą, które zostały podpowiedziane pojedynczo. W~ten sposób całkowicie eliminowane jest ryzyko niebezpiecznych zagrań, lecz agent nadal nie~degeneruje swojej strategii do~tej znanej z~agenta Distrustful.
+
+Strategia agenta nie~jest~przystosowana do~rozgrywek dwuosobowych, gdyż udzielenie dowolnej podpowiedzi wetuje kartę, która miała szansę być właśnie zagrana. Prowadzi to~do konieczności omijania systemu obietnic. Można to~osiągnąć wyłącznie poprzez wykonywanie jednej z~pozostałych akcji, co~jest trudnym zadaniem, gdyż wiąże~się to~z koniecznością dobrej znajomości własnej ręki.
 
 \subsection*{Osiągi}
 
-\begin{table}[h!]
+\begin{figure}[H]
 	\centering
-	\begin{tabular}{ r|c|c|c|c| }
-		\multicolumn{1}{r}{}
-		 & \multicolumn{1}{c}{2 graczy}
-		 & \multicolumn{1}{c}{3 graczy}
-		 & \multicolumn{1}{c}{4 graczy}
-		 & \multicolumn{1}{c}{5 graczy} \\
-		\cline{2-5}
-		średnia & 18.11 & 20.50 & 20.45 & 19.16 \\
-		\cline{2-5}
-		mediana & 19 & 21 & 20 & 19 \\
-		\cline{2-5}
-		wariancja & 10.91 & 2.65 & 2.71 & 2.64 \\
-		\cline{2-5}
-		odchylenie standardowe & 3.30 & 1.63 & 1.65 & 1.63 \\
-		\cline{2-5}
-	\end{tabular}
-	\caption{Wyniki agenta Trustful (rozmiar próby: 1000 gier)}
-	\label{table:Trustful}
-\end{table}
+	\captionsetup{format=hang}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Trustful.png}
+	\caption[Caption]{Wyniki agenta Trustful (rozmiar próby: 1000 gier)}
+	\label{fig:Trustful}
+\end{figure}
 
+Agent Trustful nie tylko potrafi przekroczyć próg 20~punktów, ale i~zdarza mu~się~wygrać: zastosowanie protokołu implicytnej komunikacji pozwoliło wynieść osiągi sztucznej inteligencji na~nowy poziom. Niestety, strategia programu nie~jest przystosowana do~rozgrywek dwuosobowych, co~objawia~się wysoką niestabilnością algorytmu. Wartym zaobserwowania faktem, który można odczytać z~wykresu, jest wykładniczy wzrost trudności uzyskiwania kolejnych punktów, który występuje od~pewnego momentu rozgrywki.
 
 \section{BayesianTrustful}
 
-WIP
+Agent BayesianTrustful stanowi próbę odnalezienia nowych wag funkcji heurystycznych agenta Trustful, które pierwotnie zostały dobrane manualnie, w~celu poprawy osiągów. W~tym celu użyliśmy bayesowskiej metody optymalizacji hiperparametrów, korzystającej z~procesów gaussowskich.
+
+\subsection*{Podstawy teoretyczne}
+
+Bayesowska metoda optymalizacji to~proces iteracyjny, oparty o~twierdzenie Bayesa, który korzysta z~wnioskowania statystycznego do~analizy prawdopodobieństwa hipotez. Rozważmy przestrzeń hipotez $\mathbb{H}$, której elementom $h$ przyporządkowane są~początkowe prawdopodobieństwa $P(h)$, zwane $\textit{a priori}$. Prawdopodobieństwo hipotezy $h\in\mathbb{H}$ po~dokonaniu nowej obserwacji $O$ można wyrazić wzorem $P(h|O)$, nazywanym $\textit{a posteriori}$. Metoda bayesowska pozwala na~aktualizację prawdopodobieństwa $\textit{a priori}$ hipotez w~oparciu o~nowe obserwacje. Przekłada~się to~na~możliwość dokonywania wnioskowania statystycznego na~temat rozkładu funkcji, która nie~posiada wzoru jawnego.
+
+Proces gaussowski to proces stochastyczny, który pozwala na~określenie łącznego rozkładu prawdopodobieństwa (a~także jego niepewności) wybranej rodziny nieparametrycznych funkcji $\mathbb{F}$. Polega on~na~konstrukcji prawdopodobieństw $\textit{a priori}$, które można aktualizować poprzez kolejne obserwacje, co~tworzy system przekonań o~kształcie badanych funkcji.
+
+\begin{figure}[H]
+	\centering
+	\captionsetup{format=hang}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Gauss.png}
+	\caption[Caption]{Wizualizacja procesu gaussowskiego. Zielonymi plusami zaznaczono obserwacje, niebieskie krzywe to~poprzednie przekonania $\textit{a posteriori}$, zaś czerwona krzywa to~ich średnia. Zacieniona część wykresu wyznacza niepewność modelu. Żródło: $\cite{Gauss}$}
+	\label{fig:Gauss}
+\end{figure}
+
+Bayesowska metoda optymalizacji oparta o~procesy gaussowskie polega na~stworzeniu rozkładu $\textit{a priori}$ funkcji, której maksimum szukamy, a~następnie próbkowaniu jej. Nowe obserwacje pozwalają na~aktualizację prawdopodobieństw $\textit{a posteriori}$. Wraz ze~wzrostem ilości obserwacji przekonania algorytmu ulegają zmianie, a ponieważ proces gaussowski pozwala na~identyfikację tych części funkcji, które najbardziej wymagają większej ilości obserwacji, metoda ta~minimalizuje ilość próbkowań, potrzebnych do~dalszych rozważań.
+
+\subsection*{Osiągi}
+
+\begin{figure}[H]
+	\centering
+	\captionsetup{format=hang}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{BayesianTrustful.png}
+	\caption[Caption]{Wyniki agenta BayesianTrustful (rozmiar próby: 1000 gier)}
+	\label{fig:BayesianTrustful}
+\end{figure}
+
+Maksymalizowana była funkcja o~27 parametrach, odpowiadających wagom używanym w~funkcjach heurystycznych. Jej wartość w~punkcie została zdefiniowana jako średnia arytmetyczna wyników uzyskanych na~przestrzeni 20~niezależnych rozgrywek czteroosobowych.
+
+Algorytm optymalizujący, po~zbadaniu kilku tysięcy próbek, znalazł nowy zestaw parametrów. Przeprowadzone testy wskazują na~niewielki wzrost średniej ilości punktów dla grup trzech, czterech i~pięciu graczy, kosztem zwiększonej wariancji. Agent Trustful nie~był projektowany do~przeprowadzania rozgrywek dwuosobowych, co~szczególnie dobrze widać na~wykresie -~lepsze dostosowanie wag, które pomagają przy bardziej licznych grupach, pogrąża strategię dla dwóch graczy.
+
+Na~podstawie analizy wartości nowych wag można dociec, w~jaki sposób zmieniła~się strategia agenta:
+
+\begin{itemize}
+	\item Moduł ``Discard tip'', pomagający graczom w~odrzucaniu bezużytecznych kart, udziela podpowiedzi wyłącznie w~sytuacji, w~której jest w~stanie częściowo ujawnić jednocześnie co~najmniej 4~karty (poprzednia wartość:~2)
+	\item Moduł ``Play tip'', zarządzający podpowiedziami dotyczącymi zagrań, w~znacznie większym stopniu nagradza zagrania lawinowe, udzialanie informacji dalszym graczom oraz podpowiedzi dotyczące kart o~niższych numerach, jednocześnie drastycznie zwiększając kary za~nieprawidłowe obietnice i~marginalizując znaczenie podpowiedzi będących komunikatami
+	\item Moduł ``Risky tip'', pozwalający na~udzielanie podpowiedzi będących nieprawidłowymi obietnicami, otrzymał karę o~takiej~wysokości, która całkowicie wyklucza możliwość jego wykorzystania
+	\item Moduł ``Information tip'', pozwalający na~udzielanie podpowiedzi będących komunikatami, ma~zwiększony pułap jakościowy, co~sprawia, że~jest on~znacznie rzadziej wykorzystywany
+\end{itemize}
+
+Podsumowując: agent jest mniej skłonny do~udzielania podpowiedzi będących komunikatami i~agresywnie penalizuje nieprawidłowe obietnice. Choć prowadzi to~do~uzyskania wyższej średniej punktowej, takie postępowanie destabilizuje algorytm i~powoduje wzrost wariancji obserwowanych wyników.
 
 \section{Reinforced}
 
 WIP
 
-\chapter{Wnioski}
+\subsection*{Osiągi}
+
+\iffalse
+\begin{figure}[H]
+	\centering
+	\captionsetup{format=hang}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{Reinforced.png}
+	\caption[Caption]{Wyniki agenta Reinforced (rozmiar próby: 1000 gier)}
+	\label{fig:Reinforced}
+\end{figure}
+\fi
+
+\chapter{Niestandardowe modele rozgrywki}
+
+\section{Dwa oblicza drużyn Hanabi}
+
+WIP
+
+\section{Pojedynki XY}
+
+WIP
+
+\chapter{Dalsze badania}
+
+WIP
+
+\appendix
+\chapter{Uruchamianie interfejsu użytkownika}
 
 WIP
 
 \begin{thebibliography}{4}
 
 \bibitem{NP-Complete} J.-F Baffier i in., \textit{Hanabi is NP-complete, Even for Cheaters who Look at Their Cards}, 2017. URL: 
-\href{https://arxiv.org/pdf/1603.01911.pdf}{\textbf{link}} (term. wiz. 11.01.2020)
+\href{https://arxiv.org/pdf/1603.01911.pdf}{\textbf{link}} (term. wiz. 26.01.2020)
 
 \bibitem{MCTS} A. Lerer, H. Hu, J. Foerster, N. Brown, \textit{Building AI that can master complex cooperative games with hidden information}, 2019. URL: 
-\href{https://ai.facebook.com/blog/building-ai-that-can-master-complex-cooperative-games-with-hidden-information/}{\textbf{link}} (term. wiz. 11.01.2020)
+\href{https://ai.facebook.com/blog/building-ai-that-can-master-complex-cooperative-games-with-hidden-information/}{\textbf{link}} (term. wiz. 26.01.2020)
 
-\bibitem{Mario} T. Murphy, \textit{The First Level of Super Mario Bros. is Easy with Lexicographic Orderings and Time Travel . . . after that it gets a little tricky.}, 2013. URL: 
-\href{http://www.cs.cmu.edu/~tom7/mario/mario.pdf}{\textbf{link}} (term. wiz. 11.01.2020)
+\bibitem{Mario} T. Murphy, \textit{The First Level of Super Mario Bros. is Easy with Lexicographic Orderings and Time Travel $\ldots$after that it gets a little tricky.}, 2013. URL: 
+\href{http://www.cs.cmu.edu/~tom7/mario/mario.pdf}{\textbf{link}} (term. wiz. 26.01.2020)
 
 \bibitem{HatPlayer} B. Bouzy, \textit{Playing Hanabi Near-Optimally}, 2017. URL: 
-\href{http://helios.mi.parisdescartes.fr/~bouzy/publications/bouzy-hanabi-2017.pdf}{\textbf{link}} (term. wiz. 11.01.2020)
+\href{http://helios.mi.parisdescartes.fr/~bouzy/publications/bouzy-hanabi-2017.pdf}{\textbf{link}} (term. wiz. 26.01.2020)
+
+\bibitem{Gauss} Fernando Pérez-Cruz i in., \textit{Gaussian Processes for Nonlinear Signal Processing: An Overview of Recent Advances}, 2013. URL: 
+\href{https://www.researchgate.net/publication/260637079_Gaussian_Processes_for_Nonlinear_Signal_Processing_An_Overview_of_Recent_Advances}{\textbf{link}} (term. wiz. 26.01.2020)
 
 \end{thebibliography}
 
