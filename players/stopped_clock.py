@@ -65,7 +65,7 @@ class StoppedClock(BasePlayer):
                 hand = deepcopy(utils.get_player_hand_by_number(round_info, player))
                 hand.shuffle()
                 for card in hand:
-                    if random.randint(0,1) is 0:
+                    if random.randint(0, 1) is 0:
                         if card.revealed_rank is None:
                             return ChoiceDetails(
                                 Choice.HINT,

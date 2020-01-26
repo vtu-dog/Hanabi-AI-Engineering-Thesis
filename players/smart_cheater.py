@@ -135,7 +135,7 @@ class SmartCheater(BasePlayer):
 
     def hint_first_free_card(self, round_info, player_number):
         original_player_number = player_number
-        player_number = utils.next_player_number(round_info, player_number)
+        player_number = utils.next_player_number(round_info, original_player_number)
 
         while player_number is not original_player_number:
             if player_number is round_info.player_turn:
@@ -155,6 +155,14 @@ class SmartCheater(BasePlayer):
                         HintDetails(player_number, card.real_suit)
                     )
             player_number = utils.next_player_number(round_info, player_number)
+
+        player_number = utils.next_player_number(round_info, original_player_number)
+        player_hand = utils.get_player_hand_by_number(round_info, player_number)
+        for card in player_hand:
+            return ChoiceDetails(
+                Choice.HINT,
+                HintDetails(player_number, card.real_rank)
+            )
 
     def check_for_soft_pass_turn(self, round_info, player_number):
         original_player_number = player_number

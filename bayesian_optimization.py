@@ -67,4 +67,20 @@ print("New optimizer is now aware of {} points.".format(len(optimizer.space)))
 #    n_iter=2000,
 #)
 
-print(optimizer.max)
+results = []
+
+for i, res in enumerate(optimizer.res):
+    print("Iteration {}: \n\t{}".format(i, res['target']))
+    results.append((i, res['target'], res['params']))
+
+results = sorted(results, key=lambda x: x[1])
+for result in results:
+    st = "\n"
+    a = 0
+    for param in result[2]:
+        a += 1
+        st += str(result[2][param]) + ", "
+        if a == 3 or a == 11 or a == 19 or a == 27:
+            st += "\n"
+
+    print(result[0], result[1], st)

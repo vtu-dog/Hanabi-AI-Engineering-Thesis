@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from framework import BasePlayer, Choice, ChoiceDetails, utils, HintDetails
-import functools
 import random
 import math
 from copy import deepcopy
 import statistics
 
 debug = True
-random_action = 0.1
+random_action = 0.01
 exploration_param = math.sqrt(2)
 
 class Reinforced(BasePlayer):
@@ -203,6 +202,9 @@ class Reinforced(BasePlayer):
                 if player_distance < 0:
                     player_distance += round_info.number_of_players
 
+                if player_distance > 2:
+                    player_distance = 2
+
                 targets = {}
                 for rank in utils.Rank:
                     targets[rank] = []
@@ -319,7 +321,7 @@ class Reinforced(BasePlayer):
                         last_remaining = 1
 
                     state = (rank, current_alignment, future_alignment, obviously_useless, corrected, falsely_hinted,
-                             chain_bonus, last_remaining, card_age, oldest_card, player_distance, hints)
+                             chain_bonus, last_remaining, card_age, oldest_card, player_distance)
 
                     weights = self.learning_state.get_hint_weights(state)
                     return state, weights, player_number, hint
@@ -365,11 +367,11 @@ class Reinforced(BasePlayer):
         def quality_to_heuristic(quality):
             if quality <= 0.1:
                 quality = 0
-            elif quality <= 0.35:
+            elif quality <= 0.3:
                 quality = 1
             elif quality <= 0.5:
                 quality = 2
-            elif quality <= 0.75:
+            elif quality <= 0.7:
                 quality = 3
             elif quality <= 0.9:
                 quality = 4
@@ -418,7 +420,7 @@ class Reinforced(BasePlayer):
         else:
             max_of_weights = 0
             used_play = None
-            total_count = 0
+            total_count = 1
 
             for play in play_actions:
                 total_count += play[1][0][0]
@@ -426,7 +428,8 @@ class Reinforced(BasePlayer):
 
             for play in play_actions:
                 if round_info.log and debug:
-                    self.info("{0}".format(play))
+                    self.info("{0} {1} {2} {3}".format(play[0], play[1][0][0],
+                                                       self.learning_state.get_chance(play[1][0]), play[2]))
 
                 sum_of_weights = self.learning_state.get_chance(play[1][0]) \
                                  + exploration_param * math.sqrt(total_count / play[1][0][0])
@@ -448,7 +451,7 @@ class Reinforced(BasePlayer):
         else:
             max_of_weights = 0
             used_play = None
-            total_count = 0
+            total_count = 1
 
             for play in play_actions:
                 total_count += play[1][1][0]
@@ -456,7 +459,8 @@ class Reinforced(BasePlayer):
 
             for play in play_actions:
                 if round_info.log and debug:
-                    self.info("{0}".format(play))
+                    self.info("{0} {1} {2} {3} {4}".format(play[0], play[1][1][0], play[1][1],
+                                                       self.learning_state.get_chance(play[1][1]), play[2]))
 
                 sum_of_weights = self.learning_state.get_chance(play[1][1]) \
                                  + exploration_param * math.sqrt(total_count / play[1][1][0])
@@ -479,7 +483,7 @@ class Reinforced(BasePlayer):
             else:
                 max_of_weights = 0
                 used_hint = None
-                total_count = 0
+                total_count = 1
 
                 for hint in hint_actions:
                     total_count += hint[1][0][0]
@@ -487,7 +491,9 @@ class Reinforced(BasePlayer):
 
                 for hint in hint_actions:
                     if round_info.log and debug:
-                        self.info("{0}".format(hint))
+                        self.info("{0} {1} {2} {3} {4}".format(hint[0], hint[1][0][0],
+                                                               self.learning_state.get_chance(hint[1][0]),
+                                                               hint[2], hint[3]))
 
                     sum_of_weights = self.learning_state.get_chance(hint[1][0]) \
                                      + exploration_param * math.sqrt(total_count / hint[1][0][0])
@@ -497,6 +503,9 @@ class Reinforced(BasePlayer):
                         used_hint = hint
 
                 used_hints.append(used_hint)
+
+        if len(used_hints) > 0 and used_hints[0] is None:
+            used_hints = []
 
         macro_weights = self.decide_macro_action(round_info, used_actions, used_hints)
 
@@ -566,8 +575,10 @@ class Reinforced(BasePlayer):
 
         if round_info.log and debug:
             self.info("{0}".format(macro_action))
-            self.info("{0}".format(used_state))
-            self.info("{0}".format(macro_weights))
+            self.info("{0} {1} {2}".format(used_state[0], used_state[1][0][0],
+                                           self.learning_state.get_chance(used_state[1][0])))
+            self.info("{0} {1} {2}".format(macro_weights[0], macro_weights[1][0][0],
+                                           self.learning_state.get_chance(macro_weights[1][0])))
 
         self.learning_state.append_to_history((round_info.player_turn, action, used_state, play_actions, hint_actions,
                                                macro_weights))
@@ -577,110 +588,156 @@ class Reinforced(BasePlayer):
     def reward_own_play(self, state, round_info, amount=1.0):
         weights = self.learning_state.get_own_card_weights(state)
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[0][0], weights[0][1]))
 
+        weights[0].append((amount, amount))
+        weights[1].append((amount, 0))
         weights[0][0] += amount
         weights[0][1] += amount
         weights[1][0] += amount
+
+        while len(weights[0]) - 2 > self.learning_state.max_state_history:
+            weights[0][1] -= weights[0][2][1]
+            weights[0].pop(2)
+
+        while len(weights[1]) - 2 > self.learning_state.max_state_history:
+            weights[1][1] -= weights[1][2][1]
+            weights[1].pop(2)
+
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[0][0], weights[0][1]))
 
         self.learning_state.own_card_states[state] = weights
 
     def reward_own_discard(self, state, round_info, amount=1.0):
         weights = self.learning_state.get_own_card_weights(state)
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[1][0], weights[1][1]))
 
+        weights[0].append((amount, 0))
+        weights[1].append((amount, amount))
+        weights[0][0] += amount
         weights[1][0] += amount
         weights[1][1] += amount
-        weights[0][0] += amount
+
+        while len(weights[0]) - 2 > self.learning_state.max_state_history:
+            weights[0][1] -= weights[0][2][1]
+            weights[0].pop(2)
+
+        while len(weights[1]) - 2 > self.learning_state.max_state_history:
+            weights[1][1] -= weights[1][2][1]
+            weights[1].pop(2)
+
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[1][0], weights[1][1]))
 
         self.learning_state.own_card_states[state] = weights
 
     def reward_hint(self, state, round_info, amount=1.0):
         weights = self.learning_state.get_hint_weights(state)
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[0][0], weights[0][1]))
 
+        weights[0].append((amount, amount))
         weights[0][0] += amount
         weights[0][1] += amount
+
+        while len(weights[0]) - 2 > self.learning_state.max_state_history:
+            weights[0][1] -= weights[0][2][1]
+            weights[0].pop(2)
+
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[0][0], weights[0][1]))
 
         self.learning_state.hint_states[state] = weights
 
     def penalize_own_play(self, state, round_info, amount=1.0):
         weights = self.learning_state.get_own_card_weights(state)
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[0][0], weights[0][1]))
 
+        weights[0].append((amount, 0))
         weights[0][0] += amount
+
+        while len(weights[0]) - 2 > self.learning_state.max_state_history:
+            weights[0][1] -= weights[0][2][1]
+            weights[0].pop(2)
+
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[0][0], weights[0][1]))
 
         self.learning_state.own_card_states[state] = weights
 
     def penalize_own_discard(self, state, round_info, amount=1.0):
         weights = self.learning_state.get_own_card_weights(state)
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[1][0], weights[1][1]))
 
+        weights[1].append((amount, 0))
         weights[1][0] += amount
+
+        while len(weights[1]) - 2 > self.learning_state.max_state_history:
+            weights[1][1] -= weights[1][2][1]
+            weights[1].pop(2)
+
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[1][0], weights[1][1]))
 
         self.learning_state.own_card_states[state] = weights
 
     def penalize_hint(self, state, round_info, amount=1.0):
         weights = self.learning_state.get_hint_weights(state)
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[0][0], weights[0][1]))
 
+        weights[0].append((amount, 0))
         weights[0][0] += amount
+
+        while len(weights[0]) - 2 > self.learning_state.max_state_history:
+            weights[0][1] -= weights[0][2][1]
+            weights[0].pop(2)
+
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[0][0], weights[0][1]))
 
         self.learning_state.hint_states[state] = weights
 
-    def reward_macro(self, state, action, round_info, amount=1):
+    def reward_macro(self, state, action, round_info, amount=1.0):
         weights = self.learning_state.get_macro_weights(state)
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[action][0], weights[action][1]))
 
-        for i in range(amount):
-            weights[action].append(1)
-            weights[action][0] += 1
+        weights[action].append((amount, amount))
+        weights[action][0] += amount
+        weights[action][1] += amount
 
-        while len(weights[action]) - 1 > self.learning_state.max_macro_size:
-            weights[action][0] -= weights[action][1]
-            weights[action].pop(1)
+        while len(weights[action]) - 2 > self.learning_state.max_state_history:
+            weights[action][1] -= weights[action][2][1]
+            weights[action].pop(2)
 
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[action][0], weights[action][1]))
 
         self.learning_state.macro_states[state] = weights
 
-    def penalize_macro(self, state, action, round_info, amount=1):
+    def penalize_macro(self, state, action, round_info, amount=1.0):
         weights = self.learning_state.get_macro_weights(state)
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[action][0], weights[action][1]))
 
-        for i in range(amount):
-            weights[action].append(0)
+        weights[action].append((amount, 0))
+        weights[action][0] += amount
 
-        while len(weights[action]) - 1 > self.learning_state.max_macro_size:
-            weights[action][0] -= weights[action][1]
-            weights[action].pop(1)
+        while len(weights[action]) - 1 > self.learning_state.max_state_history:
+            weights[action][1] -= weights[action][2][1]
+            weights[action].pop(2)
 
         if round_info.log and debug:
-            self.info("{0} {1}".format(state, weights))
+            self.info("{0} {1} {2}".format(state, weights[action][0], weights[action][1]))
 
         self.learning_state.macro_states[state] = weights
 
-    def analyze_turn(self, move, target, round_info):
+    def analyze_turn(self, move, target, round_info, learning_player=True):
         # ? whenever we give a reward to an action, we also give small penalty to every alternative action that turn
         # ? whenever we give a penalty to an action, we also give small reward to every alternative action that turn
         # rewarding macro decisions will be also included after initial training
@@ -737,31 +794,51 @@ class Reinforced(BasePlayer):
 
         if move == 'Correct Play':
             # give large reward to last play action
-            state = self.learning_state.states_history[-1][2][0]
-            macro_state = self.learning_state.states_history[-1][5][0]
-            self.reward_own_play(state, round_info, 0.5)
-            #self.reward_macro(macro_state, 0, round_info, 1)
-
-            # give small reward to last action of every other player
+            if learning_player:
+                card_state = self.learning_state.states_history[-1][2][0]
+                macro_state = self.learning_state.states_history[-1][5][0]
+                self.reward_own_play(card_state, round_info, 0.75)
+                self.reward_macro(macro_state, 0, round_info, 0.5)
 
             # give medium-large reward to hints that led to this play
             for state in target.hint_states:
-                self.reward_hint(state[0], round_info, 0.5)
-                #reward_macro(state[1], 2, round_info, 1)
+                changed_card = deepcopy(target)
+                if state[0][0] is True:
+                    changed_card.revealed_rank = None
+                else:
+                    changed_card.revealed_suit = None
+                changed_card.hint_size = changed_card.past_hint_size
+
+                chance_with_hint = self.learning_state.get_chance(self.read_own_card(round_info, target)[1][0])
+                chance_wo_hint = self.learning_state.get_chance(self.read_own_card(round_info, changed_card)[1][0])
+                if round_info.log and debug:
+                    self.info("{0}".format(self.read_own_card(round_info, changed_card)[0]))
+                    self.info("{0} {1}".format(chance_with_hint, chance_wo_hint))
+
+                if chance_with_hint - chance_wo_hint > 0.2:
+                    time_difference = round_info.current_turn - state[2]
+                    if state[3] > round_info.player_turn:
+                        time_difference -= 1
+                    if round_info.log and debug:
+                        self.info("{0} {1} {2}".format(round_info.current_turn, state[2], time_difference))
+                    if time_difference == 0:
+                        self.reward_hint(state[0], round_info, 0.75)
+                    if time_difference == 1:
+                        self.reward_hint(state[0], round_info, 0.45)
+                    if time_difference >= 2:
+                        self.reward_hint(state[0], round_info, 0.25)
 
         if move == 'Wrong Play':
             # give large penalty to last play action
-            state = self.learning_state.states_history[-1][2][0]
-            macro_state = self.learning_state.states_history[-1][5][0]
-            self.penalize_own_play(state, round_info, 1)
-            #self.penalize_macro(macro_state, 0, round_info, 1)
-
-            # give small penalty to last action of every player
+            if learning_player:
+                state = self.learning_state.states_history[-1][2][0]
+                macro_state = self.learning_state.states_history[-1][5][0]
+                self.penalize_own_play(state, round_info, 1.25)
+                self.penalize_macro(macro_state, 0, round_info, 0.75)
 
             # after initial training: give medium-large penalty to all hints that led to this play
             for state in target.hint_states:
-                self.penalize_hint(state[0], round_info, 0.5)
-                #self.penalize_macro(state[1], 0.03, 2, round_info)
+                self.penalize_hint(state[0], round_info, 0.625)
 
         if move == "Discard":
             real_card = deepcopy(target)
@@ -773,52 +850,71 @@ class Reinforced(BasePlayer):
                     if round_info.log and debug:
                         self.info("useless")
                     # give medium-large reward to last discard action
-                    state = self.learning_state.states_history[-1][2][0]
-                    macro_state = self.learning_state.states_history[-1][5][0]
-                    self.reward_own_discard(state, round_info, 0.2)
-                    #self.reward_macro(macro_state, round_info, 1)
+                    if learning_player:
+                        state = self.learning_state.states_history[-1][2][0]
+                        macro_state = self.learning_state.states_history[-1][5][0]
+                        self.reward_own_discard(state, round_info, 0.253125)
+                        self.reward_macro(macro_state, 1, round_info, 0.253125)
 
-                    # give small reward to last action of every player
-
-                    # give small reward to hints that led to this play
+                    # give small reward to hints that led to this play and penalize unnecessary ones
                     for state in target.hint_states:
-                        self.reward_hint(state[0], round_info, 0.1)
-                        #self.reward_macro(state[1], 2, round_info, 1)
+                        real_card = deepcopy(target)
+                        if state[0][0] is True:
+                            real_card.revealed_rank = None
+                        else:
+                            real_card.revealed_suit = None
+                        if self.check_card_usefulness(round_info, real_card) is False:
+                            self.reward_hint(state[0], round_info, 0.1015625)
 
             elif self.remaining[target.real_suit][target.real_rank] == 1:
                 if round_info.log and debug:
                     self.info("crucial")
                 # give large penalty to last discard action
-                state = self.learning_state.states_history[-1][2][0]
-                macro_state = self.learning_state.states_history[-1][5][0]
-                self.penalize_own_discard(state, round_info, 0.5)
-                #self.penalize_macro(macro_state, 1, round_info, 1)
+                if learning_player:
+                    state = self.learning_state.states_history[-1][2][0]
+                    macro_state = self.learning_state.states_history[-1][5][0]
+                    self.penalize_own_discard(state, round_info, 0.5)
+                    self.penalize_macro(macro_state, 1, round_info, 0.325)
 
-                # give small penalty to last action of every player
-
-            elif target.real_rank.value - round_info.board_state[target.real_suit] < 3:
+            elif target.real_rank.value - round_info.board_state[target.real_suit] < 3 and \
+                    (self.known[target.real_suit][target.real_rank] is 0 or
+                     target.hint_size > 0):
                 if round_info.log and debug:
                     self.info("good card")
                 # give medium penalty to last discard action
-                state = self.learning_state.states_history[-1][2][0]
-                macro_state = self.learning_state.states_history[-1][5][0]
-                self.penalize_own_discard(state, round_info, 0.2)
-                #self.penalize_macro(macro_state, 1, round_info, 1)
-
-                # give small penalty to last action of every player
+                if learning_player:
+                    state = self.learning_state.states_history[-1][2][0]
+                    macro_state = self.learning_state.states_history[-1][5][0]
+                    self.penalize_own_discard(state, round_info, 0.375)
+                    self.penalize_macro(macro_state, 1, round_info, 0.25)
 
     def analyze_game(self, round_info, score):
         scores = self.learning_state.score_history
 
-        #transfer_rate = 0.03
-        #transfer_rate = 1 - pow(1 - transfer_rate, pow(abs(score-(statistics.median_low(scores))), 1.5))
-        #if round_info.log and debug:
-        #    self.info("{0}".format(transfer_rate))
+        #prog = 16
+        prog = statistics.median_low(scores) - 1
 
-        amount = abs(score - statistics.median_low(scores))
+        amount = abs(score - prog)
         amount = math.ceil(amount)
 
-        if score > statistics.median_low(scores):
+        original_player_number = round_info.player_turn
+        player_number = original_player_number
+        first = True
+
+        while player_number != original_player_number or first:
+            first = False
+            if player_number == original_player_number:
+                player_hand = round_info.player_hand
+            else:
+                player_hand = utils.get_player_hand_by_number(round_info, player_number)
+
+            for card in player_hand:
+                for state in card.hint_states:
+                    self.penalize_hint(state[0], round_info, 0.05078125)
+
+            player_number = utils.next_player_number(round_info, player_number)
+
+        if score > prog:
             for i in range(-1, -len(self.learning_state.states_history) - 1, -1):
                 action = self.learning_state.states_history[i][1][0]
                 state = self.learning_state.states_history[i][2][0]
@@ -828,18 +924,18 @@ class Reinforced(BasePlayer):
                     self.info("{0} {1}".format(action, state))
 
                 if action is Choice.PLAY:
-                    self.reward_own_play(state, round_info, amount)
+                    self.reward_own_play(state, round_info, amount/16)
                     self.reward_macro(macro_state, 0, round_info, amount)
 
                 if action is Choice.DISCARD:
-                    self.reward_own_discard(state, round_info, amount)
+                    self.reward_own_discard(state, round_info, amount/8)
                     self.reward_macro(macro_state, 1, round_info, amount)
 
                 if action is Choice.HINT:
-                    self.reward_hint(state, round_info, amount)
+                    self.reward_hint(state, round_info, amount/8)
                     self.reward_macro(macro_state, 2, round_info, amount)
 
-        elif score < statistics.median_low(scores):
+        elif score < prog:
             for i in range(-1, -len(self.learning_state.states_history) - 1, -1):
                 action = self.learning_state.states_history[i][1][0]
                 state = self.learning_state.states_history[i][2][0]
@@ -849,20 +945,20 @@ class Reinforced(BasePlayer):
                     self.info("{0} {1}".format(action, state))
 
                 if action is Choice.PLAY:
-                    self.penalize_own_play(state, round_info, amount)
+                    self.penalize_own_play(state, round_info, amount/16)
                     self.penalize_macro(macro_state, 0, round_info, amount)
 
                 if action is Choice.DISCARD:
-                    self.penalize_own_discard(state, round_info, amount)
+                    self.penalize_own_discard(state, round_info, amount/8)
                     self.penalize_macro(macro_state, 1, round_info, amount)
 
                 if action is Choice.HINT:
-                    self.penalize_hint(state, round_info, amount)
+                    self.penalize_hint(state, round_info, amount/8)
                     self.penalize_macro(macro_state, 2, round_info, amount)
 
         scores[0] = ((len(scores) - 1) * scores[0] + score) / len(scores)
         scores.append(score)
-        if len(scores) > 1001:
+        if len(scores) > 3001:
             scores[0] = ((len(scores) - 1) * scores[0] - scores[1]) / (len(scores) - 2)
             scores.pop(1)
         self.learning_state.score_history = scores
@@ -872,10 +968,7 @@ class Reinforced(BasePlayer):
         self.logger.info(msg)
 
     def play(self, round_info):
-
         if round_info.current_turn == 0:
             self.initialize_player(round_info)
-
         self.initialize_variables(round_info)
-
         return self.read_board(round_info, round_info.player_turn)

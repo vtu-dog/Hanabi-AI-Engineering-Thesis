@@ -11,11 +11,13 @@ from random import shuffle
 
 
 class Game:
-    def __init__(self, players, logger=None, log=False, learning_state=None):
+    def __init__(self, players, logger=None, log=False, learning_state=None, save=False):
         self.logger = logger
         self.log = log
 
         self.learning_state = learning_state
+        self.save = save
+        self.analyzer = None
 
         self.players = players
         self.number_of_players = len(players)
@@ -28,6 +30,10 @@ class Game:
                 self.learning_state,
                 ' #{0}'.format(str(player_number + 1))
             )
+
+        for player in self.players:
+            if player.name[:10] == 'Reinforced' and self.analyzer is None:
+                self.analyzer = player
 
         self.hints = MAX_HINTS
         self.lives = LIVES
@@ -196,10 +202,13 @@ class Game:
             hand_position = move.details
             card = self.current_player_hand[hand_position]
 
-            card.played_on_turn = self.current_turn
-            card.hand_position = None
-
             if card.is_playable(self):
+                if self.save and self.analyzer is not None:
+                    self.analyzer.analyze_turn('Correct Play', card, RoundInfo(self), learning_player)
+
+                card.played_on_turn = self.current_turn
+                card.hand_position = None
+
                 self.history.append(PlayDetails(
                     choice, hand_position, card, self.deck_size))
                 self.board_state[card.real_suit] += 1
@@ -210,10 +219,6 @@ class Game:
                 self.score += 1
                 self.played.append(card)
 
-                if learning_player:
-                    self.players[self.player_turn].analyze_turn(
-                        'Correct Play', card, RoundInfo(self))
-
                 self.info(
                     '{0} correctly played {1}'.format(
                         self.players[self.player_turn],
@@ -223,16 +228,18 @@ class Game:
                 info_msg = 'Played {0}'.format(card)
 
             else:
+                if self.save and self.analyzer is not None:
+                    self.analyzer.analyze_turn('Wrong Play', card, RoundInfo(self), learning_player)
+
+                card.played_on_turn = self.current_turn
+                card.hand_position = None
+
                 card.misplayed = True
                 self.history.append(PlayDetails(
                     choice, hand_position, card, self.deck_size))
 
                 self.lives -= 1
                 self.discarded.append(card)
-
-                if learning_player:
-                    self.players[self.player_turn].analyze_turn(
-                        'Wrong Play', card, RoundInfo(self))
 
                 self.info(
                     '{0} misplayed {1}, {2} lives remaining'.format(
@@ -247,6 +254,9 @@ class Game:
             hand_position = move.details
             card = self.current_player_hand[hand_position]
 
+            if self.save and self.analyzer is not None:
+                self.analyzer.analyze_turn('Discard', card, RoundInfo(self), learning_player)
+
             card.played_on_turn = self.current_turn
             card.discarded = True
             card.hand_position = None
@@ -254,10 +264,6 @@ class Game:
             self.history.append(PlayDetails(
                 choice, hand_position, card, self.deck_size))
             self.discarded.append(card)
-
-            if learning_player:
-                self.players[self.player_turn].analyze_turn(
-                    'Discard', card, RoundInfo(self))
 
             self.hints = min(self.hints + 1, MAX_HINTS)
 
@@ -273,6 +279,9 @@ class Game:
         if choice is Choice.HINT:
             player_number, hint = move.details
 
+            if self.save and self.analyzer is not None:
+                self.analyzer.analyze_turn('Hint', (player_number, hint), RoundInfo(self), learning_player)
+
             hand = get_player_hand_by_number(self, player_number)
             reveal_size = 0
             for card in hand:
@@ -282,18 +291,14 @@ class Game:
                     reveal_size += 1
 
             state = None
-            if learning_player:
-                state = self.learning_state.get_last_hint_state()
+            if learning_player and self.save:
+                state = self.learning_state.get_last_hint_state() + [self.current_turn, self.player_turn]
 
             for card in hand:
                 card.reveal_info_from_hint(hint, reveal_size, state)
 
             self.history.append(PlayDetails(
                 choice, move.details[0], move.details[1], self.deck_size))
-
-            if learning_player:
-                self.players[self.player_turn].analyze_turn(
-                    'Hint', (player_number, hint), RoundInfo(self))
 
             self.hints -= 1
             self.info(
@@ -340,9 +345,8 @@ class Game:
             self.game_ended_by_timeout = True
 
         if self.game_over:
-            if learning_player:
-                self.players[self.player_turn].analyze_game(
-                    RoundInfo(self), self.score)
+            if self.save and self.analyzer is not None:
+                self.analyzer.analyze_game(RoundInfo(self), self.score)
 
             if self.score is MAX_SCORE:
                 self.info('\nPerfect victory!')
