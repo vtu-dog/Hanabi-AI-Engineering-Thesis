@@ -11,7 +11,7 @@ class LearningState:
         self.score_history = [3, 3]
         self.load_knowledge()
         self.states_history = []
-        self.max_state_history = 300
+        self.max_state_history = 400
 
     def load_knowledge(self):
         with open('own_card_states.data', 'rb') as file:

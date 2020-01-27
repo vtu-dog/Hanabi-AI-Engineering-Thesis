@@ -14,13 +14,13 @@ gsum = 0
 best_score = 0
 
 learn = LearningState()
-games_to_play = 10000
+games_to_play = 100000
 save = True
 
 while played_games < games_to_play:
     played_games += 1
 
-    p = [players.Reinforced(), players.Trustful(), players.Trustful(), players.Trustful(), players.Trustful()]
+    p = [players.Reinforced(), players.Reinforced()]
 
     learn.states_history = []
     game = Game(p, logger, log=False, learning_state=learn, save=save)

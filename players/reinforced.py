@@ -7,7 +7,7 @@ from copy import deepcopy
 import statistics
 
 debug = True
-random_action = 0.01
+random_action = 0.02
 exploration_param = math.sqrt(2)
 
 class Reinforced(BasePlayer):
@@ -201,9 +201,6 @@ class Reinforced(BasePlayer):
                 player_distance = player_number - original_player_number - 1
                 if player_distance < 0:
                     player_distance += round_info.number_of_players
-
-                if player_distance > 2:
-                    player_distance = 2
 
                 targets = {}
                 for rank in utils.Rank:
@@ -510,7 +507,7 @@ class Reinforced(BasePlayer):
         macro_weights = self.decide_macro_action(round_info, used_actions, used_hints)
 
         macro_max = 0
-        macro_action = "Play"
+        macro_action = "Discard"
         total_count = 0
 
         for weight in macro_weights[1]:
@@ -534,7 +531,7 @@ class Reinforced(BasePlayer):
         sum_of_weights = self.learning_state.get_chance(macro_weights[1][2]) \
                          + exploration_param * math.sqrt(total_count / (len(macro_weights[1][2]) - 1))
 
-        if macro_max < sum_of_weights and round_info.hints > 0:
+        if macro_max < sum_of_weights and round_info.hints > 0 and len(used_hints) > 0:
             macro_action = "Hint"
 
         if use_random:
@@ -798,7 +795,7 @@ class Reinforced(BasePlayer):
                 card_state = self.learning_state.states_history[-1][2][0]
                 macro_state = self.learning_state.states_history[-1][5][0]
                 self.reward_own_play(card_state, round_info, 0.75)
-                self.reward_macro(macro_state, 0, round_info, 0.5)
+                self.reward_macro(macro_state, 0, round_info, 0.75)
 
             # give medium-large reward to hints that led to this play
             for state in target.hint_states:
@@ -834,7 +831,7 @@ class Reinforced(BasePlayer):
                 state = self.learning_state.states_history[-1][2][0]
                 macro_state = self.learning_state.states_history[-1][5][0]
                 self.penalize_own_play(state, round_info, 1.25)
-                self.penalize_macro(macro_state, 0, round_info, 0.75)
+                self.penalize_macro(macro_state, 0, round_info, 1)
 
             # after initial training: give medium-large penalty to all hints that led to this play
             for state in target.hint_states:
@@ -892,7 +889,7 @@ class Reinforced(BasePlayer):
         scores = self.learning_state.score_history
 
         #prog = 16
-        prog = statistics.median_low(scores) - 1
+        prog = statistics.median_low(scores) - 2
 
         amount = abs(score - prog)
         amount = math.ceil(amount)
@@ -958,7 +955,7 @@ class Reinforced(BasePlayer):
 
         scores[0] = ((len(scores) - 1) * scores[0] + score) / len(scores)
         scores.append(score)
-        if len(scores) > 3001:
+        while len(scores) > 1001:
             scores[0] = ((len(scores) - 1) * scores[0] - scores[1]) / (len(scores) - 2)
             scores.pop(1)
         self.learning_state.score_history = scores
