@@ -20,6 +20,7 @@
 \usepackage{float}
 \usepackage{array}
 \usepackage{amsfonts}
+\usepackage{spverbatim}
 
 \graphicspath{{img/}}
 \let\cleardoublepage=\clearpage
@@ -32,17 +33,17 @@
 
 Gry planszowe to forma rozrywki, która towarzyszy człowiekowi od~tysięcy lat. Były one popularne już za~czasów starożytnych, czego dowodzi chociażby malowidło z~3300~r.~p.n.e, pochodzące z~grobowca Merknery, na~którym ukazano rozgrywkę Seneta. Przykładem może być także Królewska~Gra~z~Ur, której egzemplarze odnaleziono w~trakcie badań nad~starożytną Mezopotamią. Choć gry te zostały w~dzisiejszych czasach w~znacznej mierze zapomniane, nie~sposób nie~wspomnieć o~innych, które również istniały w~starożytności, takich~jak~warcaby czy~Go, a~także o~nieco młodszych szachach, które wciąż cieszą~się ogromną i~niesłabnącą popularnością.
 
-Każdą z~tych gier łączy aspekt rywalizacji: pod~koniec rozgrywki jednoznacznie wyszczególnia~się jednego lub~więcej graczy, których określamy mianem zwycięzców, natomiast reszta -~przegrywa. Inny schemat prezentują gry kooperacyjne, gdzie zadaniem nie~jest pokonanie innych uczestników zabawy, a~osiągnięcie wspólnego celu, który gwarantuje wygraną. Można powiedzieć, że~przeciwnikiem graczy jest w~tym przypadku sama gra, która swoją konstrukcją skłania do~współpracy. Pierwsze gry tego typu powstały dopiero w~drugiej połowie XX~wieku i~początkowo miały wyłącznie charakter edukacyjny. Wraz z~popularyzacją tzw. ``planszówek'', gry kooperacyjne w~znacznym stopniu zyskały na~popularności, a~ich forma wyewoluowała w~kierunku zabawy, kładącej nacisk na~aspekty towarzyskie, które ograniczają lub~wręcz odrzucają współzawodnictwo. Przykładami takich gier mogą~być Pandemic, Martwa Zima, a~także Hanabi.
+Każdą z~tych gier łączy aspekt rywalizacji: pod~koniec rozgrywki jednoznacznie wyszczególnia~się jednego lub~więcej graczy, których określamy mianem zwycięzców, natomiast reszta -~przegrywa. Inny schemat prezentują gry kooperacyjne, gdzie zadaniem nie~jest pokonanie innych uczestników zabawy, a~osiągnięcie wspólnego celu, który gwarantuje wygraną. Można powiedzieć, że~przeciwnikiem graczy jest w~tym przypadku sama gra, która swoją konstrukcją skłania do~współpracy. Pierwsze gry tego typu powstały dopiero w~drugiej połowie XX~wieku i~początkowo miały wyłącznie charakter edukacyjny. Wraz z~popularyzacją tzw. ``planszówek'', gry kooperacyjne w~znacznym stopniu zyskały na~popularności, a~ich forma wyewoluowała w~kierunku rozrywki kładącej nacisk na~aspekty towarzyskie, które ograniczają lub~wręcz odrzucają współzawodnictwo. Przykładami takich gier mogą~być Pandemic, Martwa Zima, a~także Hanabi.
 
 Hanabi (jap. fajerwerki) to~w~pełni kooperacyjna gra planszowa, która w~2013 roku wygrała prestiżową nagrodę Spiel~des~Jahres. Gracze wcielają~się w~niej w~pracowników fabryki fajerwerków, w~której omyłkowo zostały pomieszane ze~sobą różne rodzaje prochu. Celem jest złożenie w~odpowiedniej kolejności możliwie jak~największej ilości sztucznych ogni, które gracze otrzymują poprzez dobieranie kart z~potasowanej talii. Uczestnicy rozgrywki widzą karty, które są~w~posiadaniu innych graczy, lecz~nie~mogą przypatrywać~się~tym, którymi sami dysponują. Dodatkowo, komunikacja odnosząca~się do~treści kart podlega restrykcyjnym zasadom i~jest w~znacznym stopniu ograniczona, co~czyni rozgrywkę nietrywialną. Jakie strategie należy zatem zastosować, by~wygrać? Jak można przełożyć je~na~świat algorytmów?
 
 \section{Hanabi a sztuczna inteligencja}
 
-W~teorii gier istnieje pojęcie perfekcyjnego zagrania, czyli pojedynczego ruchu zależnego od~aktualnego etapu gry, prowadzącego do~stanu rozgrywki maksymalizującego oczekiwany wynik -~niezależnie od~ruchów, które mogą w~odpowiedzi wykonać inni gracze. Perfekcyjne zagrania są~podstawą optymalnego planu działania, minimalizującego możliwe straty ponoszone w~trakcie rozgrywania danej partii. Niestety, tak~silna strategia -~w~przypadku złożonych gier -~jest nieprawdopodobnie trudna do~uzyskania ze~względu na~ogromną rozpiętość drzewa możliwych do~uzyskania stanów rozgrywki. W~praktyce używa~się algorytmów: heurystycznych, regułowych, opartych na~technikach uczących, nadużywających zasad gry lub~siłowych. Przykładowo, słynny komputer Deep Blue, który w~maju 1997 roku pokonał ówczesnego mistrza świata w~szachach, Garrego Kasparova, nie~posiadał optymalnej strategii. Używał on~metody siłowej, wspomaganej algorytmem przeszukującym alfa-beta, rozpatrując wszystkie możliwe zagrania i~wybierając~te, które dawały mu~największą przewagę lokalną. Takie działanie było możliwe z~racji na~ogromną moc superkomputera, który potrafił rozpatrywać 200~milionów ruchów na~sekundę.
+W~teorii gier istnieje pojęcie perfekcyjnego zagrania, czyli pojedynczego ruchu zależnego od~aktualnego etapu gry, prowadzącego do~stanu rozgrywki maksymalizującego oczekiwany wynik -~niezależnie od~ruchów, które mogą w~odpowiedzi wykonać inni gracze. Perfekcyjne zagrania są~podstawą optymalnego planu działania, minimalizującego możliwe straty ponoszone w~trakcie rozgrywania danej partii. Niestety, tak~silna strategia -~w~przypadku złożonych gier -~jest nieprawdopodobnie trudna do~uzyskania ze~względu na~ogromną rozpiętość drzewa możliwych do~uzyskania stanów rozgrywki. W~praktyce używa~się algorytmów: heurystycznych, regułowych, opartych na~technikach uczących, nadużywających zasad gry lub~siłowych. Przykładowo, słynny komputer Deep Blue, który w~maju 1997 roku pokonał ówczesnego mistrza świata w~szachach, Garrego Kasparova, nie~posiadał optymalnej strategii. Używał on~metody siłowej, wspomaganej algorytmem przeszukującym alfa-beta, rozpatrując wszystkie możliwe zagrania i~wybierając~te, które dawały mu~największą przewagę lokalną. Takie działanie było możliwe z~racji na~ogromną moc superkomputera, który potrafił rozpatrywać 200~milionów ruchów na~sekundę\cite{DeepBlue}.
 
-Stworzenie agentów sztucznej inteligencji do~Hanabi to~zadanie, które wymaga pokonania trudności niespotykanych w~innych grach. Jest to~następstwo kilku czynników: niepełnej informacji, losowości dobieranych kart, a~także ograniczonych zasobów, m.in. w~postaci podpowiedzi dla~innych graczy. Agenci muszą współpracować, gdyż gracz, który odmawia~kooperacji, może w~kilku ruchach doprowadzić do~przegranej całej grupy. Ważne jest, by~nie~marnować zasobów, a~zatem sztuczna inteligencja musi być odpowiednio skoordynowana. Ponadto, znikoma ilość kart w~talii nie~pozwala na~zbyt długą rozgrywkę -~oznacza to~zatem, że~aby zdążyć z~wygraną agenci muszą posiadać protokół komunikacji, który dopuszcza przekazywanie w~obrębie zasad gry dodatkowych, implicytnych informacji, rozumianych przez pozostałych jej~uczestników.
+Stworzenie agentów sztucznej inteligencji do~Hanabi to~zadanie, które wymaga pokonania trudności niespotykanych w~innych grach, takich jak: niepełnej informacji, losowości dobieranych kart, a~także ograniczonych zasobów, m.in. w~postaci podpowiedzi dla~innych graczy. Agenci muszą współpracować, gdyż gracz, który odmawia~kooperacji, może w~kilku ruchach doprowadzić do~przegranej całej grupy. Ważne jest, by~nie~marnować zasobów, a~zatem sztuczna inteligencja musi być odpowiednio skoordynowana. Ponadto, znikoma ilość kart w~talii nie~pozwala na~zbyt długą rozgrywkę -~oznacza to~zatem, że~aby zdążyć z~wygraną agenci muszą posiadać protokół komunikacji, który dopuszcza przekazywanie w~obrębie zasad gry dodatkowych, implicytnych informacji, rozumianych przez pozostałych jej~uczestników.
 
-Niniejsza praca ma~na~celu zbadanie Hanabi jako gry kooperacyjnej z~niepełną informacją. Będziemy analizować techniki tworzenia agentów sztucznej inteligencji grających w~Hanabi, którzy wykonują możliwie najbardziej efektywne i~zrozumiałe dla ludzi ruchy na~tyle szybko, by~umożliwić komfortową rozgrywkę z~człowiekiem na~zwykłych komputerach.
+Niniejsza praca ma~na~celu zbadanie Hanabi jako gry kooperacyjnej z~niepełną informacją. Będziemy analizować techniki tworzenia agentów sztucznej inteligencji grających w~Hanabi, którzy wykonują możliwie najbardziej efektywne i~zrozumiałe dla ludzi ruchy na~tyle szybko, by~umożliwić komfortową rozgrywkę z~człowiekiem na~komputerach osobistych.
 
 
 \chapter{Reguły gry}
@@ -61,19 +62,19 @@ Celem gry jest zdobycie możliwie największej ilości punktów poprzez poprawne
 
 Talia do~gry składa~się z~pięćdziesięciu kart. Każda karta jest~oznaczona jednym z~pięciu kolorów (czerwony, żółty, niebieski, biały, zielony) oraz jedną z~wartości z~zakresu od~1~do~5. Dla każdego koloru istnieją po~trzy karty o~numerze~1, po~dwie karty o~numerach 2,~3~i~4, a~także po~jednej karcie o~numerze~5.
 
-Na początku gry talia jest tasowana. Gracze rozpoczynają rozgrywkę z~ośmioma żetonami podpowiedzi i~trzema żetonami życia. Żetony te~są~wspólne dla wszystkich uczestników rozgrywki. Jeżeli graczy jest dwóch lub~trzech, każdy z~nich dobiera po~pięć zakrytych kart. Jeżeli jest ich~czterech lub~pięciu, dobierają po~cztery zakryte karty. Następnie gracze po kolei wykonują swoje ruchy. Ruchu nie~można pominąć. Ruch to~wykonanie jednej z~trzech dostępnych akcji:
+Na początku gry talia jest tasowana. Gracze rozpoczynają rozgrywkę z~ośmioma żetonami podpowiedzi i~trzema żetonami życia. Żetony te~są~wspólne dla wszystkich uczestników rozgrywki. Jeżeli graczy jest dwóch lub~trzech, każdy z~nich dobiera po~pięć zakrytych kart. Jeżeli jest ich~czterech lub~pięciu, dobierają po~cztery zakryte karty. Następnie gracze po kolei wykonują swoje ruchy. Ruchu nie~można pominąć. Ruch to~wykonanie jednej z~trzech następujących akcji:
 \begin{enumerate}
 	\item Zagranie karty:
 
-	Gracz deklaruje chęć zagrania karty, wybiera zakrytą ze~swojej ręki, a~następnie wykłada ją~na~planszę w~pozycji odkrytej. Zagranie może być~poprawne lub~niepoprawne. Karty muszą być~zagrywane w~kolejności rosnącej, zaczynając od~jedynki, inaczej zagranie uważa~się za~niepoprawne. Przykładowo, jeśli na~planszy~nie ma~żadnych kart, można poprawnie zagrać tylko te, które są~oznaczone numerem~1. Jeżeli na~planszy znajdują~się wyłącznie jedna niebieska karta o~numerze~1 i~stos żółtych kart, spośród których największą wartość ma~karta o~numerze~4, można poprawnie zagrać niebieską kartę o~numerze~2, żółtą kartę o~numerze~5 lub dowolną kartę innego koloru o~numerze~1. Jeżeli karta została zagrana poprawnie, jest ona dodawana do~stosu o~odpowiednim kolorze lub~też~rozpoczyna stos swojego koloru, jeżeli jest to~karta o~numerze~1. Dodatkowo, jeżeli zagrana karta ma~numer~5, gracze otrzymują jeden żeton podpowiedzi (chyba, że~mają ich już osiem -~wtedy zagranie nie~ma~żadnego dodatkowego efektu). Jeżeli karta została zagrana niepoprawnie, jest ona~usuwana z~gry i~nie~jest dodawana do~żadnego ze~stosów, a~gracze tracą jeden z~żetonów życia. Po~rozpatrzeniu efektów akcji gracz dobiera zakrytą kartę z~talii (jeżeli nie~jest ona~pusta).
+	Gracz deklaruje chęć wykonania zagrania, wybiera zakrytą kartę ze~swojej ręki, a~następnie wykłada ją~na~planszę w~pozycji odkrytej. Zagranie może być~poprawne lub~niepoprawne. Karty muszą być~zagrywane w~kolejności rosnącej, zaczynając od~jedynki, inaczej zagranie uważa~się za~niepoprawne. Przykładowo, jeśli na~planszy~nie ma~żadnych kart, można poprawnie zagrać tylko te, które są~oznaczone numerem~1. Jeżeli na~planszy znajdują~się wyłącznie jedna niebieska karta o~numerze~1 i~stos żółtych kart, spośród których największą wartość ma~karta o~numerze~4, można poprawnie zagrać niebieską kartę o~numerze~2, żółtą kartę o~numerze~5 lub dowolną kartę innego koloru o~numerze~1. Jeżeli karta została zagrana poprawnie, jest ona dodawana do~stosu o~odpowiednim kolorze lub~też~rozpoczyna stos swojego koloru, jeżeli jest to~karta o~numerze~1. Dodatkowo, jeżeli zagrana karta ma~numer~5, gracze otrzymują jeden żeton podpowiedzi (chyba, że~mają ich już osiem -~wtedy zagranie nie~ma~żadnego dodatkowego efektu). Jeżeli karta została zagrana niepoprawnie, jest ona~usuwana z~gry i~nie~jest dodawana do~żadnego ze~stosów, a~gracze tracą jeden z~żetonów życia. Po~rozpatrzeniu efektów zagrania gracz dobiera zakrytą kartę z~talii (jeżeli nie~jest ona~pusta).
 	
 	\item Odrzucenie karty:
  
-	Gracz deklaruje chęć odrzucenia karty, wybiera zakrytą ze~swojej ręki, a~następnie wykłada ją~na~planszę w~pozycji odkrytej. Karta ta~jest usuwana z~gry, bez dokładania jej~do~któregokolwiek ze~stosów, a~gracze otrzymują jeden żeton podpowiedzi (chyba, że~mają ich już osiem -~wtedy odrzucenie karty nie~ma~żadnego dodatkowego efektu). Po~rozpatrzeniu efektów akcji gracz dobiera zakrytą kartę z~talii (jeżeli nie~jest ona~pusta).
+	Gracz deklaruje chęć odrzucenia karty, wybiera zakrytą kartę ze~swojej ręki, a~następnie wykłada ją~na~planszę w~pozycji odkrytej. Karta ta~jest usuwana z~gry, bez dokładania jej~do~któregokolwiek ze~stosów, a~gracze otrzymują jeden żeton podpowiedzi (chyba, że~mają ich już osiem -~wtedy odrzucenie karty nie~ma~żadnego dodatkowego efektu). Po~rozpatrzeniu efektów akcji gracz dobiera zakrytą kartę z~talii (jeżeli nie~jest ona~pusta).
 
 	\item Udzielenie podpowiedzi innemu graczowi:
 
-	Gracz usuwa jeden z~żetonów podpowiedzi, następnie wybiera innego uczestnika rozgrywki oraz jeden z~dwóch rodzajów informacji, których chce mu~udzielić: może wskazać wszystkie jego karty o~wybranym kolorze lub~wszystkie jego karty o~wybranym numerze. Akcji tej nie~można wykonać, jeśli w~grze~nie ma~żadnych żetonów podpowiedzi, gdyż wiązałoby~się to~z~koniecznością usunięcia żetonu podpowiedzi, który~nie istnieje. Udzielanie graczom podpowiedzi dotyczących kart w~jakikolwiek inny sposób jest zabronione.
+	Gracz usuwa jeden z~żetonów podpowiedzi, następnie wybiera innego uczestnika rozgrywki oraz jeden z~dwóch rodzajów informacji, której chce mu~udzielić: może wskazać wszystkie jego karty o~wybranym kolorze lub~wszystkie jego karty o~wybranym numerze. Akcji tej nie~można wykonać, jeśli w~grze~nie ma~żadnych żetonów podpowiedzi, gdyż wiązałoby~się to~z~koniecznością usunięcia żetonu podpowiedzi, który~nie istnieje. Udzielanie graczom podpowiedzi dotyczących kart w~jakikolwiek inny sposób jest zabronione.
 \end{enumerate}
 
 Jeżeli któryś z graczy dobierze ostatnią kartę z~talii, każdy uczestnik rozgrywa jedną dodatkową turę (wraz z~graczem, który dobrał ostatnią kartę), a~następnie gra~się kończy.
@@ -82,9 +83,9 @@ Gra natychmiast kończy~się, gdy~zostanie utracony ostatni żeton życia lub gd
 
 \section{Dodatkowe obserwacje}
 
-Partie na~dwóch graczy cechują~się bardzo wysokim stopniem trudności. Uczestnicy rozgrywki znacznie częściej muszą radzić sobie ze~skomplikowanymi sytuacjami, które wynikają z~niekorzystnych rozdań. Fakt ten jest spotęgowany przez znikomą ilość dostępnych informacji (każdy z~graczy widzi naraz tylko pięć kart), a~także łatwość wpadnięcia w~cykl, w~którym jeden z~graczy udziela podpowiedzi, a~drugi zagrywa lub odrzuca karty.
+Partie na~dwóch graczy cechują~się bardzo wysokim stopniem trudności. Uczestnicy rozgrywki znacznie częściej muszą radzić sobie ze~skomplikowanymi sytuacjami, które wynikają z~niekorzystnych rozdań. Fakt ten jest spotęgowany przez znikomą ilość dostępnych informacji (każdy z~graczy widzi naraz tylko pięć kart swojego sojusznika), a~także łatwość wpadnięcia w~cykl, w~którym jeden z~graczy udziela podpowiedzi, a~drugi zagrywa lub odrzuca karty.
 
-Z~powodu losowej natury gry, niektórych rozdań nie~da~się wygrać z~maksymalną ilością punktów. Najprostsza taka sytuacja ma~miejsce, gdy w~rozgrywce na~dwóch graczy jeden z~nich dobierze same karty o~numerze~5, drugi dobierze wyłącznie karty o~numerze~4, a~na~górze talii znajdują~się pozostałe karty o~numerze~4. Aby uzyskać dostęp do~kart o~innych numerach, gracze muszą odrzucić (lub niepoprawnie zagrać) co~najmniej sześć kart. Z~zasady szufladkowej Dirchleta można wywnioskować, że~wszystkie kopie co~najmniej jednej z~kart danego rodzaju zostaną bezpowrotnie usunięte z~gry, bez umieszczania ich na~stosie, co~uniemożliwia wygraną.
+Z~powodu losowej natury gry, w~niektórych rozdaniach nie~jest możliwe zdobycie maksymalnej ilością punktów. Najprostsza taka sytuacja ma~miejsce, gdy w~rozgrywce na~dwóch graczy jeden z~nich dobierze same karty o~numerze~5, drugi dobierze wyłącznie karty o~numerze~4, a~na~górze talii znajdują~się pozostałe karty o~numerze~4. Aby uzyskać dostęp do~kart o~innych numerach, gracze muszą odrzucić (lub niepoprawnie zagrać) co~najmniej sześć kart. Z~zasady szufladkowej Dirchleta można wywnioskować, że~wszystkie kopie co~najmniej jednej z~kart danego rodzaju zostaną bezpowrotnie usunięte z~gry, bez umieszczania ich na~stosie, co~uniemożliwi wygraną.
 
 Ze~względu na~ograniczony rozmiar talii, zagrywanie wyłącznie tych kart, o~których posiada~się komplet informacji, jest wysoce nieefektywne. Po~rozdaniu kart talia zawiera od~30~do~40 kart, zależnie od~liczby graczy. Aby uzyskać najwyższy wynik, należy zagrać aż~25~kart, a~zagranie każdej z~nich oznacza zmniejszenie rozmiaru talii o~jeden. Oznacza to (zakładając, że~gracze próbują uzyskać 25~punktów), że~można wykonać maksymalnie od~10~do~17 ruchów, w~których odrzuca~się kartę, wliczając tury po~opróżnieniu talii. Po~doliczeniu początkowych 8~żetonów maksymalna ilość możliwych do~uzyskania podpowiedzi wynosi~25. Z~tego wynika, że~w~grze na~dwie osoby każda podpowiedź musi jednoznacznie ujawniać średnio po~jednej karcie, lecz każda z~nich potrzebuje dwóch podpowiedzi różnego rodzaju, by~uzyskać pełną informację. Przy pięciu graczach każda podpowiedź musi średnio ujawniać już nie~jedną, a~prawie półtorej karty.
 
@@ -96,21 +97,21 @@ Ponadto, jeżeli chcemy odrzucać wyłącznie karty, które można bezpiecznie u
 
 Podczas realnej rozgrywki Hanabi gracze nie~dysponują komputerem, który pomagałby im~w~wykonywaniu ruchów poprzez dokonywanie odpowiednich obliczeń. Zamiast tego korzystają oni z~wiedzy nabytej w~trakcie rozegranych już partii, modyfikując swoje strategie i~rozszerzając je~o~kolejne elementy, aż~do~osiągnięcia zadowalającego ich poziomu wiedzy o~grze. Proces ten w~naturalny sposób prowadzi do~wykształcenia konwencji (takich jak: ``należy zawsze odrzucać najstarszą kartę w~ręce''), a~także do~opracowania systemu reguł, pomocnych w~uzyskiwaniu wysokich wyników (przykładowo: ``jeżeli ktoś chce odrzucić ważną kartę, należy go~powstrzymać poprzez udzielenie odpowiedniej podpowiedzi''). Zasady te~można przełożyć na~algorytmy, co~prowadzi do~utworzenia systemów regułowych, znanych także jako eksperckie.
 
-Algorytmy regułowe to~programy, naśladujące poprzez procesy decyzyjne wybory, które w~danych sytuacjach mógłby dokonać człowiek. Są~one najczęściej deterministyczne, co~jest cechą szczególnie ważną w~środowiskach, które wymagają koordynacji i~przewidywania działań podejmowanych przez inne elementy systemu. W~przypadku agentów sztucznej inteligencji, algorytmy regułowe powielają zachowania prawdziwych graczy.
+Algorytmy regułowe to~programy, naśladujące poprzez procesy decyzyjne wybory, których w~danych sytuacjach mógłby dokonać człowiek. Są~one najczęściej deterministyczne, co~jest cechą szczególnie ważną w~środowiskach, które wymagają koordynacji i~przewidywania działań podejmowanych przez inne elementy systemu. W~przypadku agentów sztucznej inteligencji, algorytmy regułowe powielają zachowania prawdziwych graczy.
 
-Z~racji na kooperacyjną konstrukcję Hanabi, sama emulacja typowych zachowań ludzkich graczy~nie wystarcza, by~wygrać. Potrzebna jest także odpowiednia koordynacja działań pomiędzy agentami: strategia. Gracze muszą zwracać uwagę na~współuczestników rozgrywki i~na~bieżąco interpretować ich poczynania, by~móc wywnioskować, jaka seria ruchów doprowadzi do~najlepszej możliwej sytuacji. Prostym i~efektywnym sposobem na~zaimplementowanie strategii jest wyspecyfikowanie protokołu komunikacji pomiędzy agentami, który nadaje niektórym zagraniom dodatkowe znaczenie, rozumiane przez pozostałych graczy. Przykładowo, dobrym pomysłem może być zasada o~następującej treści: ``jeżeli inny gracz podpowiedział mi~bez wyraźnej przyczyny jeden z kolorów, ujawniając w ten sposób kilka kart, najprawdopodobniej mogę je zagrać, w~kolejności od~lewej do~prawej''. Z~tego powodu implementacja agentów regułowych wiąże~się z~koniecznością bardzo dobrej znajomości zasad rządzących grą.
+Z~racji na kooperacyjną konstrukcję Hanabi, sama emulacja typowych zachowań ludzkich graczy~nie wystarcza, by~wygrać. Potrzebna jest także odpowiednia koordynacja działań pomiędzy agentami: strategia. Gracze muszą zwracać uwagę na~współuczestników rozgrywki i~na~bieżąco interpretować ich poczynania, by~móc wywnioskować, jaka seria ruchów doprowadzi do~najlepszej możliwej sytuacji. Prostym i~efektywnym sposobem na~zaimplementowanie strategii jest wyszczególnienie protokołu komunikacji pomiędzy agentami, który nadaje niektórym zagraniom dodatkowe znaczenie, rozumiane przez pozostałych graczy. Przykładowo, skuteczna może być zasada o~następującej treści: ``jeżeli inny gracz podpowiedział mi~bez wyraźnej przyczyny jeden z~kolorów, ujawniając w~ten sposób kilka kart, najprawdopodobniej mogę je~zagrać, w~kolejności od~lewej do~prawej''. Z~tego powodu implementacja agentów regułowych wiąże~się z~koniecznością bardzo dobrej znajomości zasad rządzących grą.
 
 \section{Drzewa poszukiwań}
 
 Istnieją dwa główne czynniki, które sprawiają, że~analiza stanu gry w~Hanabi jest trudnym zadaniem. Są~to: niepełna informacja o~aktualnym etapie rozgrywki, a~także losowość kart dobieranych z~talii. Udowodniono, że~nawet w~uproszczonej wersji gry, w~której uczestnicy mogą patrzeć na~swoje karty, problem perfekcyjnego zagrania jest NP-kompletny\cite{NP-Complete}. Sprawia to, że~próba rozwiązania zagadnienia w~sposób siłowy jest nieefektywna. Fakt ten, połączony z~trudnością opracowania funkcji oceniającej jakość zagrania, wyklucza użycie części możliwych rozwiązań problemu, takich jak algorytm alfa-beta.
 
-Aby zredukować trudność znalezienia perfekcyjnego zagrania, grupa Facebook Research zaproponowała rozwiązanie bazujące na~drzewie poszukiwań Monte Carlo\cite{MCTS}. Każdy z~graczy dysponuje zbiorem predefiniowanych akcji, dostosowywanych odpowiednio do~aktualnego stanu rozgrywki poprzez analizę prawdopodobieństwa zagrań, które mogą wykonać współuczestnicy. Algorytm bierze pod uwagę także szanse aktualnego gracza na~posiadanie w~ręce kart, które mogły zostać wylosowane z~talii. Aby przyspieszyć działanie programu, głębokość drzewa poszukiwań jest ograniczana, a agenci wykonują predefiniowane akcje i~nie~eksplorują nowych opcji, jeżeli wiązałoby~się to~z~przekroczeniem zadanego limitu obliczeń. 
+Aby zredukować trudność znalezienia perfekcyjnego zagrania, grupa Facebook Research zaproponowała rozwiązanie bazujące na~drzewie poszukiwań Monte Carlo\cite{MCTS}. Każdy z~graczy dysponuje zbiorem predefiniowanych akcji, dostosowywanych odpowiednio do~aktualnego stanu rozgrywki poprzez analizę prawdopodobieństwa zagrań, które mogą wykonać współuczestnicy. Algorytm bierze pod uwagę także szanse aktualnego gracza na~posiadanie w~ręce kart, które mogły zostać wylosowane z~talii. Aby przyspieszyć działanie programu, głębokość drzewa poszukiwań jest ograniczana, a agenci wykonują predefiniowane akcje i~nie~eksplorują nowych opcji, jeśli wiązałoby~się to~z~przekroczeniem zadanego limitu obliczeń.
 
-Takie podejście pozwala na~uzyskanie bardzo wysokich wyników, sięgających nawet 24.61~punktów w~rozgrywce dla dwóch graczy. Działanie algorytmu jest jednak kosztowne obliczeniowo, nawet przy znacznym ograniczeniu zakresu dokonywanych poszukiwań. Do~osiągnięcia tak wysokich punktacji potrzeba olbrzymich ilości obliczeń, które, z~racji na możliwość ich zrównoleglenia, są~najczęściej dokonywane na~nowoczesnych kartach graficznych. Wyłączenie agentom możliwości dokonywania dodatkowych poszukiwań degeneruje ich do~postaci agentów regułowych, które, choć na~każdą akcję potrzebują zużycia istotnie mniejszej ilości zasobów, wciąż osiągają imponujący wynik 23~punktów.
+Takie podejście pozwala na~uzyskanie bardzo wysokich wyników, sięgających nawet 24.61~punktów w~rozgrywce dla dwóch graczy. Działanie algorytmu jest jednak kosztowne obliczeniowo, nawet przy znacznym ograniczeniu zakresu dokonywanych poszukiwań. Do~osiągnięcia tak wysokich punktacji potrzeba olbrzymich ilości obliczeń, które, z~racji na możliwość ich zrównoleglenia, są~najczęściej dokonywane na~nowoczesnych kartach graficznych. Wyłączenie agentom możliwości dokonywania dodatkowych poszukiwań degeneruje ich do~postaci agentów regułowych, którzy, choć na~każdą akcję potrzebują zużycia istotnie mniejszej ilości zasobów, wciąż osiągają imponujący wynik 23~punktów.
 
 \section{Algorytmy uczące}
 
-Innym sposobem na~zaimplementowanie programu grającego w~Hanabi jest użycie algorytmów uczących, które łączą zalety podejść regułowych i~poszukujących. Jak sugeruje nazwa, polegają one na~symulowaniu procesu akumulacji doświadczenia, podobnego do~tego doznawanego przez ludzkich graczy. W~toku ewolucji agent zdobywa wiedzę o~środowisku, w~którym operuje, dostosowując~się do~zmieniających warunków, wypracowując i~udoskonalając sposoby radzenia sobie w~zaprezentowanych sytuacjach. Tworzenie algorytmów uczących nie~wymaga ani szerokiej wiedzy o~zawiłościach zasad gry, ani kosztownych obliczeń, które byłyby wykonywane w~trakcie rozgrywki.
+Innym sposobem na~zaimplementowanie programu grającego w~Hanabi jest użycie algorytmów uczących, które łączą zalety podejść regułowych i~poszukujących. Jak sugeruje nazwa, polegają one na~symulowaniu procesu akumulacji doświadczenia, podobnego do~tego doznawanego przez ludzkich graczy. W~toku ewolucji agent zdobywa wiedzę o~środowisku, w~którym operuje, dostosowując~się do~zmieniających warunków oraz wypracowując i~udoskonalając sposoby radzenia sobie w~zaprezentowanych sytuacjach. Tworzenie algorytmów uczących nie~wymaga ani szerokiej wiedzy o~zawiłościach zasad gry, ani kosztownych obliczeń, które byłyby wykonywane w~trakcie rozgrywki.
 
 Wadą tego algorytmu jest konieczność wyuczenia agenta odpowiednich zachowań. Odbywa~się to~poprzez zapewnienie mu~zestawu danych, na~których mógłby zdobyć doświadczenie. W~zależności od~uzyskiwanych wyników, decyzje algorytmu są~nagradzane lub karane. Dobranie odpowiednio różnorodnego zbioru uczącego, w~parze z~funkcjami kwalifikującymi, pozwala programowi nie~tylko na~rozpoznawanie i~radzenie sobie z~najczęściej występującymi sytuacjami, ale i~generalizację zachowań, potrzebną do~wybrnięcia ze~stanów gry, które nie~zostały dotychczas napotkane.
 
@@ -132,7 +133,7 @@ W~celu zbadania zaprezentowanych sposobów tworzenia sztucznej inteligencji, kt�
 
 Siedmiu agentów jest opartych o~systemy regułowe, różniące~się stopniem zaawansowania wdrażanych strategii. Aby usprawnić działanie jednego z~agentów regułowych, użyliśmy bayesowskiej metody optymalizacji hiperparametrów, korzystającej z~procesów gaussowskich. Ostatni z~zaprezentowanych agentów stosuje algorytm uczący ze~wzmocnieniem, oparty o~funkcje heurystyczne generalizujące stan gry, wspomagane procesami decyzyjnymi Monte Carlo.
 
-Systemy zasad zostały oparte o~nasze własne spostrzeżenia, których doszukaliśmy~się poprzez obserwację rozgrywek ludzkich graczy i~uznaliśmy za~kluczowe do~gry na~wysokim poziomie. Każdy kolejny agent regułowy bazuje na~konceptach, które zostały użyte do~zbudowania jego poprzedników, i~usprawnia je. Takie działanie~prowadzi do~naturalnej progresji prezentowanych warstw abstrakcji.
+Systemy zasad zostały oparte o~nasze własne spostrzeżenia, zdobyte poprzez obserwację rozgrywek ludzkich graczy, które uznaliśmy za~kluczowe do~gry na~wysokim poziomie. Każdy kolejny agent regułowy bazuje na~konceptach, które zostały użyte do~zbudowania jego poprzedników, i~usprawnia je. Takie działanie~prowadzi do~naturalnej progresji warstw abstrakcji prezentowanych pojęć.
 
 \subsection*{Nomenklatura}
 
@@ -147,7 +148,7 @@ Systemy zasad zostały oparte o~nasze własne spostrzeżenia, których doszukali
 
 \section{Cheater}
 
-Cheater jest agentem, którego strategia polega na~bezmyślnym oszukiwaniu. Program zawsze posiada komplet informacji o~kartach, którymi dysponuje, lecz~nie wykorzystuje dostępnej mu~wiedzy w~optymalny sposób: zagrywa karty, gdy to~możliwe, w~przeciwnym wypadku losowo je~odrzuca.
+Cheater jest agentem, którego strategia polega na~bezmyślnym oszukiwaniu. Program oszukuje, dzięki czemu zawsze posiada komplet informacji o~kartach, którymi dysponuje, lecz~nie wykorzystuje dostępnej mu~wiedzy w~optymalny sposób: zagrywa karty, gdy to~możliwe, w~przeciwnym wypadku losowo je~odrzuca.
 
 \subsection*{Nowe pojęcia}
 
@@ -192,7 +193,7 @@ Uzyskane wyniki są~bardzo dobre, lecz cechują~się stosunkowo wysoką wariancj
 
 \section{SmartCheater}
 
-SmartCheater usprawnia poczynania agenta Cheater. Program zawsze posiada komplet informacji o~kartach, którymi dysponuje, i~wykorzystuje tę~wiedzę w~sposób bliski optymalnemu, stosując strategię przedłużającą rozgrywkę. Agent potrafi oceniać przydatność kart i~za~wszelką cenę unika ruchów, które utrudniają lub uniemożliwiają wygraną.
+SmartCheater usprawnia poczynania agenta Cheater. Program oszukuje, dzięki czemu zawsze posiada komplet informacji o~kartach, którymi dysponuje, i~wykorzystuje tę~wiedzę w~sposób bliski optymalnemu, stosując strategię przedłużającą rozgrywkę. Agent potrafi oceniać przydatność kart i~za~wszelką cenę unika ruchów, które utrudniają lub uniemożliwiają wygraną.
 
 \subsection*{Nowe pojęcia}
 
@@ -247,7 +248,7 @@ Strategia agenta Erratic polega na~wykonywaniu serii przypadkowych ruchów, któ
 
 \begin{itemize}
 	\item Wylosuj jedną z~legalnych akcji (zagraj kartę, odrzuć kartę, udziel podpowiedzi innemu uczestnikowi rozgrywki).
-	\item Losowo wybierz detale ruchu, a~następnie go~wykonaj.
+	\item Losowo wybierz szczegóły ruchu, a~następnie go~wykonaj.
 \end{itemize}
 
 
@@ -291,7 +292,7 @@ Agent ma~nikłą szansę na~uzyskanie wysokich wyników, a~jego konstrukcja nigd
 
 \section{SimpleDistrustful}
 
-Agent SimpleDistrustful imituje postępowanie człowieka, który po~raz pierwszy gra w~Hanabi: wykonuje wyłącznie bezpieczne ruchy, lecz robi to~umiejętnie, gdyż potrafi przeprowadzać pewne wnioskowania, które na~jego miejscu mogłyby dokonać osoby o~podstawowej znajomości zasad. Program nie~udziela redundantnych podpowiedzi, stroni od~odrzucania kart, które mogą~się jeszcze przydać, a~także rozumie, że~niektóre karty zawsze można bezpiecznie zagrać lub odrzucić -~mimo posiadania o~nich niepełnej informacji.
+Agent SimpleDistrustful imituje postępowanie człowieka, który po~raz pierwszy gra w~Hanabi: wykonuje wyłącznie bezpieczne ruchy, lecz robi to~umiejętnie, gdyż potrafi przeprowadzać pewne wnioskowania, które na~jego miejscu mogłyby dokonać osoby o~podstawowej znajomości zasad. Program nie~udziela zbędnych podpowiedzi, stroni od~odrzucania kart, które mogą~się jeszcze przydać, a~także rozumie, że~niektóre karty zawsze można bezpiecznie zagrać lub odrzucić -~mimo posiadania o~nich niepełnej informacji.
 
 \subsection*{Nowe pojęcia}
 
@@ -302,7 +303,7 @@ Agent SimpleDistrustful imituje postępowanie człowieka, który po~raz pierwszy
 	
 	\item \textbf{Wartościowa podpowiedź}:
 	
-	Zdarzają się~sytuacje, w~których udzielanie pewnych informacji jest niepożądane. Przykładowo: jeżeli dwóch lub więcej uczestników rozgrywki posiada kopię danej karty, warto skupić~się ujawnianiu wyłącznie jednej z~nich. Wartościowa podpowiedź to~taka, która jest lokalnie optymalna, gdyż unika powtarzania znanych informacji.
+	Zdarzają się~sytuacje, w~których udzielanie pewnych informacji jest niepożądane. Przykładowo: jeżeli dwóch lub więcej uczestników rozgrywki posiada kopię danej karty, warto skupić~się na~ujawnianiu wyłącznie jednej z~nich. Wartościowa podpowiedź to~taka, która jest lokalnie optymalna, gdyż unika powtarzania znanych informacji.
 	
 	\item \textbf{Najbliższy gracz}:
 	
@@ -390,7 +391,7 @@ Agent jest złożony z~siedmiu modułów, które są~rozważane po~kolei w~jedne
 
 	\item \underline{``Mediocre play tip''}:
 	
-	Jeżeli posiadasz co~najmniej dwa żetony podpowiedzi, spróbuj wykonać akcję modułu numer~3 (``Good play tip''), ale ze~znacznie niższym pułapem jakościowym.
+	Jeżeli posiadasz co~najmniej dwa żetony podpowiedzi, wykonaj akcję modułu numer~3 (``Good play tip''), ale ze~znacznie niższym pułapem jakościowym.
 
 	\item \underline{``Guess discard''}:
 	\begin{enumerate}
@@ -463,7 +464,7 @@ Agent posiada dwie kategorie podpowiedzi: obietnice oraz komunikaty. Ustalenie i
 	\item Podpowiedź jest obietnicą.
 \end{enumerate}
 
-Podobnie jak w~przypadku agenta Distrustful, program składa~się z~dziesięciu modułów, które są~rozważane po~kolei w~jednej z~czterech konfiguracji. Każdy moduł, poza ostatnim w~sekwencji, może zawieść. Ich kolejność zależy od~ilości posiadanych żetonów podpowiedzi:
+Agent jest złożony z~dziesięciu modułów, które są~rozważane po~kolei w~jednej z~czterech konfiguracji. Każdy moduł, poza ostatnim w~sekwencji, może zawieść. Ich kolejność zależy od~ilości posiadanych żetonów podpowiedzi:
 
 \begin{itemize}
 	\item Mniej niż 3~żetony: sekwencja 1, 2, 3, 9, 4, 5, 10 (moduły 6, 7, 8 nie są używane).
@@ -508,7 +509,7 @@ Używane moduły to:
 	
 	\item \underline{``Information tip''}:
 	
-	Spróbuj wykonać akcję modułu numer~4 (``Play tip'') ze~zwiększoną nagrodą za~udzielanie podpowiedzi w~trybie komunikatu.
+	Wykonaj akcję modułu numer~4 (``Play tip'') ze~zwiększoną nagrodą za~udzielanie podpowiedzi w~trybie komunikatu.
 	
 	\item \underline{``Obvious discard''}:
 	
@@ -588,7 +589,7 @@ Bayesowska metoda optymalizacji oparta o~procesy gaussowskie polega na~stworzeni
 
 Maksymalizowana była funkcja o~27 parametrach, odpowiadających wagom używanym w~funkcjach heurystycznych. Jej wartość w~punkcie została zdefiniowana jako średnia arytmetyczna wyników uzyskanych na~przestrzeni 20~niezależnych rozgrywek czteroosobowych.
 
-Algorytm optymalizujący, po~zbadaniu kilku tysięcy próbek, znalazł nowy zestaw parametrów. Przeprowadzone testy wskazują na~niewielki wzrost średniej ilości punktów dla grup trzech, czterech i~pięciu graczy, kosztem zwiększonej wariancji. Agent Trustful nie~był projektowany do~przeprowadzania rozgrywek dwuosobowych, co~szczególnie dobrze widać na~wykresie -~lepsze dostosowanie wag, które pomagają przy bardziej licznych grupach, pogrąża strategię dla dwóch graczy.
+Algorytm optymalizujący, po~zbadaniu kilku tysięcy próbek, znalazł nowy zestaw parametrów. Przeprowadzone testy wskazują na~niewielki wzrost średniej ilości punktów dla grup trzech, czterech i~pięciu graczy, kosztem zwiększonej wariancji. Ponieważ agent Trustful nie~był projektowany do~przeprowadzania rozgrywek dwuosobowych, lepsze dostosowanie wag, które pomagają przy bardziej licznych grupach, pogrąża strategię dla dwóch graczy.
 
 Na~podstawie analizy wartości nowych wag można dociec, w~jaki sposób zmieniła~się strategia agenta:
 
@@ -632,26 +633,70 @@ WIP
 WIP
 
 \appendix
-\chapter{Uruchamianie interfejsu użytkownika}
+\chapter{Korzystanie z projektu}
+
+\section{Instalacja zależności}
+Aby skorzystać ze~wszystkich możliwości programu, potrzebne będzie zainstalowanie środowiska uruchomieniowego Python~3. Projekt był testowany przy użyciu wersji 3.7.4 na~następujących systemach operacyjnych:
+\begin{itemize}
+	\item Windows 10, kompilacja 17763
+	\item MacOS~Catalina 10.15.2
+	\item Ubuntu 18.04.3 LTS
+\end{itemize}
+
+\subsection{Windows}
+
+Należy otworzyć powłokę CMD lub PowerShell, przejść do~głównego katalogu projektu, a~następnie wykonać następującą komendę:
+\begin{verbatim}
+    $ python3 -m pip install -r requirements-windows.txt
+\end{verbatim}
+
+\subsection{MacOS}
+
+Należy otworzyć jedną z~powłok systemu Unix (bash, zsh), przejść do~głównego katalogu projektu, a~następnie wykonać następującą komendę:
+\begin{verbatim}
+    $ python3 -m pip install -r requirements-macos.txt
+\end{verbatim}
+
+\subsection{Ubuntu Linux}
+
+Należy otworzyć jedną z~powłok systemu Unix (bash, zsh), przejść do~głównego katalogu projektu, a~następnie wykonać następujące komendy:
+\begin{spverbatim}
+    $ sudo add-apt-repository ppa:kivy-team/kivy
+    $ sudo apt update
+    $ sudo apt install python3-kivy python3-tk python3-sdl2
+    $ python3 -m pip install -r requirements-linux.txt
+\end{spverbatim}
+
+\section{Uruchamianie projektu}
+
+Aby uruchomić graficzny interfejs użytkownika, należy otworzyć powłokę systemu operacyjnego, przejść do~głównego katalogu projektu, a~następnie wykonać następującą komendę:
+\begin{verbatim}
+    $ python3 hanabi.py
+\end{verbatim}
+
+\section{Komponenty interfejsu}
 
 WIP
 
 \begin{thebibliography}{4}
 
+\bibitem{DeepBlue} M. Campbell, A. J. Hoane Jr., F. Hsu, \textit{Deep Blue}, 2002. URL: 
+\href{https://core.ac.uk/download/pdf/82416379.pdf}{\textbf{link}} (term. wiz. 27.01.2020)
+
 \bibitem{NP-Complete} J.-F Baffier i in., \textit{Hanabi is NP-complete, Even for Cheaters who Look at Their Cards}, 2017. URL: 
-\href{https://arxiv.org/pdf/1603.01911.pdf}{\textbf{link}} (term. wiz. 26.01.2020)
+\href{https://arxiv.org/pdf/1603.01911.pdf}{\textbf{link}} (term. wiz. 27.01.2020)
 
 \bibitem{MCTS} A. Lerer, H. Hu, J. Foerster, N. Brown, \textit{Building AI that can master complex cooperative games with hidden information}, 2019. URL: 
-\href{https://ai.facebook.com/blog/building-ai-that-can-master-complex-cooperative-games-with-hidden-information/}{\textbf{link}} (term. wiz. 26.01.2020)
+\href{https://ai.facebook.com/blog/building-ai-that-can-master-complex-cooperative-games-with-hidden-information/}{\textbf{link}} (term. wiz. 27.01.2020)
 
 \bibitem{Mario} T. Murphy, \textit{The First Level of Super Mario Bros. is Easy with Lexicographic Orderings and Time Travel $\ldots$after that it gets a little tricky.}, 2013. URL: 
-\href{http://www.cs.cmu.edu/~tom7/mario/mario.pdf}{\textbf{link}} (term. wiz. 26.01.2020)
+\href{http://www.cs.cmu.edu/~tom7/mario/mario.pdf}{\textbf{link}} (term. wiz. 27.01.2020)
 
 \bibitem{HatPlayer} B. Bouzy, \textit{Playing Hanabi Near-Optimally}, 2017. URL: 
-\href{http://helios.mi.parisdescartes.fr/~bouzy/publications/bouzy-hanabi-2017.pdf}{\textbf{link}} (term. wiz. 26.01.2020)
+\href{http://helios.mi.parisdescartes.fr/~bouzy/publications/bouzy-hanabi-2017.pdf}{\textbf{link}} (term. wiz. 27.01.2020)
 
 \bibitem{Gauss} Fernando Pérez-Cruz i in., \textit{Gaussian Processes for Nonlinear Signal Processing: An Overview of Recent Advances}, 2013. URL: 
-\href{https://www.researchgate.net/publication/260637079_Gaussian_Processes_for_Nonlinear_Signal_Processing_An_Overview_of_Recent_Advances}{\textbf{link}} (term. wiz. 26.01.2020)
+\href{https://www.researchgate.net/publication/260637079_Gaussian_Processes_for_Nonlinear_Signal_Processing_An_Overview_of_Recent_Advances}{\textbf{link}} (term. wiz. 27.01.2020)
 
 \end{thebibliography}
 
