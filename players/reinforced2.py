@@ -25,7 +25,7 @@ class Reinforced2(BasePlayer):
 
     def load_knowledge(self):
         root = Path(".")
-        folder = root / "players" / "reinforced_for_2_data"
+        folder = root / "players" / "reinforced2_data"
         with open(folder / 'own_card_states.data', 'rb') as file:
             self.own_card_states = pickle.load(file)
         with open(folder / 'hint_states.data', 'rb') as file:
