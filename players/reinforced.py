@@ -7,8 +7,9 @@ from copy import deepcopy
 import statistics
 
 debug = True
-random_action = 0
-exploration_param = math.sqrt(2)-1.2
+random_action = 0.01
+exploration_param = math.sqrt(2)
+
 
 class Reinforced(BasePlayer):
     def __init__(self, *args):
