@@ -4,14 +4,15 @@ import pickle
 
 
 class LearningState:
-    def __init__(self):
+    def __init__(self, reset=False):
         self.own_card_states = {}
         self.hint_states = {}
         self.macro_states = {}
         self.score_history = [3, 3]
-        self.load_knowledge()
         self.states_history = []
         self.max_state_history = 400
+        if reset is False:
+            self.load_knowledge()
 
     def load_knowledge(self):
         with open('own_card_states.data', 'rb') as file:
