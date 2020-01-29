@@ -10,3 +10,5 @@ from .reinforced import *
 from .bayesian_trustful import *
 from .erratic import *
 from .trustful_param_injection import *
+from .reinforced_for_2 import *
+from .reinforced_for_4 import *

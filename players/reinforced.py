@@ -7,7 +7,7 @@ from copy import deepcopy
 import statistics
 
 debug = True
-random_action = 0.02
+random_action = 0.01
 exploration_param = math.sqrt(2)
 
 class Reinforced(BasePlayer):
@@ -201,6 +201,9 @@ class Reinforced(BasePlayer):
                 player_distance = player_number - original_player_number - 1
                 if player_distance < 0:
                     player_distance += round_info.number_of_players
+
+                #if player_distance > 0:
+                #    player_distance = 0
 
                 targets = {}
                 for rank in utils.Rank:
@@ -456,7 +459,7 @@ class Reinforced(BasePlayer):
 
             for play in play_actions:
                 if round_info.log and debug:
-                    self.info("{0} {1} {2} {3} {4}".format(play[0], play[1][1][0], play[1][1],
+                    self.info("{0} {1} {2} {3}".format(play[0], play[1][1][0],
                                                        self.learning_state.get_chance(play[1][1]), play[2]))
 
                 sum_of_weights = self.learning_state.get_chance(play[1][1]) \
