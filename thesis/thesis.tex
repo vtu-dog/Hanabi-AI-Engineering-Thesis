@@ -4,14 +4,21 @@
 \englishtitle{A study on cooperative games with incomplete\fmlinebreak information based on the game of Hanabi}
 
 
-\polishabstract {\ldots}
-\englishabstract{\ldots}
+\polishabstract {Od początku ery komputerów, gry planszowe były używane do~testowania limitów sztucznej inteligencji. W~ostatnich latach nadzwyczajną popularność, zarówno w~środowiskach pasjonatów gier planszowych, jak i~badaczy akademickich, zyskało Hanabi -~w~pełni kooperacyjna gra karciana z~niepełną informacją, którą można określić mianem ``kooperacyjnego pasjansa''. W~poniższej pracy przedstawiamy różnorodne metody tworzenia agentów grających w~Hanabi, którzy, przy surowych ograniczeniach na~czas wykonania ruchu, byliby zdolni do~gry na~poziomie ludzkiego gracza. W~tym celu zaimplementowaliśmy siedmiu agentów regułowych o~różnych stopniach zaawansowania wdrażanych strategii oraz agenta, który potrafi nauczyć~się gry bez ingerencji człowieka. Sprawdziliśmy także, w~jaki sposób strategie agentów wzajemnie na~siebie oddziałują. Badania empiryczne wykazały, że~stworzeni agenci potrafią grać na~poziomie zbliżonym do~ludzkiego, bez konieczności poświęcania wysokich nakładów mocy obliczeniowej. Pokazaliśmy również skuteczność metod uczących, które pozwoliły korzystającemu z~nich agentowi na~samoistne wypracowanie efektywnej strategii, osiągającej wyniki zbliżone do~tych osiąganych przez ludzi. Aby ułatwić dalszą analizę zagadnienia, a~także umożliwić grę ze~stworzonymi agentami, wykonaliśmy graficzny interfejs użytkownika. Praca stawia podwaliny pod dalsze rozwinięcie problematyki wysokopoziomowej gry w~Hanabi z~ograniczeniami czasowymi i~stanowi funkcjonalny prototyp.}
+%\englishabstract{\ldots}
 
 
 \author{Wojciech Jarząbek\and Jacek Leja}
 \advisor{dr Paweł Rychlikowski}
 \date{\today}
 % Data zlozenia pracy
+
+\iffalse
+	W tej pracy opisujemy różne metody tworzenia agentów grających w grę kooperacyjną Hanabi z ograniczonym czasem na pojedyncze ruchy, w celu utworzenia programu zdolnego do gry na poziomie człowieka.
+	W tym celu stworzyliśmy 7 różnych agentów regułowych o różnym stopniu zaawansowania oraz jednego agenta uczącego się grać samoistnie i następnie zbadaliśmy ich osiągi w różnych wariancjach partii gry. Sprawdziliśmy również jak zachowują się w zależności między sobą, nie mając wiedzy o wykorzystywanych wzajemnie strategiach.
+	Testy wykazały, że nasi najlepsi agenci potrafią grać na poziomie podobnym do ludzkiego bez konieczności poświęcania dużej ilości czasu na obliczenia w trakcie tury. Pokazaliśmy również skuteczność metod uczących, gdzie korzystając z naszego modelu agent wypracował samemu strategię zdobywającą wyniki zbliżonych do wyników osiąganych przez ludzkich graczy.
+	Ta praca stawia podwaliny pod dalsze rozwinięcia problematyki wysokopoziomowej rozgrywki w grę Hanabi z ograniczonym czasem i stanowi dowód konceptu.
+\fi
 
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
@@ -605,7 +612,7 @@ Podsumowując: agent jest mniej skłonny do~udzielania podpowiedzi będących ko
 
 Poprzednicy agenta Reinforced korzystali ze~ściśle określonych systemów regułowych. W~przeciwieństwie do~nich, agent Reinforced samodzielnie dopracowuje obieraną strategię poprzez sukcesywne rozgrywanie kolejnych partii i~wyciąganie wniosków na~temat wykonanych ruchów.
 
-Na~początku procesu uczenia każdej z~możliwych akcji agenta przydzielony jest taki sam priorytet, gdyż program nie~wie, który z~ruchów może być przydatne w~danym momencie rozgrywki. Wiedza o~tym, jakie zachowania są~najbardziej pożądane, jest nabywana poprzez egzekwowanie systemu kar i~nagród, nadawanych w~trakcie gry, a~także po~jej zakończeniu. Na~ich podstawie wyciągane są~wnioski, które pozwalają na~dokonywanie lepszych decyzji w~przyszłości -~zarówno w~skali makro (wybieranie jednej z~trzech akcji: zagrania, odrzucenia i~podpowiedzi), jak i~mikro (określanie szczegółów ruchu).
+Na~początku procesu uczenia, każdej z~możliwych akcji agenta przydzielony jest taki sam priorytet, gdyż program nie~wie, który z~ruchów może być przydatny w~danym momencie rozgrywki. Wiedza o~tym, jakie zachowania są~najbardziej pożądane, jest nabywana poprzez egzekwowanie systemu kar i~nagród, nadawanych w~trakcie gry, a~także po~jej zakończeniu. Na~ich podstawie wyciągane są~wnioski, które pozwalają na~dokonywanie lepszych decyzji w~przyszłości -~zarówno w~skali makro (wybieranie jednej z~trzech akcji: zagrania, odrzucenia i~podpowiedzi), jak i~mikro (określanie szczegółów ruchu).
 
 \subsection*{Schemat działania}
 
@@ -615,7 +622,7 @@ Agent posiada cztery funkcje oceniające, które pozwalają na~rozstrzyganie, kt
 	\item Rozstrzygnij, która z~posiadanych kart powinna zostać zagrana.
 	\item Rozstrzygnij, która z~posiadanych kart powinna zostać odrzucona.
 	\item Rozstrzygnij, która z~możliwych do~udzielenia podpowiedzi jest najbardziej przydatna, pomijając te~z~nich, które nie ujawniają żadnych informacji.
-	\item Rozstrzygnij, która z~najlepiej ocenianych akcji powinna być wykonana.
+	\item Sprawdź, które akcje zostały ocenione najlepiej, a~następnie rozstrzygnij, która z~nich powinna zostać wykonana.
 \end{enumerate}
 
 Funkcje oceniające nie~są~narzucone odgórnie. Każda z~nich wydaje werdykt w~zależności od~obecnego stanu gry, a~także wartości, które zostały wyuczone na~podstawie poprzednich decyzji, podjętych w~zbliżonych warunkach. Mechanizm ten przypomina działanie algorytmu Q-learning.
@@ -652,7 +659,7 @@ Informacje o~stanie gry są~przechowywane jako kolekcja wektorów, które zawier
 			\item ilość pozostałych żetonów podpowiedzi,
 			\item ilość pozostałych żetonów życia,
 			\item czy talia jest pusta,
-			\item oceny najlepszych akcji.
+			\item oceny najlepszych akcji z~poszczególnych kategorii.
 		\end{itemize}
 \end{enumerate}
 
@@ -664,11 +671,11 @@ Początkowo, wartości liczbowe zwracane przez funkcje oceniające zawierają s
 
 Po~dokonaniu analizy heurystycznej ruchów, wykonywana jest akcja, która otrzymała najwyższą notę. Aby wymusić dodatkowe losowe błądzenia, agent ma~stałą szansę na~wykonanie arbitralnego ruchu, która wynosi 1\%. Funkcjonalność ta~jest aktywna wyłącznie wtedy, gdy program znajduje~się w~trybie nauki.
 
-Na~koniec każdej z~tur, agent rozważa efekty wybranej akcji. Jeżeli program wykonał poprawne zagranie lub odrzucił bezużyteczną kartę, funkcje oceniające ten ruch są~nagradzane. Bonus otrzymują także funkcje, które zdecydowały o~udzieleniu podpowiedzi dotyczącej danej karty. Podobnie, jeżeli zagranie było niepoprawne, lub została odrzucona karta krytyczna (bądź taka, którą można było zagrać), funkcje są~karane. Z~uwagi na~trudność natychmiastowego oszacowania poprawności akcji udzielenia podpowiedzi, takie ruchy są~oceniane dopiero po~zakończeniu rozgrywki.
+Na~koniec każdej z~tur, agent rozważa efekty wybranej akcji. Jeżeli program wykonał poprawne zagranie lub odrzucił bezużyteczną kartę, funkcje oceniające ten ruch są~nagradzane. Bonus otrzymują także funkcje, które zdecydowały o~udzieleniu podpowiedzi dotyczącej danej karty. Podobnie, jeżeli zagranie było niepoprawne lub została odrzucona karta krytyczna (bądź taka, którą można było zagrać), funkcje są~karane. Z~uwagi na~trudność natychmiastowego oszacowania poprawności akcji udzielenia podpowiedzi, te~ruchy są~oceniane dopiero po~zakończeniu rozgrywki.
 
 W~zależności od~tego, czy po~ukończeniu partii agent uzyskał wynik wyższy od~mediany punktów z~ostatniego tysiąca rozgrywek, wszystkie akcje dokonane w~trakcie gry są~nagradzane lub karane. Zmiana jest wprost proporcjonalna do~różnicy pomiędzy uzyskanym wynikiem a~medianą. Funkcja oceniająca, która dokonuje wyboru głównej akcji, korzysta z~tego mechanizmu w~największym stopniu.
 
-Ponieważ funkcje oceniające są~ze~sobą silnie skorelowane, istnieje ryzyko wypracowania przez agenta nieefektywnej strategii, którą trudno jest skorygować. Z~tego powodu program pamięta dla każdego ze~stanów jedynie 400 ostatnich kar i~nagród, a~funkcje nadają wyższe wagi tym z~nich, które są~najnowsze.
+Ponieważ funkcje oceniające są~ze~sobą silnie skorelowane, ocena stanu rozgrywki może diametralnie~się zmieniać w~zależności od~aktualnie przyjętej strategii. Z~tego powodu program pamięta dla każdego ze~stanów jedynie 400 ostatnich kar i~nagród, a~funkcje nadają wyższe wagi tym z~nich, które są~najnowsze.
 
 Opisany model uczący był tworzony empirycznie, za~pomocą metody prób i~błędów, a~jego forma w~znacznej mierze wynika z~naszego zrozumienia gry Hanabi.
 
@@ -706,7 +713,7 @@ Agent Reinforced2, który trenował granie partii dwuosobowych, osiąga w~nich n
 	\label{fig:Reinforced4}
 \end{figure}
 
-W~przypadku agenta Reinforced4, wypracowana strategia jest znacznie mniej podatna na~zmiany w~liczbie graczy. Choć agent nie~osiąga w~partiach dwuosobowych wyników, które pozwoliłyby mu~konkurować z~bliźniaczym algorytmem, pokonuje w~nich pozostałych agentów, którzy nie~oszukują. W~pozostałych testach plasuje~się on~pomiędzy agentami Distrustful a~Trustful, jednocześnie wyróżniając~się bardzo wysoką stabilnością wdrażanych strategii.
+W~przypadku agenta Reinforced4, wypracowana strategia jest znacznie mniej podatna na~zmiany w~liczbie graczy. Choć agent nie~osiąga w~partiach dwuosobowych wyników, które pozwoliłyby mu~konkurować z~bliźniaczym algorytmem, pokonuje w~nich pozostałych agentów, którzy nie~oszukują. W~pozostałych testach sytuuje~się on~pomiędzy agentami Distrustful a~Trustful, jednocześnie wyróżniając~się bardzo wysoką stabilnością wdrażanych strategii.
 
 \chapter{Niestandardowe modele rozgrywki}
 
@@ -714,7 +721,7 @@ W~przypadku agenta Reinforced4, wypracowana strategia jest znacznie mniej podatn
 
 Prezentowanie możliwości dotychczas przedstawionych agentów polegało na~umieszczaniu ich w~homogenicznych środowiskach, na~które składało~się wiele kopii jednego agenta. Gwarantowało to, że~wszyscy uczestnicy rozgrywki posiadali jednolitą strategię. W~naturalny sposób nasuwa~się pytanie: co~może~się wydarzyć, kiedy do~partii zasiądą gracze o~różnych schematach działania?
 
-Rozgrywki mieszane, znane także jako potyczki XY, stanowią ciekawy problem w~kontekście sztucznej inteligencji grającej w~Hanabi, gdyż wymagają pogodzenia dwóch antytecznych konceptów: konieczności współpracy, oraz braku wspólnego planu działania. Niepewność poczynań innych graczy zmienia problematykę całej gry: implicytna komunikacja staje~się niemożliwa, a~gracze w~każdej chwili mogą wykonać akcje, które nie mają sensu z~punktu widzenia współuczestników rozgrywki, co~skutecznie paraliżuje większość strategii. Dobrym sposobem na~uzyskanie wysokich wyników nie~jest już kooperacja, a~maksymalne ograniczenie zaufania do~innych graczy. W~przypadku agentów sztucznej inteligencji, którzy nie~potrafią dostosowywać~się do~zmieniających warunków tak, jak robią to~ludzie, zredefiniowanie formuły rozgrywki może prowadzić do~zaskakujących rezultatów.
+Rozgrywki mieszane, znane także jako potyczki XY, stanowią ciekawy problem w~kontekście sztucznej inteligencji grającej w~Hanabi, gdyż wymagają pogodzenia dwóch antytecznych konceptów: konieczności współpracy oraz braku wspólnego planu działania. Niepewność poczynań innych graczy zmienia problematykę całej gry: implicytna komunikacja staje~się niemożliwa, a~gracze w~każdej chwili mogą wykonać akcje, które nie mają sensu z~punktu widzenia współuczestników rozgrywki, co~skutecznie paraliżuje większość strategii. Dobrym sposobem na~uzyskanie wysokich wyników nie~jest już kooperacja, a~maksymalne ograniczenie zaufania do~innych graczy. W~przypadku agentów sztucznej inteligencji, którzy nie~potrafią dostosowywać~się do~zmieniających warunków tak, jak robią to~ludzie, zredefiniowanie formuły rozgrywki może prowadzić do~zaskakujących rezultatów.
 
 \section{Potyczki XY}
 
@@ -730,7 +737,7 @@ Przeprowadziliśmy testy rozgrywek, w~których gracze występowali w~różnych k
 	\label{fig:XY2}
 \end{figure}
 
-Agenci Distrustful oraz StoppedClock używają strategii, które dobrze ze~sobą współgrają. Zagrywane są~wyłącznie karty bezpieczne, a~pomiędzy graczami nie istnieje żaden protokół komunikacji, który mógłby zostać przypadkowo złamany. Ich połączenie skutkuje dosyć stabilnymi wynikami, mimo przypadkowości akcji dokonywanych przez agenta StoppedClock.
+Agenci Distrustful oraz StoppedClock używają strategii, które dobrze ze~sobą współgrają. Zagrywane są~wyłącznie karty bezpieczne, a~pomiędzy graczami nie~istnieje żaden protokół komunikacji, który mógłby zostać przypadkowo złamany. Ich połączenie skutkuje dosyć stabilnymi wynikami, mimo przypadkowości akcji dokonywanych przez agenta StoppedClock.
 
 Jak można było przewidywać, protokół komunikacji agenta Trustful źle współgra z~graczami, którzy go~nie stosują: agent Distrustful udziela podpowiedzi, które są~nadinterpretowywane, co~prowadzi do~niepoprawnych zagrań. Problem potęguje~się, gdy drugim uczestnikiem rozgrywki jest agent Reinforced4 -~posługuje~się on~nietypową strategią, co~czasami prowadzi do~zaskakująco wysokich wyników, lecz w~większości przypadków kończy~się dezorientacją agenta Trustful i~szybką przegraną.
 
@@ -746,9 +753,9 @@ Połączenie agentów Distrustful oraz Reinforced4 daje ciekawy rezultat: mimo r
 	\label{fig:XY3}
 \end{figure}
 
-Nawet gdy w~grze z~agentami Trustful znajduje~się tylko jeden gracz, który łamie protokół komunikacji, losowe podpowiedzi prowadzą do~porażającej ilości szybkich porażek. Po~raz kolejny potwierdza~się fakt, że~agent Trustful nie~sprawdza~się w~potyczkach~XY: jego kooperacyjna strategia prowadzi do~powstawania błędnych przekonań, których inni agenci nie~są~w~stanie na~czas skorygować, by~zapobiec nieszczęściu.
+Nawet, gdy w~grze z~agentami Trustful znajduje~się tylko jeden gracz, który łamie zasady protokołu komunikacji, losowe podpowiedzi prowadzą do~porażającej ilości szybkich porażek. Po~raz kolejny potwierdza~się fakt, że~agent Trustful nie~sprawdza~się w~potyczkach~XY: jego kooperacyjna strategia prowadzi do~powstawania błędnych przekonań, których inni agenci nie~są~w~stanie na~czas skorygować, by~zapobiec nieszczęściu.
 
-Podobna, acz mniej ekstremalna sytuacja ma~miejsce, gdy dwóch agentów Trustful próbuje współpracować z~agentem Reinforced4. Rozumie on~część protokołu komunikacji, gdyż stosuje technikę podpowiadania pojedynczych kart, lecz nie~ma~pojęcia o~systemie obietnic. Często doprowadza to~do~wetowania kolejnych kart i~zmusza drugiego agenta Trustful do~udzielania dodatkowych informacji. Rozgrywki, w~których uczestniczy dwóch agentów Reinforced4 oraz jeden agent Trustful to~przypadek symetryczny, gdyż tym razem to~Trustful rozumie tylko część protokołu komunikacji.
+Podobna, chociaż mniej ekstremalna sytuacja ma~miejsce, gdy dwóch agentów Trustful próbuje współpracować z~agentem Reinforced4. Rozumie on~część protokołu komunikacji, gdyż stosuje technikę podpowiadania pojedynczych kart, lecz nie~ma~pojęcia o~systemie obietnic. Często doprowadza to~do~wetowania kolejnych kart i~zmusza drugiego agenta Trustful do~udzielania dodatkowych informacji. Rozgrywki, w~których uczestniczy dwóch agentów Reinforced4 oraz jeden agent Trustful to~przypadek symetryczny, gdyż tym razem to~Trustful rozumie tylko część protokołu komunikacji.
 
 Wymieszanie trzech różnych agentów okazuje~się nie~być tragiczne w~skutkach: w~porównaniu do~rozgrywki, w~której uczestniczyli wyłącznie Trustful oraz Reinforced4, dodatkowy gracz w~postaci agenta Distrustful pełni rolę arbitra, który balansuje niedobory w~przekazywanych informacjach.
 
@@ -762,7 +769,7 @@ Wymieszanie trzech różnych agentów okazuje~się nie~być tragiczne w~skutkach
 	\label{fig:XY4}
 \end{figure}
 
-Okazuje~się, że~nie~tylko dobór agentów, ale i~ich kolejność mogą mieć znaczenie dla przebiegu gry. Ustawienie agentów Trustful obok siebie skutkuje możliwością korekty obietnic, które zostały nieświadomie wystosowane przez pozostałych agentów uczestniczących w~rozgrywce. Ułożenie agentów naprzemiennie nie~pozwala na~zastosowanie tej części protokołu komunikacji, co~objawia się~niższymi wynikami, a~także większą niestabilnością uzyskiwanych wyników.
+Okazuje~się, że~nie~tylko dobór agentów, ale i~ich kolejność może mieć znaczenie dla przebiegu gry. Ustawienie agentów Trustful obok siebie skutkuje możliwością korekty obietnic, które zostały nieświadomie wystosowane przez pozostałych agentów uczestniczących w~rozgrywce. Ułożenie agentów naprzemiennie nie~pozwala na~zastosowanie tej części protokołu komunikacji, co~objawia się~niższymi wynikami, a~także większą niestabilnością uzyskiwanych wyników.
 
 Wraz ze~wzrostem liczby graczy, różnice pomiędzy protokołami komunikacji są~bardziej oczywiste -~nawet, gdy mają one pewne cechy wspólne. Zastąpienie jednego z~agentów Trustful na~Reinforced4 powoduje znaczne zwiększenie wariancji ilości uzyskiwanych punktów. Fenomen ten nie~występował w~partiach na~trzech graczy, gdzie wymiana Trustful-Reinforced4 skutkowała mało istotnymi zmianami.
 
@@ -780,7 +787,7 @@ Protokół komunikacji agenta Trustful został oparty o~nasze własne spostrzeż
 
 \chapter{Wnioski}
 
-Problem gry w~Hanabi to~złożone zagadnienie, które nie~bez powodu rozbudza ciekawość zarówno fascynatów gier planszowych, jak i~matematyków czy informatyków. Jego trudność można określić mianem interdyscyplinarnej: w~zależności od~obieranych technik rozwiązania, metodyka oraz sposób analizy postawionego problemu diametralnie się różnią. Stworzenie agentów sztucznej inteligencji, którzy potrafiliby grać w~Hanabi na~poziomie mistrzowskim, jest wyjątkowo skomplikowanym zadaniem, wymagającym zastosowania niestandardowych rozwiązań.
+Problem gry w~Hanabi to~złożone zagadnienie, które nie~bez powodu rozbudza ciekawość zarówno pasjonatów gier planszowych, jak i~matematyków czy informatyków. Jego trudność można określić mianem interdyscyplinarnej: w~zależności od~sposobu postawienia problemu, techniki jego analizy oraz rozwiązania diametralnie~się różnią. Stworzenie agentów sztucznej inteligencji, którzy potrafiliby grać w~Hanabi na~poziomie mistrzowskim, jest wyjątkowo skomplikowanym zadaniem, wymagającym zastosowania niestandardowych rozwiązań.
 
 Zaprezentowani agenci sztucznej inteligencji nie~osiągnęli wyników, które mogłyby konkurować z~programami wykorzystującymi złożone obliczeniowo techniki. Stanowią oni jednak dowód możliwości tworzenia szybkich i~skutecznych rozwiązań zawiłych problemów algorytmicznych, korzystających nie~z~kolosalnej mocy współczesnych komputerów, lecz~dobrej znajomości zadania, z~którym dane jest~się nam mierzyć.
 
