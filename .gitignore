@@ -1,5 +1,8 @@
 # MacOS-specific
-.DS_Store
+**/.DS_Store
+
+# Texpad-specific
+**/.texpadtmp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -57,12 +57,12 @@ optimizer = bayes_opt.BayesianOptimization(
     random_state=1,
 )
 
-load_logs(optimizer, logs=["./logs4.json"])
+load_logs(optimizer, logs=["./logs.json"])
 #logger1 = JSONLogger(path="./logs4.json")
 #optimizer.subscribe(Events.OPTMIZATION_STEP, logger1)
 
 print("New optimizer is now aware of {} points.".format(len(optimizer.space)))
-#optimizer.maximize(
+# optimizer.maximize(
 #    init_points=0,
 #    n_iter=2000,
 #)
