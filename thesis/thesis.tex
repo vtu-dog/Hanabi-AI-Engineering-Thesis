@@ -1,18 +1,17 @@
 \documentclass[declaration,shortabstract,inz]{iithesis}
 
-\polishtitle    {Badanie gier kooperacyjnych z niepełną\fmlinebreak informacją na przykładzie gry Hanabi}
-\englishtitle   {A study on cooperative games with incomplete\fmlinebreak information based on the game of Hanabi}
+\polishtitle{Badanie gier kooperacyjnych z niepełną\fmlinebreak informacją na przykładzie gry Hanabi}
+\englishtitle{A study on cooperative games with incomplete\fmlinebreak information based on the game of Hanabi}
+
+
 \polishabstract {\ldots}
 \englishabstract{\ldots}
-\author         {Wojciech Jarząbek \and
-				Jacek Leja}
-\advisor        {dr Paweł Rychlikowski}
-\date          {\today}                     % Data zlozenia pracy
-% Dane do oswiadczenia o autorskim wykonaniu
-%\transcriptnum {}                     % Numer indeksu
-%\advisorgen    {dr. Pawła Rychlikowskiego} % Nazwisko promotora w dopelniaczu
-%%%%%
 
+
+\author{Wojciech Jarząbek\and Jacek Leja}
+\advisor{dr Paweł Rychlikowski}
+\date{\today}
+% Data zlozenia pracy
 
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
@@ -824,7 +823,7 @@ Należy otworzyć jedną z~powłok systemu Unix (przykładowo: bash, zsh), a~na
 
 \subsection{Inne systemy operacyjne}
 
-Należy zainstalować biblioteki \emph{bayesian-optimization} oraz \emph{Kivy}$\footnote{Instrukcja instalacji: \href{https://kivy.org/doc/stable/gettingstarted/installation.html}{\textbf{link}} (term. wiz. 30.01.2020)}$. Instalacji pierwszej z~nich można dokonać poprzez wykonanie w~powłoce systemowej następującej komendy:
+Należy zainstalować biblioteki \emph{bayesian-optimization} oraz \emph{Kivy}$\footnote{Instrukcja instalacji biblioteki Kivy: \href{https://kivy.org/doc/stable/gettingstarted/installation.html}{\textbf{link}} (term. wiz. 30.01.2020)}$. Instalacji pierwszej z~nich można dokonać poprzez wykonanie w~powłoce systemowej następującej komendy:
 \begin{verbatim}
     $ python3 -m pip install bayesian-optimization
 \end{verbatim}
@@ -837,6 +836,15 @@ Aby uruchomić graficzny interfejs użytkownika, należy otworzyć powłokę s
 \end{verbatim}
 
 \noindent Spowoduje to~pojawienie się~menu wyboru agentów, które pozwala na~rozpoczęcie nowej rozgrywki w~Hanabi.
+
+\section{Dodatkowe funkcje}
+
+Główny katalog projektu zawiera programy, które pozwalają na~kontynuowanie jego rozwoju, a~także powtórzenie przeprowadzonych eksperymentów:
+\begin{itemize}
+	\item Aby rozpocząć proces uczenia własnego agenta Reinforced, wystarczy uruchomić plik o~nazwie $learning\_example.py$.
+	\item Program odpowiedzialny za~optymalizację hiperparametrów metodą bayesowską zawarty jest w~pliku $bayesian\_optimization.py$.
+	\item Wyniki eksperymentów dokonywanych na~agentach można znaleźć w~notatniku $benchmark.ipynb$. Do otworzenia pliku potrzebne będzie zainstalowanie programu Jupyter Notebook$\footnote{Instrukcja instalacji programu Jupyter Notebook: \href{https://jupyter.org/install}{\textbf{link}} (term. wiz. 30.01.2020)}$.
+\end{itemize}
 
 \begin{thebibliography}{4}
 
