@@ -4,7 +4,7 @@
 \englishtitle{A study on cooperative games with incomplete\fmlinebreak information based on the game of Hanabi}
 
 
-\polishabstract {Od początku ery komputerów, gry planszowe były używane do~testowania limitów sztucznej inteligencji. W~ostatnich latach nadzwyczajną popularność, zarówno w~środowiskach pasjonatów gier planszowych, jak i~badaczy akademickich, zyskało Hanabi -~w~pełni kooperacyjna gra karciana z~niepełną informacją, którą można określić mianem ``kooperacyjnego pasjansa''. W~poniższej pracy przedstawiamy różnorodne metody tworzenia agentów grających w~Hanabi, którzy, przy surowych ograniczeniach na~czas wykonania ruchu, byliby zdolni do~gry na~poziomie ludzkiego gracza. W~tym celu zaimplementowaliśmy siedmiu agentów regułowych o~różnych stopniach zaawansowania wdrażanych strategii oraz agenta, który potrafi nauczyć~się gry bez ingerencji człowieka. Sprawdziliśmy także, w~jaki sposób strategie agentów wzajemnie na~siebie oddziałują. Badania empiryczne wykazały, że~stworzeni agenci potrafią grać na~poziomie zbliżonym do~ludzkiego, bez konieczności poświęcania wysokich nakładów mocy obliczeniowej. Pokazaliśmy również skuteczność metod uczących, które pozwoliły korzystającemu z~nich agentowi na~samoistne wypracowanie efektywnej strategii, osiągającej wyniki zbliżone do~tych osiąganych przez ludzi. Aby ułatwić dalszą analizę zagadnienia, a~także umożliwić grę ze~stworzonymi agentami, wykonaliśmy graficzny interfejs użytkownika. Praca stawia podwaliny pod dalsze rozwinięcie problematyki wysokopoziomowej gry w~Hanabi z~ograniczeniami czasowymi i~stanowi funkcjonalny prototyp.}
+\polishabstract {Od początku ery komputerów, gry planszowe były używane do~testowania limitów sztucznej inteligencji. W~ostatnich latach nadzwyczajną popularność, zarówno w~środowiskach pasjonatów gier planszowych, jak i~badaczy akademickich, zyskało Hanabi -~w~pełni kooperacyjna gra karciana z~niepełną informacją, którą można określić mianem ``kooperacyjnego pasjansa''. W~poniższej pracy przedstawiamy różnorodne metody tworzenia agentów grających w~Hanabi, którzy, przy surowych ograniczeniach na~czas wykonania ruchu, byliby zdolni do~gry na~poziomie ludzkiego gracza. W~tym celu zaimplementowaliśmy siedmiu agentów regułowych o~różnych stopniach zaawansowania wdrażanych strategii oraz agenta, który potrafi nauczyć~się gry bez ingerencji człowieka. Sprawdziliśmy także, w~jaki sposób strategie agentów wzajemnie na~siebie oddziałują. Badania empiryczne wykazały, że~stworzeni agenci potrafią grać na~poziomie zbliżonym do~ludzkiego, bez konieczności poświęcania wysokich nakładów mocy obliczeniowej. Pokazaliśmy również skuteczność metod uczących, które pozwoliły korzystającemu z~nich agentowi na~samoistne wypracowanie efektywnej strategii, osiągającej wyniki zbliżone do~tych uzyskiwanych przez ludzi. Aby ułatwić dalszą analizę zagadnienia, a~także umożliwić grę ze~stworzonymi agentami, wykonaliśmy graficzny interfejs użytkownika. Praca daje podstawy do~rozwijania problematyki wysokopoziomowej gry w~Hanabi z~ograniczeniami czasowymi i~stanowi funkcjonalny prototyp.}
 %\englishabstract{\ldots}
 
 
@@ -719,7 +719,7 @@ W~przypadku agenta Reinforced4, wypracowana strategia jest znacznie mniej podatn
 
 \section{Dwa oblicza drużyn Hanabi}
 
-Prezentowanie możliwości dotychczas przedstawionych agentów polegało na~umieszczaniu ich w~homogenicznych środowiskach, na~które składało~się wiele kopii jednego agenta. Gwarantowało to, że~wszyscy uczestnicy rozgrywki posiadali jednolitą strategię. W~naturalny sposób nasuwa~się pytanie: co~może~się wydarzyć, kiedy do~partii zasiądą gracze o~różnych schematach działania?
+Prezentowanie możliwości dotychczas przedstawionych agentów polegało na~pomyśle umieszczania ich w~homogenicznych środowiskach, na~które składało~się wiele kopii jednego agenta. Gwarantowało to, że~wszyscy uczestnicy rozgrywki posiadali jednolitą strategię. W~naturalny sposób nasuwa~się pytanie: co~może~się wydarzyć, kiedy do~partii zasiądą gracze o~różnych schematach działania?
 
 Rozgrywki mieszane, znane także jako potyczki XY, stanowią ciekawy problem w~kontekście sztucznej inteligencji grającej w~Hanabi, gdyż wymagają pogodzenia dwóch antytecznych konceptów: konieczności współpracy oraz braku wspólnego planu działania. Niepewność poczynań innych graczy zmienia problematykę całej gry: implicytna komunikacja staje~się niemożliwa, a~gracze w~każdej chwili mogą wykonać akcje, które nie mają sensu z~punktu widzenia współuczestników rozgrywki, co~skutecznie paraliżuje większość strategii. Dobrym sposobem na~uzyskanie wysokich wyników nie~jest już kooperacja, a~maksymalne ograniczenie zaufania do~innych graczy. W~przypadku agentów sztucznej inteligencji, którzy nie~potrafią dostosowywać~się do~zmieniających warunków tak, jak robią to~ludzie, zredefiniowanie formuły rozgrywki może prowadzić do~zaskakujących rezultatów.
 
@@ -739,7 +739,7 @@ Przeprowadziliśmy testy rozgrywek, w~których gracze występowali w~różnych k
 
 Agenci Distrustful oraz StoppedClock używają strategii, które dobrze ze~sobą współgrają. Zagrywane są~wyłącznie karty bezpieczne, a~pomiędzy graczami nie~istnieje żaden protokół komunikacji, który mógłby zostać przypadkowo złamany. Ich połączenie skutkuje dosyć stabilnymi wynikami, mimo przypadkowości akcji dokonywanych przez agenta StoppedClock.
 
-Jak można było przewidywać, protokół komunikacji agenta Trustful źle współgra z~graczami, którzy go~nie stosują: agent Distrustful udziela podpowiedzi, które są~nadinterpretowywane, co~prowadzi do~niepoprawnych zagrań. Problem potęguje~się, gdy drugim uczestnikiem rozgrywki jest agent Reinforced4 -~posługuje~się on~nietypową strategią, co~czasami prowadzi do~zaskakująco wysokich wyników, lecz w~większości przypadków kończy~się dezorientacją agenta Trustful i~szybką przegraną.
+Jak można było przewidywać, protokół komunikacji agenta Trustful źle współgra z~graczami, którzy go~nie stosują: agent Distrustful udziela podpowiedzi, które są~nadinterpretowywane przez Trustful, co~prowadzi do~niepoprawnych zagrań. Problem potęguje~się, gdy drugim uczestnikiem rozgrywki jest agent Reinforced4 -~posługuje~się on~nietypową strategią, co~czasami prowadzi do~zaskakująco wysokich wyników, lecz w~większości przypadków kończy~się dezorientacją agenta Trustful i~szybką przegraną.
 
 Połączenie agentów Distrustful oraz Reinforced4 daje ciekawy rezultat: mimo różnych strategii, średnia osiąganych wyników oscyluje blisko osiągów agenta Distrustful. Zachowanie Reinforced4, z~powodu braku innych graczy, którzy rozumieliby implicytne informacje, zdegenerowało~się do~poziomu bliskiego agentowi Distrustful.
 
@@ -757,7 +757,7 @@ Nawet, gdy w~grze z~agentami Trustful znajduje~się tylko jeden gracz, który ł
 
 Podobna, chociaż mniej ekstremalna sytuacja ma~miejsce, gdy dwóch agentów Trustful próbuje współpracować z~agentem Reinforced4. Rozumie on~część protokołu komunikacji, gdyż stosuje technikę podpowiadania pojedynczych kart, lecz nie~ma~pojęcia o~systemie obietnic. Często doprowadza to~do~wetowania kolejnych kart i~zmusza drugiego agenta Trustful do~udzielania dodatkowych informacji. Rozgrywki, w~których uczestniczy dwóch agentów Reinforced4 oraz jeden agent Trustful to~przypadek symetryczny, gdyż tym razem to~Trustful rozumie tylko część protokołu komunikacji.
 
-Wymieszanie trzech różnych agentów okazuje~się nie~być tragiczne w~skutkach: w~porównaniu do~rozgrywki, w~której uczestniczyli wyłącznie Trustful oraz Reinforced4, dodatkowy gracz w~postaci agenta Distrustful pełni rolę arbitra, który balansuje niedobory w~przekazywanych informacjach.
+Wymieszanie trzech różnych agentów okazuje~się nie~być tragiczne w~skutkach: w~porównaniu do~rozgrywki na~dwóch graczy, w~której uczestniczyli wyłącznie Trustful oraz Reinforced4, dodatkowy gracz w~postaci agenta Distrustful pełni rolę arbitra, który balansuje niedobory w~przekazywanych informacjach.
 
 \subsection*{Partie na czterech graczy}
 
@@ -771,11 +771,11 @@ Wymieszanie trzech różnych agentów okazuje~się nie~być tragiczne w~skutkach
 
 Okazuje~się, że~nie~tylko dobór agentów, ale i~ich kolejność może mieć znaczenie dla przebiegu gry. Ustawienie agentów Trustful obok siebie skutkuje możliwością korekty obietnic, które zostały nieświadomie wystosowane przez pozostałych agentów uczestniczących w~rozgrywce. Ułożenie agentów naprzemiennie nie~pozwala na~zastosowanie tej części protokołu komunikacji, co~objawia się~niższymi wynikami, a~także większą niestabilnością uzyskiwanych wyników.
 
-Wraz ze~wzrostem liczby graczy, różnice pomiędzy protokołami komunikacji są~bardziej oczywiste -~nawet, gdy mają one pewne cechy wspólne. Zastąpienie jednego z~agentów Trustful na~Reinforced4 powoduje znaczne zwiększenie wariancji ilości uzyskiwanych punktów. Fenomen ten nie~występował w~partiach na~trzech graczy, gdzie wymiana Trustful-Reinforced4 skutkowała mało istotnymi zmianami.
+Wraz ze~wzrostem liczby graczy, różnice pomiędzy protokołami komunikacji są~bardziej oczywiste -~nawet, gdy mają one pewne cechy wspólne. Zastąpienie jednego z~agentów Trustful przez~Reinforced4 powoduje znaczne zwiększenie wariancji ilości uzyskiwanych punktów. Fenomen ten nie~występował w~partiach na~trzech graczy, gdzie wymiana Trustful-Reinforced4 skutkowała mało istotnymi zmianami.
 
 \subsection*{Podsumowanie}
 
-Agenci, którzy wykorzystują wysublimowane strategie, są~w~znacznie większym stopniu podatni na~niekorzystne sytuacje, wynikające ze~specyfiki mieszanych rozgrywek. W~potyczkach~XY największą stabilność uzyskują strategie, które bazują swoje akcje na~wnioskowaniu i~nie polegają na~sygnałach od~innych graczy.
+Agenci, którzy wykorzystują wysublimowane strategie, są~w~znacznie większym stopniu podatni na~niekorzystne sytuacje, wynikające ze~specyfiki mieszanych rozgrywek. W~potyczkach~XY największą stabilność uzyskują strategie bazowane na~wnioskowaniu, które nie~polegają na~sygnałach od~innych graczy.
 
 \chapter{Dalsze badania}
 
