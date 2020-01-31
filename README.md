@@ -1,7 +1,7 @@
 # Hanabi-AI-Engineering-Thesis
 A study on cooperative games with incomplete information based on the game of Hanabi
 
-![GUI](./thesis/img/GUI.png)
+![GUI](./thesis/img/gui.png)
 
 ## Running the project
 You'll need to install Kivy (instructions can be found [here](https://kivy.org/doc/stable/gettingstarted/installation.html)). After doing so, just type `$ python3 hanabi.py`. Enjoy the game!
