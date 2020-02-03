@@ -11,7 +11,7 @@ random_action = 0.01
 exploration_param = math.sqrt(2)
 
 
-class Reinforced(BasePlayer):
+class Reinforced:
     def __init__(self, *args):
         super(Reinforced, self).__init__(*args)
         self.name = 'Reinforced'

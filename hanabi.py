@@ -278,6 +278,10 @@ class Card(Image):
             else:
                 self.tint(set_card=True)
 
+    def reveal(self):
+        self.full_info = True
+        self.update()
+
     def update(self, board=False, last_card=False):
         if not last_card:
             if board:
@@ -376,6 +380,10 @@ class Hand(BoxLayout):
         for c in self.cards:
             c.untint()
 
+    def reveal(self):
+        for c in self.cards:
+            c.reveal()
+
 
 class PlayerGrid(BoxLayout):
     def __init__(self, **kwargs):
@@ -462,6 +470,9 @@ class Human(BoxLayout):
 
     def untint_all(self):
         self.hand.untint_all()
+
+    def reveal(self):
+        self.hand.reveal()
 
     def update(self):
         self.hand.update()
@@ -670,6 +681,7 @@ class HanabiGame(BoxLayout):
             self.human.set_tintable()
             self.human.untint_all()
             self.human.set_untintable()
+            self.human.reveal()
             self.players.set_tintable()
             self.players.untint_all()
             self.players.set_untintable()
