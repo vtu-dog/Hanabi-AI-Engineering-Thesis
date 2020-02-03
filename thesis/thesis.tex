@@ -50,9 +50,9 @@ Niniejsza praca ma~na~celu zbadanie Hanabi jako gry kooperacyjnej z~niepełną i
 \begin{figure}[ht!]
 	\centering
 	\captionsetup{format=hang}
-	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{GUI.png}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{gui.png}
 	\caption[Caption]{Interfejs graficzny do gry Hanabi, utworzony na potrzeby projektu (twórca grafik: Jakub Podwysocki)}
-	\label{fig:GUI}
+	\label{fig:gui}
 \end{figure}
 
 \section{Wyjaśnienie zasad}
@@ -128,7 +128,7 @@ Niestety, taki sposób gry całkowicie zawodzi, gdy jeden z~graczy wyłamie~się
 
 \chapter{Funkcjonalna realizacja SI}
 
-W~celu zbadania zaprezentowanych sposobów tworzenia sztucznej inteligencji, która potrafiłaby grać w~Hanabi, zaimplementowaliśmy dziewięciu agentów. Aby umożliwić testowanie ich możliwości, opracowaliśmy także graficzny interfejs (patrz: \hyperref[fig:GUI]{Rysunek 2.1}), pozwalający użytkownikowi na~aktywne uczestnictwo w~rozgrywce, złożonej z~dowolnie dobranego przez niego składu graczy komputerowych.
+W~celu zbadania zaprezentowanych sposobów tworzenia sztucznej inteligencji, która potrafiłaby grać w~Hanabi, zaimplementowaliśmy dziewięciu agentów. Aby umożliwić testowanie ich możliwości, opracowaliśmy także graficzny interfejs (patrz: \hyperref[fig:gui]{Rysunek 2.1}), pozwalający użytkownikowi na~aktywne uczestnictwo w~rozgrywce, złożonej z~dowolnie dobranego przez niego składu graczy komputerowych.
 
 Siedmiu agentów jest opartych o~systemy regułowe, różniące~się stopniem zaawansowania wdrażanych strategii. Aby usprawnić działanie jednego z~agentów regułowych, użyliśmy bayesowskiej metody optymalizacji hiperparametrów, korzystającej z~procesów gaussowskich. Ostatni z~zaprezentowanych agentów stosuje algorytm uczący ze~wzmocnieniem, oparty o~funkcje heurystyczne generalizujące stan gry, wspomagane procesami decyzyjnymi Monte Carlo.
 
@@ -586,7 +586,7 @@ Bayesowska metoda optymalizacji oparta o~procesy gaussowskie polega na~stworzeni
 	\label{fig:BayesianTrustful}
 \end{figure}
 
-Maksymalizowana była funkcja o~27 parametrach, odpowiadających wagom używanym w~funkcjach heurystycznych. Jej wartość w~punkcie została zdefiniowana jako średnia arytmetyczna wyników uzyskanych na~przestrzeni 20~niezależnych rozgrywek czteroosobowych.
+Maksymalizowana była funkcja o~27 parametrach, odpowiadających wagom używanym w~funkcjach heurystycznych. Jej wartość w~punkcie została zdefiniowana jako średnia arytmetyczna wyników uzyskanych na~przestrzeni 20~niezależnych rozgrywek czteroosobowych. Proces optymalizacji zajął około 50~godzin.
 
 Algorytm optymalizujący, po~zbadaniu kilku tysięcy próbek, znalazł nowy zestaw parametrów. Przeprowadzone testy wskazują na~niewielki wzrost średniej ilości punktów dla grup trzech, czterech i~pięciu graczy, kosztem zwiększonej wariancji. Ponieważ agent Trustful nie~był projektowany do~przeprowadzania rozgrywek dwuosobowych, lepsze dostosowanie wag, które pomagają przy bardziej licznych grupach, pogrąża strategię dla dwóch graczy.
 
@@ -708,6 +708,45 @@ Agent Reinforced2, który trenował granie partii dwuosobowych, osiąga w~nich n
 
 W~przypadku agenta Reinforced4, wypracowana strategia jest znacznie mniej podatna na~zmiany w~liczbie graczy. Choć agent nie~osiąga w~partiach dwuosobowych wyników, które pozwoliłyby mu~konkurować z~bliźniaczym algorytmem, pokonuje w~nich pozostałych agentów, którzy nie~oszukują. W~pozostałych testach sytuuje~się on~pomiędzy agentami Distrustful a~Trustful, jednocześnie wyróżniając~się bardzo wysoką stabilnością wdrażanych strategii.
 
+\chapter{Podsumowanie wyników agentów}
+ 
+\begin{table}[H]
+	\centering
+	\captionsetup{format=hang}
+	\begin{tabular}{ r|c|c|c|c| }		
+ 		\multicolumn{1}{r}{}		
+ 		 & \multicolumn{1}{c}{2 graczy}		
+ 		 & \multicolumn{1}{c}{3 graczy}		
+ 		 & \multicolumn{1}{c}{4 graczy}		
+ 		 & \multicolumn{1}{c}{5 graczy} \\		
+ 		\cline{2-5}		
+ 		Cheater & 20.5 (2.59) & 22.27 (2.04) & 21.73 (2.07) & 21.94 (2.0) \\		
+ 		\cline{2-5}		
+ 		SmartCheater & 24.72 (0.79) & 24.91 (0.41) & 24.89 (0.41) & 24.85 (0.44) \\		
+ 		\cline{2-5}		
+ 		Erratic & 1.45 (1.5) & 1.32 (1.39) & 1.3 (1.36) & 1.34 (1.34) \\
+ 		\cline{2-5}		
+ 		StoppedClock & 5.74 (2.62) & 6.25 (2.2) & 5.31 (1.91) & 4.51 (1.69) \\
+ 		\cline{2-5}		
+ 		SimpleDistrustful & 13.37 (3.0) & 15.48 (1.3) & 15.06 (1.09) & 14.02 (1.0) \\
+ 		\cline{2-5}		
+ 		Distrustful & 17.52 (1.71) & 16.49 (1.13) & 15.72 (1.03) & 14.46 (0.95) \\
+ 		\cline{2-5}		
+ 		Trustful & 17.94 (3.41) & 20.39 (1.69) & 20.43 (1.67) & 19.03 (1.61) \\
+ 		\cline{2-5}		
+ 		BayesianTrustful & 17.36 (3.81) & $\textbf{20.46 (2.02)}$ & $\textbf{20.65 (1.72)}$ & $\textbf{19.3 (1.66)}$ \\
+ 		\cline{2-5}		
+ 		Reinforced2 & $\textbf{18.94 (2.12)}$ & 17.84 (1.62) & 16.04 (2.53) & 13.92 (1.89) \\
+ 		\cline{2-5}		
+ 		Reinforced4 & 17.94 (3.09) & 19.03 (1.37) & 18.69 (1.41) & 17.42 (1.29) \\
+ 		\cline{2-5}		
+ 	\end{tabular}		
+ 	\caption{Średnia wyników agentów sztucznej inteligencji (rozmiar każdej z~prób: 1000 gier). W~nawiasach podano odchylenie standardowe. Najlepsze wyniki zostały pogrubione.}		
+ 	\label{table:summary}		
+ \end{table}
+ 
+ Agent BayesianTrustful uzyskał aż~trzy z~czterech najwyższych średnich punktowych wśród agentów, którzy nie~oszukują. Lepszym wyborem do~partii na trzech graczy byłby jednak agent Trustful -~choć jego wynik jest nieco niższy, różnica w~odchyleniu standardowym jest na~tyle znacząca, by~móc chcieć go~wybrać ponad BayesianTrustful w~celu uzyskania stabilniejszego przebiegu rozgrywki.
+
 \chapter{Niestandardowe modele rozgrywki}
 
 \section{Dwa oblicza drużyn Hanabi}
@@ -766,9 +805,21 @@ Okazuje~się, że~nie~tylko dobór agentów, ale i~ich kolejność może mieć z
 
 Wraz ze~wzrostem liczby graczy, różnice pomiędzy protokołami komunikacji są~bardziej oczywiste -~nawet, gdy mają one pewne cechy wspólne. Zastąpienie jednego z~agentów Trustful przez~Reinforced4 powoduje znaczne zwiększenie wariancji ilości uzyskiwanych punktów. Fenomen ten nie~występował w~partiach na~trzech graczy, gdzie wymiana Trustful-Reinforced4 skutkowała mało istotnymi zmianami.
 
-\subsection*{Podsumowanie}
+\section{Podsumowanie}
 
-Agenci, którzy wykorzystują wysublimowane strategie, są~w~znacznie większym stopniu podatni na~niekorzystne sytuacje, wynikające ze~specyfiki mieszanych rozgrywek. W~potyczkach~XY największą stabilność uzyskują strategie bazowane na~wnioskowaniu, które nie~polegają na~sygnałach od~innych graczy.
+Agenci, którzy wykorzystują wysublimowane strategie, są~w~znacznie większym stopniu podatni na~niekorzystne sytuacje, wynikające ze~specyfiki mieszanych rozgrywek. W~potyczkach~XY największą stabilność uzyskują strategie bazowane na~wnioskowaniu, które nie~polegają na~sygnałach od~innych graczy. Potwierdzają to~zarówno wyniki eksperymentów, jak i~badania nad drużynami ad-hoc w~Hanabi, przeprowadzone w~pracy pt. \textit{``Diverse Agents for Ad-Hoc Cooperation in Hanabi''}\cite{AdHoc}.
+
+\bigskip
+
+\begin{figure}[H]
+	\centering
+	\captionsetup{format=hang}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{ad-hoc.png}
+	\caption[Caption]{Średnie wyniki agentów o~zadanych parametrach Communicativeness (komunikatywność) oraz Risk Aversion (unikanie ryzyka). Badanie było przeprowadzone poprzez uśrednienie wyników serii rozgrywek dwusobowych (rozmiar każdej z~prób: 1000 gier), w~których drugi z~graczy był wybierany z~puli 326 agentów o~pozostałych kombinacjach parametrów. Źródło: \cite{AdHoc}}
+	\label{fig:ad-hoc}
+\end{figure}
+
+W~drużynach ad-hoc premiowana jest wyważona strategia. Agenci osiągają znacznie lepsze wyniki, gdy unikają ryzyka, lecz nie mogą robić tego kosztem ograniczania komunikacji -~Hanabi, z~racji bycia grą kooperacyjną, wymaga pewnej formy współpracy. Rozgrywki mieszane zmuszają nie~do~maksymalizacji wyników, a~minimalizacji możliwych do~poniesienia strat. Aby nie~pozwolić współuczestnikom rozgrywki na~popełnianie tragicznych w~skutkach błędów, należy ich kierować ku~dobrym zagraniom, jednocześnie na~pierwszym miejscu stawiając swoje poczynania. Najlepszym sposobem na~uzyskiwanie wysokich wyników jest ograniczona współpraca, która zakłada, że~inni gracze mogą wykonywać akcje sprzeczne z~przyjętą logiką.
 
 \chapter{Wnioski}
 
@@ -823,7 +874,7 @@ Należy otworzyć jedną z~powłok systemu Unix (przykładowo: bash, zsh), a~na
 
 \subsection{Inne systemy operacyjne}
 
-Należy zainstalować biblioteki \emph{bayesian-optimization} oraz \emph{Kivy}$\footnote{Instrukcja instalacji biblioteki Kivy: \href{https://kivy.org/doc/stable/gettingstarted/installation.html}{\textbf{link}} (term. wiz. 30.01.2020)}$. Instalacji pierwszej z~nich można dokonać poprzez wykonanie w~powłoce systemowej następującej komendy:
+Należy zainstalować biblioteki \emph{bayesian-optimization} oraz \emph{Kivy}$\footnote{Instrukcja instalacji biblioteki Kivy: \href{https://kivy.org/doc/stable/gettingstarted/installation.html}{\textbf{link}} (term. wiz. 03.02.2020)}$. Instalacji pierwszej z~nich można dokonać poprzez wykonanie w~powłoce systemowej następującej komendy:
 \begin{verbatim}
     $ python3 -m pip install bayesian-optimization
 \end{verbatim}
@@ -843,34 +894,37 @@ Główny katalog projektu zawiera programy, które pozwalają na~kontynuowanie j
 \begin{itemize}
 	\item Aby rozpocząć proces uczenia własnego agenta Reinforced, wystarczy uruchomić plik o~nazwie $learning\_example.py$.
 	\item Program odpowiedzialny za~optymalizację hiperparametrów metodą bayesowską zawarty jest w~pliku $bayesian\_optimization.py$.
-	\item Wyniki eksperymentów dokonywanych na~agentach można znaleźć w~notatniku $benchmark.ipynb$. Do otworzenia pliku potrzebne będzie zainstalowanie programu Jupyter Notebook$\footnote{Instrukcja instalacji programu Jupyter Notebook: \href{https://jupyter.org/install}{\textbf{link}} (term. wiz. 30.01.2020)}$.
+	\item Wyniki eksperymentów dokonywanych na~agentach można znaleźć w~notatniku $benchmark.ipynb$. Do otworzenia pliku potrzebne będzie zainstalowanie programu Jupyter Notebook$\footnote{Instrukcja instalacji programu Jupyter Notebook: \href{https://jupyter.org/install}{\textbf{link}} (term. wiz. 03.02.2020)}$.
 \end{itemize}
 
 \begin{thebibliography}{4}
 
 \bibitem{DeepBlue} M. Campbell, A. J. Hoane Jr., F. Hsu, \textit{Deep Blue}, 2002. URL: 
-\href{https://core.ac.uk/download/pdf/82416379.pdf}{\textbf{link}} (term. wiz. 30.01.2020)
+\href{https://core.ac.uk/download/pdf/82416379.pdf}{\textbf{link}} (term. wiz. 03.02.2020)
 
 \bibitem{NP-Complete} J.-F Baffier i in., \textit{Hanabi is NP-complete, Even for Cheaters who Look at Their Cards}, 2017. URL: 
-\href{https://arxiv.org/pdf/1603.01911.pdf}{\textbf{link}} (term. wiz. 30.01.2020)
+\href{https://arxiv.org/pdf/1603.01911.pdf}{\textbf{link}} (term. wiz. 03.02.2020)
 
 \bibitem{MCTS} A. Lerer, H. Hu, J. Foerster, N. Brown, \textit{Building AI that can master complex cooperative games with hidden information}, 2019. URL: 
-\href{https://ai.facebook.com/blog/building-ai-that-can-master-complex-cooperative-games-with-hidden-information/}{\textbf{link}} (term. wiz. 30.01.2020)
+\href{https://ai.facebook.com/blog/building-ai-that-can-master-complex-cooperative-games-with-hidden-information/}{\textbf{link}} (term. wiz. 03.02.2020)
 
 \bibitem{Mario} T. Murphy, \textit{The First Level of Super Mario Bros. is Easy with Lexicographic Orderings and Time Travel $\ldots$after that it gets a little tricky.}, 2013. URL: 
-\href{http://www.cs.cmu.edu/~tom7/mario/mario.pdf}{\textbf{link}} (term. wiz. 30.01.2020)
+\href{http://www.cs.cmu.edu/~tom7/mario/mario.pdf}{\textbf{link}} (term. wiz. 03.02.2020)
 
 \bibitem{HatPlayer} B. Bouzy, \textit{Playing Hanabi Near-Optimally}, 2017. URL: 
-\href{http://helios.mi.parisdescartes.fr/~bouzy/publications/bouzy-hanabi-2017.pdf}{\textbf{link}} (term. wiz. 30.01.2020)
+\href{http://helios.mi.parisdescartes.fr/~bouzy/publications/bouzy-hanabi-2017.pdf}{\textbf{link}} (term. wiz. 03.02.2020)
 
 \bibitem{Gauss} Fernando Pérez-Cruz i in., \textit{Gaussian Processes for Nonlinear Signal Processing: An Overview of Recent Advances}, 2013. URL: 
-\href{https://www.researchgate.net/publication/260637079_Gaussian_Processes_for_Nonlinear_Signal_Processing_An_Overview_of_Recent_Advances}{\textbf{link}} (term. wiz. 30.01.2020)
+\href{https://www.researchgate.net/publication/260637079_Gaussian_Processes_for_Nonlinear_Signal_Processing_An_Overview_of_Recent_Advances}{\textbf{link}} (term. wiz. 03.02.2020)
 
 \bibitem{UCT} L. Kocsis, C. Szepesvári, \textit{Bandit Based Monte-Carlo Planning}, 2006. URL: 
-\href{https://link.springer.com/content/pdf/10.1007/11871842_29.pdf}{\textbf{link}} (term. wiz. 30.01.2020)
+\href{https://link.springer.com/content/pdf/10.1007/11871842_29.pdf}{\textbf{link}} (term. wiz. 03.02.2020)
+
+\bibitem{AdHoc} R. Canaan i in., \textit{Diverse Agents for Ad-Hoc Cooperation in Hanabi}, 2019. URL: 
+\href{https://arxiv.org/pdf/1907.03840.pdf}{\textbf{link}} (term. wiz. 03.02.2020)
 
 \bibitem{OurInspiration} N. Bard i in., \textit{The Hanabi Challenge: A New Frontier for AI Research}, 2019. URL: 
-\href{https://arxiv.org/pdf/1902.00506.pdf}{\textbf{link}} (term. wiz. 30.01.2020)
+\href{https://arxiv.org/pdf/1902.00506.pdf}{\textbf{link}} (term. wiz. 03.02.2020)
 
 \end{thebibliography}
 
