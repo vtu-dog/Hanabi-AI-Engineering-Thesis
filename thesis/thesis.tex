@@ -576,21 +576,41 @@ Proces gaussowski to proces stochastyczny, który pozwala na~określenie łączn
 
 Bayesowska metoda optymalizacji oparta o~procesy gaussowskie polega na~stworzeniu rozkładu $\textit{a priori}$ funkcji, której maksimum szukamy, a~następnie próbkowaniu jej. Nowe obserwacje pozwalają na~aktualizację prawdopodobieństw $\textit{a posteriori}$. Wraz ze~wzrostem ilości obserwacji przekonania algorytmu ulegają zmianie, a~ponieważ proces gaussowski pozwala na~identyfikację tych części funkcji, które najbardziej wymagają większej ilości obserwacji, metoda ta~minimalizuje ilość próbkowań, potrzebnych do~dalszych rozważań.
 
+Maksymalizowana była funkcja o~27 parametrach, odpowiadających wagom używanym w~funkcjach heurystycznych. Jej wartość w~punkcie została zdefiniowana jako średnia arytmetyczna wyników uzyskanych na~przestrzeni 20~niezależnych rozgrywek. Proces optymalizacji zajął około 50~godzin.
+
 \subsection*{Osiągi}
+
+Aby porównać efekty optymalizacji, stworzyliśmy agentów BayesianTrustful2 oraz BayesianTrustful4, którzy przeprowadzali odpowiednio rozgrywki dwuosobowe i~czteroosobowe.
 
 \begin{figure}[H]
 	\centering
 	\captionsetup{format=hang}
-	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{BayesianTrustful.png}
-	\caption[Caption]{Wyniki agenta BayesianTrustful (rozmiar próby: 1000 gier)}
-	\label{fig:BayesianTrustful}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{BayesianTrustful2.png}
+	\caption[Caption]{Wyniki agenta BayesianTrustful2 (rozmiar próby: 1000 gier)}
+	\label{fig:BayesianTrustful2}
 \end{figure}
 
-Maksymalizowana była funkcja o~27 parametrach, odpowiadających wagom używanym w~funkcjach heurystycznych. Jej wartość w~punkcie została zdefiniowana jako średnia arytmetyczna wyników uzyskanych na~przestrzeni 20~niezależnych rozgrywek czteroosobowych. Proces optymalizacji zajął około 50~godzin.
+Przeprowadzone testy wskazują na wzrost średniej ilości punktów dla każdego typu rozgrywki, kosztem nieznacznie zwiększonej wariancji rozgrywek trzyosobowych i~czteroosobowych. W~rozgrywkach dwuosobowych agent pokonuje wszystkich dotychczas przedstawionych agentów, którzy nie~oszukują.
 
-Algorytm optymalizujący, po~zbadaniu kilku tysięcy próbek, znalazł nowy zestaw parametrów. Przeprowadzone testy wskazują na~niewielki wzrost średniej ilości punktów dla grup trzech, czterech i~pięciu graczy, kosztem zwiększonej wariancji. Ponieważ agent Trustful nie~był projektowany do~przeprowadzania rozgrywek dwuosobowych, lepsze dostosowanie wag, które pomagają przy bardziej licznych grupach, pogrąża strategię dla dwóch graczy.
+Na~podstawie analizy wartości nowych wag można dociec, w~jaki sposób zmieniła~się strategia agenta BayesianTrustful2:
 
-Na~podstawie analizy wartości nowych wag można dociec, w~jaki sposób zmieniła~się strategia agenta:
+\begin{itemize}
+	\item Moduł ``Discard tip'', pomagający graczom w~odrzucaniu bezużytecznych kart, udziela podpowiedzi wyłącznie w~sytuacji, w~której jest w~stanie częściowo ujawnić jednocześnie co~najmniej 3~karty (poprzednia wartość:~2).
+	\item Moduł ``Play tip'', zarządzający podpowiedziami dotyczącymi zagrań, w~znacznie większym stopniu nagradza zagrania lawinowe, a~także jest bardziej skłonny do~udzielania mało wartościowych informacji, jeżeli częściowo ujawniają one karty o~niższych numerach. Dodatkowo, agenci nigdy nie~udzielają informacji, jeżeli wetowałyby one~poprawne zagrania.
+	\item Moduły ``Risky tip'' (udzielający podpowiedzi będących nieprawidłowymi obietnicami) oraz ``Information tip'' (zarządzający komunikatami), otrzymały karę o~wysokości, która całkowicie wyklucza możliwość ich wykorzystania.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\captionsetup{format=hang}
+	\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{BayesianTrustful4.png}
+	\caption[Caption]{Wyniki agenta BayesianTrustful4 (rozmiar próby: 1000 gier)}
+	\label{fig:BayesianTrustful4}
+\end{figure}
+
+Przeprowadzone testy wskazują na~niewielki wzrost średniej ilości punktów dla grup trzech, czterech i~pięciu graczy, kosztem zwiększonej wariancji. Lepsze dostosowanie wag, które pomagają przy bardziej licznych grupach, pogrąża strategię dla dwóch graczy.
+
+Na~podstawie analizy wartości nowych wag można dociec, w~jaki sposób zmieniła~się strategia agenta BayesianTrustful4:
 
 \begin{itemize}
 	\item Moduł ``Discard tip'', pomagający graczom w~odrzucaniu bezużytecznych kart, udziela podpowiedzi wyłącznie w~sytuacji, w~której jest w~stanie częściowo ujawnić jednocześnie co~najmniej 4~karty (poprzednia wartość:~2).
@@ -599,7 +619,7 @@ Na~podstawie analizy wartości nowych wag można dociec, w~jaki sposób zmienił
 	\item Moduł ``Information tip'', pozwalający na~udzielanie podpowiedzi będących komunikatami, ma~zwiększony pułap jakościowy, co~sprawia, że~jest on~znacznie rzadziej wykorzystywany.
 \end{itemize}
 
-Podsumowując: agent jest mniej skłonny do~udzielania podpowiedzi będących komunikatami i~agresywnie penalizuje nieprawidłowe obietnice. Choć prowadzi to do~uzyskania wyższej średniej punktowej, takie postępowanie destabilizuje algorytm i~powoduje wzrost wariancji obserwowanych wyników.
+Podsumowując: obaj agenci są~mniej skłonni do~udzielania podpowiedzi będących komunikatami i~agresywnie penalizują nieprawidłowe obietnice. Choć prowadzi to do~uzyskania wyższej średniej punktowej, takie postępowanie może destabilizować algorytm i~powodować wzrost wariancji obserwowanych wyników, tak jak w~przypadku BayesianTrustful4.
 
 \section{Reinforced}
 
@@ -694,7 +714,7 @@ Strategia wypracowana przez agentów jest wyjątkowo trudna do~zrozumienia, gdy�
 	\label{fig:Reinforced2}
 \end{figure}
 
-Agent Reinforced2, który trenował granie partii dwuosobowych, osiąga w~nich najwyższe wyniki spośród wszystkich przedstawionych agentów, którzy nie~oszukują. Jednocześnie, mimo chaotycznego procesu formułowania strategii, zachowuje on~zaskakująco wysoką stabilność. Niestety, jak można było przewidywać, wraz~ze wzrostem liczby graczy agent uzyskuje coraz niższe wyniki. Ponadto, nigdy nie~udaje mu~się zdobyć maksymalnej ilości 25~punktów.
+Agent Reinforced2, który trenował granie partii dwuosobowych, osiąga w~nich wyniki niewiele niższe od~BayesianTrustful2. Jednocześnie, mimo chaotycznego procesu formułowania strategii, zachowuje on~zaskakująco wysoką stabilność. Niestety, jak można było przewidywać, wraz~ze wzrostem liczby graczy agent uzyskuje coraz niższe wyniki. Ponadto, nigdy nie~udaje mu~się zdobyć maksymalnej ilości 25~punktów.
 
 \bigskip
 
@@ -706,7 +726,7 @@ Agent Reinforced2, który trenował granie partii dwuosobowych, osiąga w~nich n
 	\label{fig:Reinforced4}
 \end{figure}
 
-W~przypadku agenta Reinforced4, wypracowana strategia jest znacznie mniej podatna na~zmiany w~liczbie graczy. Choć agent nie~osiąga w~partiach dwuosobowych wyników, które pozwoliłyby mu~konkurować z~bliźniaczym algorytmem, pokonuje w~nich pozostałych agentów, którzy nie~oszukują. W~pozostałych testach sytuuje~się on~pomiędzy agentami Distrustful a~Trustful, jednocześnie wyróżniając~się bardzo wysoką stabilnością wdrażanych strategii.
+W~przypadku agenta Reinforced4, wypracowana strategia jest znacznie mniej podatna na~zmiany w~liczbie graczy. Choć agent nie~osiąga w~partiach dwuosobowych wyników, które pozwoliłyby mu~konkurować z~bliźniaczym algorytmem czy agentem BayesianTrustful2, pokonuje w~nich wszystkich innych agentów, którzy nie~oszukują. W~pozostałych testach sytuuje~się on~pomiędzy agentami Distrustful a~Trustful, jednocześnie wyróżniając~się bardzo wysoką stabilnością wdrażanych strategii.
 
 \chapter{Podsumowanie wyników agentów}
  
@@ -734,9 +754,11 @@ W~przypadku agenta Reinforced4, wypracowana strategia jest znacznie mniej podatn
  		\cline{2-5}		
  		Trustful & 17.94 (3.41) & 20.39 (1.69) & 20.43 (1.67) & 19.03 (1.61) \\
  		\cline{2-5}		
- 		BayesianTrustful & 17.36 (3.81) & $\textbf{20.46 (2.02)}$ & $\textbf{20.65 (1.72)}$ & $\textbf{19.3 (1.66)}$ \\
+ 		BayesianTrustful2 & $\textbf{19.07 (3.16)}$ & 20.49 (1.7) & 20.32 (1.66) & 18.66 (1.7) \\
  		\cline{2-5}		
- 		Reinforced2 & $\textbf{18.94 (2.12)}$ & 17.84 (1.62) & 16.04 (2.53) & 13.92 (1.89) \\
+ 		BayesianTrustful4 & 17.25 (3.86) & $\textbf{20.55 (2.0)}$ & $\textbf{20.83 (1.73)}$ & $\textbf{19.26 (1.62)}$ \\
+ 		\cline{2-5}		
+ 		Reinforced2 & 18.94 (2.12) & 17.84 (1.62) & 16.04 (2.53) & 13.92 (1.89) \\
  		\cline{2-5}		
  		Reinforced4 & 17.94 (3.09) & 19.03 (1.37) & 18.69 (1.41) & 17.42 (1.29) \\
  		\cline{2-5}		
@@ -745,7 +767,7 @@ W~przypadku agenta Reinforced4, wypracowana strategia jest znacznie mniej podatn
  	\label{table:summary}		
  \end{table}
  
- Agent BayesianTrustful uzyskał aż~trzy z~czterech najwyższych średnich punktów spośród agentów, którzy nie~oszukują. Lepszym wyborem do~partii na trzech graczy byłby jednak agent Trustful -~choć jego wynik jest nieco niższy, różnica w~odchyleniu standardowym jest na~tyle znacząca, by~móc chcieć go~wybrać ponad BayesianTrustful w~celu uzyskania bardziej stabilnego przebiegu rozgrywki.
+ Agent BayesianTrustful4 uzyskał aż~trzy z~czterech najwyższych średnich punktów spośród agentów, którzy nie~oszukują. Lepszym wyborem do~partii na trzech graczy byłby jednak agent BayesianTrustful2 -~choć jego wynik jest nieco niższy, różnica w~odchyleniu standardowym jest na~tyle znacząca, by~móc chcieć go~wybrać w~celu uzyskania bardziej stabilnego przebiegu rozgrywki. Podobne rozumowanie skłania do~zastąpienia BayesianTrustful2 agentem Reinforced2 w~rozgrywkach dwuosobowych.
 
 \chapter{Niestandardowe modele rozgrywki}
 
