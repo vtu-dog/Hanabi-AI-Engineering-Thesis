@@ -165,7 +165,7 @@ Innym sposobem na~zaimplementowanie programu grającego w~Hanabi jest użycie al
 
 Wadą tego algorytmu jest konieczność wyuczenia agenta odpowiednich zachowań. Odbywa~się to~poprzez zapewnienie mu~zestawu danych, na~których mógłby zdobyć doświadczenie. W~zależności od~uzyskiwanych wyników, decyzje algorytmu są~nagradzane lub karane. Dobranie odpowiednio różnorodnego zbioru uczącego, w~parze z~funkcjami kwalifikującymi, pozwala programowi nie~tylko na~rozpoznawanie i~radzenie sobie z~najczęściej występującymi sytuacjami, ale i~generalizację zachowań, potrzebną do~wybrnięcia ze~stanów gry, które nie~zostały dotychczas napotkane.
 
-Należy pamiętać, że~nieodpowiedni dobór zbioru uczącego lub funkcji, które oceniają poczynania agenta, potrafi doprowadzić do~anomalii w~procesie zdobywania wiedzy. Jeżeli zestawy testowe będą zbyt homogeniczne i~zbyt liczne w~stosunku do~osiągalnej liczby stanów rozgrywki, może dojść do~przeuczenia modelu, z~kolei zbyt krótka nauka nie~przygotuje programu do~nietypowych sytuacji. Nieprawidłowości w~procedurach klasyfikujących, choć mniej zauważalne, także potrafią doprowadzić do~niepożądanych sytuacji, tak jak miało to~miejsce w~przypadku programu grającego w~produkcje na~platformę Nintendo Entertainment System. Agent ten~korzystał z~algorytmów uczących, których celem było maksymalizowanie wyników w~grach takich jak Mario czy~Pac-Man. W~sytuacjach, które prowadziły do~niechybnej przegranej, program nauczył~się wstrzymywać rozgrywkę na~zawsze\cite{Mario}.
+Należy pamiętać, że~nieodpowiedni dobór zbioru uczącego lub funkcji, które oceniają poczynania agenta, potrafi doprowadzić do~anomalii w~procesie zdobywania wiedzy. Jeżeli zestawy testowe będą zbyt homogeniczne i~zbyt liczne w~stosunku do~osiągalnej liczby stanów rozgrywki, może dojść do~przeuczenia modelu, z~kolei zbyt krótka nauka nie~przygotuje programu do~nietypowych sytuacji. Nieprawidłowości w~procedurach klasyfikujących, choć mniej zauważalne, także potrafią doprowadzić do~niepożądanych sytuacji, tak jak miało to~miejsce w~przypadku programu grającego w~produkcje na~platformę Nintendo Entertainment System. Agent ten~korzystał z~algorytmów uczących, których celem było maksymalizowanie wyników w~grach takich jak Mario czy~Pac-Man. W~obliczu sytuacji, które prowadziły do~niechybnej przegranej, program nauczył~się wstrzymywać rozgrywkę na~zawsze\cite{Mario}.
 
 \section{Naginanie zasad gry}
 
@@ -646,26 +646,27 @@ Aby porównać efekty optymalizacji, stworzyliśmy agentów BayesianTrustful2 or
 \begin{figure}[H]
 	\centering
 	\captionsetup{format=hang}
-	\includegraphics[width=.92\textwidth,height=\textheight,keepaspectratio]{BayesianTrustful2.png}
+	\includegraphics[width=.82\textwidth,height=\textheight,keepaspectratio]{BayesianTrustful2.png}
 	\caption[Caption]{Wyniki agenta BayesianTrustful2 (rozmiar próby: 1000 gier)}
 	\label{fig:BayesianTrustful2}
 \end{figure}
 
 
-Przeprowadzone testy agenta BayesianTrustful2 wskazują na wzrost średniej liczby punktów dla każdego typu rozgrywki, kosztem nieznacznie zwiększonej wariancji rozgrywek trzyosobowych i~czteroosobowych. W~rozgrywkach dwuosobowych agent pokonuje wszystkich dotychczas przedstawionych agentów, którzy nie~oszukują.
+Przeprowadzone testy agenta BayesianTrustful2 wskazują na wzrost średniej liczby punktów dla każdego typu rozgrywki, kosztem nieznacznie zwiększonej wariancji rozgrywek trzyosobowych i~czteroosobowych. W~rozgrywkach dwuosobowych agent pokonuje wszystkich dotychczas przedstawionych agentów, którzy nie~oszukują, lecz~w~rozgrywkach czteroosobowych i~pięcioosobowych jest pokonywany przez agenta Trustful.
 
 Na~podstawie analizy wartości nowych wag można dociec, w~jaki sposób zmieniła~się strategia agenta BayesianTrustful2:
 
 \begin{itemize}
 	\item Moduł ``Discard tip'', pomagający graczom w~odrzucaniu bezużytecznych kart, udziela podpowiedzi wyłącznie w~sytuacji, w~której jest w~stanie częściowo ujawnić jednocześnie co~najmniej 3~karty (poprzednia wartość:~2).
 	\item Moduł ``Play tip'', zarządzający podpowiedziami dotyczącymi zagrań, w~znacznie większym stopniu nagradza zagrania lawinowe, a~także jest bardziej skłonny do~udzielania mało wartościowych informacji, jeżeli częściowo ujawniają one karty o~niższych numerach. Dodatkowo, agenci nigdy nie~udzielają informacji, jeżeli wetowałyby one~poprawne zagrania.
-	\item Moduły ``Risky tip'' (udzielający podpowiedzi będących nieprawidłowymi obietnicami) oraz ``Information tip'' (zarządzający komunikatami), otrzymały karę o~wysokości, która całkowicie wyklucza możliwość ich wykorzystania.
+	\item Moduł ``Information tip'', pozwalający na~udzielanie podpowiedzi będących komunikatami, otrzymał karę o~wysokości, która całkowicie wyklucza możliwość jego wykorzystania.
+	\item Moduły ``Risky tip'', pozwalający na~udzielanie podpowiedzi będących nieprawidłowymi obietnicami, preferuje podpowiadanie kart o~najwyższych numerach i~w~znacznie większym stopniu nagradza zagrania lawinowe.
 \end{itemize}
 
 \begin{figure}[H]
 	\centering
 	\captionsetup{format=hang}
-	\includegraphics[width=.92\textwidth,height=\textheight,keepaspectratio]{BayesianTrustful4.png}
+	\includegraphics[width=.82\textwidth,height=\textheight,keepaspectratio]{BayesianTrustful4.png}
 	\caption[Caption]{Wyniki agenta BayesianTrustful4 (rozmiar próby: 1000 gier)}
 	\label{fig:BayesianTrustful4}
 \end{figure}
@@ -697,7 +698,7 @@ Agent posiada cztery funkcje oceniające, które pozwalają na~rozstrzyganie, kt
 	\item Rozstrzygnij, która z~posiadanych kart powinna zostać zagrana.
 	\item Rozstrzygnij, która z~posiadanych kart powinna zostać odrzucona.
 	\item Rozstrzygnij, która z~możliwych do~udzielenia podpowiedzi jest najbardziej przydatna, pomijając te~z~nich, które nie ujawniają żadnych informacji.
-	\item Sprawdź, które akcje zostały ocenione najlepiej, a~następnie rozstrzygnij, która z~nich powinna zostać wykonana.
+	\item Uwzględniając noty najlepiej ocenionych akcji, rozstrzygnij, która z~nich powinna zostać wykonana.
 \end{enumerate}
 
 Funkcje oceniające nie~są~narzucone odgórnie. Każda z~nich wydaje werdykt w~zależności od~obecnego stanu gry, a~także wartości, które zostały wyuczone na~podstawie poprzednich decyzji, podjętych w~zbliżonych warunkach. Mechanizm ten przypomina działanie algorytmu Q-learning\cite{Q-learning}.
@@ -715,15 +716,15 @@ Informacje o~stanie gry są~przechowywane jako kolekcja wektorów, które zawier
 			\item czy istnieje ryzyko, że~karta jest krytyczna (tak~/~nie),
 			\item czy karta jest najstarsza (tak~/~nie),
 			\item liczba kart, które zostaną częściowo lub w~pełni ujawnione w~tym samym momencie, co~rozpatrywana kartą (od~1~do~5),
-			\item liczba stosów, których najwyższy numer jest niższy od~numeru rozpatrywanej karty (od~0~do~5),
+			\item[$\otimes$] liczba stosów, których najwyższy numer jest niższy od~numeru rozpatrywanej karty (od~0~do~5),
 			\item liczba pozostałych żetonów podpowiedzi (od~0~do~8).
 		\end{itemize}
 	\item Możliwe do~udzielenia podpowiedzi (około $4*10^5$ unikalnych stanów):
 		\begin{itemize}
 			\item[$\otimes$] liczba ujawnianych kart, które można bezpiecznie zagrać (od~0~do~5),
-			\item liczba ujawnianych kart, które będzie można w~przyszłości bezpiecznie zagrać (od~0~do~5),
-			\item liczba ujawnianych kart, które można inferowalnie bezpiecznie odrzucić (od~0~do~5),
-			\item liczba ujawnianych kart, które zostaną w~pełni ujawnione (od~0~do~5),
+			\item[$\otimes$] liczba ujawnianych kart, które będzie można w~przyszłości bezpiecznie zagrać (od~0~do~5),
+			\item[$\otimes$] liczba ujawnianych kart, które można inferowalnie bezpiecznie odrzucić (od~0~do~5),
+			\item[$\otimes$] liczba ujawnianych kart, które zostaną w~pełni ujawnione (od~0~do~5),
 			\item czy podpowiedź obejmuje kartę, która może rozpocząć zagranie lawinowe (tak~/~nie),
 			\item czy podpowiedź obejmuje najstarszą kartę w~ręce gracza (tak~/~nie),
 			\item czy podpowiedź obejmuje jakąkolwiek kartę krytyczną (tak~/~nie),
@@ -734,15 +735,15 @@ Informacje o~stanie gry są~przechowywane jako kolekcja wektorów, które zawier
 			\item liczba pozostałych żetonów podpowiedzi (od~0~do~8),
 			\item liczba pozostałych żetonów życia (od~1~do~3),
 			\item czy talia jest pusta (tak~/~nie),
-			\item oceny najlepszych akcji z~poszczególnych kategorii.
+			\item oceny najlepszych akcji z~poszczególnych kategorii (zagranie karty, odrzucenie karty, udzielenie podpowiedzi).
 		\end{itemize}
 \end{enumerate}
 
-Niektóre ze~składowych obiektów zostały pominięte. Podane liczby unikalnych stanów zostały oszacowane, z~powodu trudności dotyczących dokładnego policzenia, ile z~nich jest~nieosiągalnych.
+Niektóre ze~składowych powyższych obiektów zostały pominięte. Podane liczby unikalnych stanów zostały oszacowane, z~powodu trudności dotyczących dokładnego policzenia, ile z~nich jest~nieosiągalnych.
 
-Aby maksymalnie uszczuplić liczbę możliwych stanów gry, większość wymienionych wartości została dodatkowo ograniczona. Przykładowo, faktyczna wartość składowej oznaczonej symbolem $\otimes$ wynosi $\min{(2, N)}$, gdzie $N$ to~wyliczona wartość pomiędzy 0~a~5. Taki zabieg pozwala na~grupowanie podobnych stanów gry i~umożliwia wnioskowanie o~sytuacjach, które nie~zostały uprzednio zbadane.
+Aby maksymalnie uszczuplić liczbę możliwych stanów gry, większość wymienionych wartości została dodatkowo ograniczona. Przykładowo, faktyczna wartość składowych oznaczonej symbolem $\otimes$ wynosi $\min{(2, N)}$, gdzie $N$ to~wyliczona wartość pomiędzy 0~a~5. Taki zabieg pozwala na~grupowanie podobnych stanów gry i~umożliwia wnioskowanie o~sytuacjach, które nie~zostały uprzednio zbadane.
 
-Składowe pierwszych dwóch kontenerów są~od siebie całkowicie niezależne. Ponieważ wartości ostatniego kontenera zależą od~werdyktu funkcji oceniających ruchy, dwa identyczne stany rozgrywki mogą zostać ocenione na~różne sposoby. Powoduje to, że~kontener akcji dostarcza agentowi najmniej pewnych informacji.
+Składowe pierwszych dwóch kontenerów są~od siebie całkowicie niezależne. Ponieważ wartości ostatniego kontenera zależą od~werdyktu funkcji oceniających ruchy, dwa identyczne stany rozgrywki mogą zostać ocenione na~różne sposoby. Powoduje to, że~kontener akcji w~skali makro dostarcza agentowi najmniej pewnych informacji.
 
 Funkcja oceniająca to~mapowanie, które przyjmuje odpowiednie kontenery, a~następnie zwraca numeryczną ocenę rozpatrywanego ruchu. Agent dysponuje czterema funkcjami oceniającymi: po~jednej na~każdą z~akcji (zagraj kartę, odrzuć kartę, udziel podpowiedzi innemu uczestnikowi rozgrywki), a~także ostatnią, która dokonuje ostatecznej decyzji o~ruchu.
 
