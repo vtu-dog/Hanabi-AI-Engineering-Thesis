@@ -41,15 +41,15 @@ Hanabi (jap. fajerwerki) to~w~pełni kooperacyjna gra planszowa, która w~2013 r
 
 \section{Hanabi a sztuczna inteligencja}
 
-W~teorii gier istnieje pojęcie perfekcyjnego zagrania, czyli pojedynczego ruchu zależnego od~aktualnego etapu gry, który prowadzi do~stanu rozgrywki maksymalizującego wynik --~niezależnie od~ruchów, które mogą w~odpowiedzi wykonać inni gracze. Perfekcyjne zagrania są~podstawą optymalnego planu działania, minimalizującego możliwe straty ponoszone w~trakcie rozgrywania danej partii. Niestety, w~przypadku złożonych gier, tak~silna strategia jest nieprawdopodobnie trudna do~uzyskania, a~dla Hanabi --~nie istnieje. Jest to~spowodowane faktem, że~wynik partii zależy nie~tylko od~współpracy całej grupy, ale i~tego, jak poczynania gracza zostaną zinterpretowane przez współuczestników rozgrywki. Zagadnienie zostało szerzej opisane w~$\hyperref[sec:xy]{\textbf{Rozdziale~6}}$.
+W~teorii gier istnieje pojęcie perfekcyjnego zagrania, czyli pojedynczego ruchu zależnego od~aktualnego etapu gry, prowadzącego do~stanu rozgrywki maksymalizującego wynik --~niezależnie od~ruchów, które mogą w~odpowiedzi wykonać inni gracze. Perfekcyjne zagrania są~podstawą optymalnego planu działania, minimalizującego możliwe straty ponoszone w~trakcie rozgrywania danej partii. Niestety, w~przypadku złożonych gier, tak~silna strategia jest nieprawdopodobnie trudna do~uzyskania, a~dla Hanabi --~nie istnieje. Jest to~spowodowane faktem, że~wynik partii zależy nie~tylko od~współpracy całej grupy, ale również tego, jak poczynania gracza zostaną zinterpretowane przez współuczestników rozgrywki. Zagadnienie zostało szerzej opisane w~$\hyperref[sec:xy]{\textbf{Rozdziale~6}}$.
 
-Najczęściej wykorzystywane sposoby tworzenia agentów sztucznej inteligencji bazują na~algorytmach: heurystycznych, regułowych, opartych o~techniki uczące, nadużywających zasad gry lub~siłowych\cite{AI-Modern-Approach}. Przykładowo, słynny komputer Deep Blue, który w~maju 1997 roku pokonał ówczesnego mistrza świata w~szachach, Garrego Kasparova, nie~posiadał optymalnej strategii. Używał on~metody siłowej, wspomaganej algorytmem przeszukującym alfa-beta, rozpatrując wszystkie możliwe zagrania i~wybierając~te, które dawały mu~największą przewagę lokalną. Takie działanie było możliwe z~racji na~ogromną moc superkomputera, który potrafił rozpatrywać 200~milionów ruchów na~sekundę\cite{DeepBlue}. W~dzisiejszych czasach wynik ten nie~robi jednak większego wrażenia --~już w~2007 roku Murray Campbell, jedna z~osób odpowiedzialnych za~stworzenie Deep Blue, w~wywiadzie dla Wired News stwierdził, że~``nowoczesny procesor Cell ma~moc porównywalną z~całym systemem [Deep Blue] z~1997 roku''$\footnote{Źródło: \href{https://www.wired.com/2007/05/a-decade-after-kasparovs-defeat-deep-blue-coder-relives-victory/}{\textbf{link}} (term. wiz. 09.02.2020)}$.
+Najczęściej wykorzystywane sposoby tworzenia agentów sztucznej inteligencji bazują na~algorytmach: heurystycznych, regułowych, opartych o~techniki uczące, nadużywających zasad gry lub~siłowych\cite{AI-Modern-Approach}. Przykładowo, słynny komputer Deep Blue, który w~maju 1997 roku pokonał ówczesnego mistrza świata w~szachach, Garrego Kasparova, nie~posiadał optymalnej strategii. Używał on~metody siłowej, wspomaganej algorytmem przeszukującym alfa-beta, rozpatrując wszystkie możliwe zagrania i~wybierając~te, które dawały mu~największą przewagę lokalną. Takie działanie było możliwe dzięki ogromnej mocy superkomputera, który potrafił rozpatrywać 200~milionów ruchów na~sekundę\cite{DeepBlue}. W~dzisiejszych czasach wynik ten nie~robi jednak większego wrażenia --~już w~2007 roku Murray Campbell, jedna z~osób odpowiedzialnych za~stworzenie Deep Blue, w~wywiadzie dla Wired News stwierdził, że~``nowoczesny procesor Cell ma~moc porównywalną z~całym systemem [Deep Blue] z~1997 roku''$\footnote{Źródło: \href{https://www.wired.com/2007/05/a-decade-after-kasparovs-defeat-deep-blue-coder-relives-victory/}{\textbf{link}} (term. wiz. 09.02.2020)}$.
 
-Stworzenie agentów sztucznej inteligencji do~Hanabi to~zadanie, którego wymaga pokonania trudności rzadko spotykanych w~innych grach, takich jak: niepełnej informacji, losowości dobieranych kart, a~także ograniczonych zasobów, m.in. w~postaci podpowiedzi dla~innych graczy (zasady gry zostały szczegółowo opisane w~$\hyperref[sec:rules]{\textbf{Rozdziale~2}}$). Agenci muszą współpracować, gdyż gracz, który odmawia~kooperacji, może w~kilku ruchach doprowadzić do~przegranej całej grupy. Ważne jest, by~nie~marnować zasobów, a~zatem sztuczna inteligencja musi być odpowiednio skoordynowana. Ponadto, znikoma liczba kart w~talii nie~pozwala na~zbyt długą rozgrywkę --~oznacza to~zatem, że~aby zdążyć z~wygraną agenci muszą posiadać protokół komunikacji, który dopuszcza przekazywanie w~obrębie zasad gry dodatkowych, implicytnych informacji, rozumianych przez pozostałych jej~uczestników.
+Stworzenie agentów sztucznej inteligencji do~Hanabi to~zadanie, którego wymaga pokonania trudności rzadko spotykanych w~innych grach, takich jak: niepełna informacja, losowość dobieranych kart, a~także ograniczone zasoby, m.in. w~postaci podpowiedzi dla~innych graczy (zasady gry zostały szczegółowo opisane w~$\hyperref[sec:rules]{\textbf{Rozdziale~2}}$). Agenci muszą współpracować, gdyż gracz, który odmawia~kooperacji, może w~kilku ruchach doprowadzić do~przegranej całej grupy. Ważne jest, by~nie~marnować zasobów, a~zatem sztuczna inteligencja musi być odpowiednio skoordynowana. Ponadto, znikoma liczba kart w~talii nie~pozwala na~zbyt długą rozgrywkę --~oznacza to~zatem, że~aby zdążyć z~wygraną agenci muszą posiadać protokół komunikacji, który dopuszcza przekazywanie w~obrębie zasad gry dodatkowych, implicytnych informacji, rozumianych przez pozostałych jej~uczestników.
 
-Aby przeanalizować techniki tworzenia agentów grających w~Hanabi, badacze z~Google Brain oraz DeepMind wydali publikację pt. \textit{``The Hanabi Challenge: A New Frontier for AI Research''}\cite{OurInspiration}, w~której wyjaśniają wysoki stopień trudności zadania i~jego znaczenie dla dalszego rozwoju informatyki w~dziedzinie sztucznej inteligencji. Aby ułatwić zgłębianie tematu, stworzyli także otwartoźródłowy szkielet aplikacyjny, pozwalający na~efektywne testowanie nowych agentów. Badaniami zainteresował~się także Facebook, którego dokonania w~zakresie tworzenia agentów grających w~Hanabi zostały opisane w~$\hyperref[sec:fb]{\textbf{Rozdziale~3.2}}$.
+Aby przeanalizować techniki tworzenia agentów grających w~Hanabi, badacze z~Google Brain oraz DeepMind wydali publikację pt. \textit{``The Hanabi Challenge: A~New Frontier for AI Research''}\cite{OurInspiration}, w~której wyjaśniają wysoki stopień trudności zadania i~jego znaczenie dla dalszego rozwoju informatyki w~dziedzinie sztucznej inteligencji. Aby ułatwić zgłębianie tematu, stworzyli także otwartoźródłowy szkielet aplikacyjny, pozwalający na~efektywne testowanie nowych agentów. Badaniami zainteresował~się także Facebook, którego dokonania w~zakresie tworzenia agentów grających w~Hanabi zostały opisane w~$\hyperref[sec:fb]{\textbf{Rozdziale~3.2}}$.
 
-Zauważyliśmy, że~dotychczas przeprowadzane badania na~temat agentów grających w~Hanabi marginalizują znaczenie algorytmów, które nie~wymagają wysokich nakładów mocy obliczeniowej, lecz osiągają nieoptymalne wyniki. Niniejsza praca ma~na~celu zbadanie Hanabi jako gry kooperacyjnej z~niepełną informacją. Będziemy analizować techniki tworzenia agentów sztucznej inteligencji grających w~Hanabi, którzy wykonują możliwie najbardziej efektywne i~zrozumiałe dla ludzi ruchy na~tyle szybko, by~umożliwić komfortową rozgrywkę z~człowiekiem na~komputerach osobistych.
+Zauważyliśmy, że~dotychczas przeprowadzone badania na~temat agentów grających w~Hanabi marginalizują znaczenie algorytmów, które nie~wymagają wysokich nakładów mocy obliczeniowej, lecz osiągają nieoptymalne wyniki. Niniejsza praca ma~na~celu zbadanie Hanabi jako gry kooperacyjnej z~niepełną informacją. Będziemy analizować techniki tworzenia agentów sztucznej inteligencji grających w~Hanabi, którzy wykonują możliwie najbardziej efektywne i~zrozumiałe dla ludzi ruchy na~tyle szybko, by~umożliwić komfortową rozgrywkę z~człowiekiem na~komputerach osobistych.
 
 
 \chapter{Reguły gry}
@@ -81,7 +81,7 @@ Na początku gry talia jest tasowana. Gracze rozpoczynają rozgrywkę z~ośmioma
 
 	\item \underline{Udzielenie podpowiedzi innemu graczowi}:
 
-	Gracz usuwa jeden z~żetonów podpowiedzi, następnie wybiera innego uczestnika rozgrywki oraz jeden z~dwóch rodzajów informacji, której chce mu~udzielić: może wskazać wszystkie jego karty o~wybranym kolorze lub~wszystkie jego karty o~wybranym numerze. Akcji tej nie~można wykonać, jeśli w~grze~nie ma~żadnych żetonów podpowiedzi, gdyż wiązałoby~się to~z~koniecznością usunięcia żetonu podpowiedzi, który~nie istnieje. Udzielanie graczom podpowiedzi dotyczących kart w~jakikolwiek inny sposób jest zabronione.
+	Gracz usuwa jeden z~żetonów podpowiedzi, następnie wybiera innego uczestnika rozgrywki oraz jeden z~dwóch rodzajów informacji, której chce mu~udzielić: może wskazać wszystkie jego karty o~wybranym kolorze lub~wszystkie jego karty o~wybranym numerze. Akcji tej nie~można wykonać, jeśli w~grze nie~ma~żadnych żetonów podpowiedzi, gdyż wiązałoby~się to~z~koniecznością usunięcia żetonu podpowiedzi, który~nie istnieje. Udzielanie graczom podpowiedzi dotyczących kart w~jakikolwiek inny sposób jest zabronione.
 \end{enumerate}
 
 Jeżeli któryś z graczy dobierze ostatnią kartę z~talii, każdy uczestnik rozgrywa jedną dodatkową turę (wraz z~graczem, który dobrał ostatnią kartę), a~następnie gra~się kończy.
@@ -110,7 +110,7 @@ Ze~względu na~ograniczony rozmiar talii, zagrywanie wyłącznie tych kart, o~kt
 
 Ponadto, jeżeli chcemy odrzucać wyłącznie karty, które można bezpiecznie usunąć z~gry, inni gracze muszą nam zakomunikować ich brak przydatności poprzez odpowiednie podpowiedzi (lub ich brak, co~jest w znacznym stopniu utrudnione przez konieczność udzielania pełnej informacji o~zawartości rąk współuczestników). Karty bezużyteczne mogą, lecz nie~muszą zostać ujawnione w~drodze przypadku, podczas ujawniania innych kart. W~rezultacie, najczęściej przyjmowaną konwencją wśród graczy jest odrzucanie karty, którą trzyma od~największej liczby tur: jeżeli żaden z~uczestników rozgrywki nie~ostrzega przed usunięciem jej z~gry, istnieje wysokie prawdopodobieństwo, że~jest ona nieprzydatna.
 
-Sukces w~Hanabi jest bezpośrednio powiązany z~efektywnością komunikacji --~konsekwencja przekazu pozwala na~przewidywanie akcji, które mogą wykonać współuczestnicy rozgrywki. Spójna komunikacja jest szczególnie ważna, gdy gracze posługują~się ustalonymi przed rozpoczęciem gry konwencjami. Przykładowo: jeżeli któryś z~graczy omyłkowo odrzuci kartę w~sposób sprzeczny z~protokołem komunikacji, może to~doprowadzić do~znacznego utrudnienia rozgrywki, gdyż inni gracze nie~byli przygotowani na~taką ewentualność i~przeznaczali żetony podpowiedzi na~oddalanie bardziej prawdopodobnych zagrożeń.
+Sukces w~Hanabi jest bezpośrednio powiązany z~efektywnością komunikacji --~konsekwencja przekazu pozwala na~przewidywanie akcji, które mogą wykonać współuczestnicy rozgrywki. Spójna komunikacja jest szczególnie ważna, gdy gracze posługują~się ustalonymi przed rozpoczęciem gry konwencjami. Przykładowo: jeżeli któryś z~graczy omyłkowo odrzuci kartę w~sposób sprzeczny z~protokołem komunikacji, może to~doprowadzić do~znacznego utrudnienia rozgrywki, gdyż inni gracze nie~będą przygotowani na~taką ewentualność, ponieważ w~przeszłości przeznaczali żetony podpowiedzi na~oddalanie bardziej prawdopodobnych zagrożeń.
 
 \section{Analiza przykładowej rundy Hanabi}
 
@@ -132,13 +132,13 @@ Trzeci i~czwarty gracz posiadają po~jednej kopii białej karty o~numerze~1. Wie
 
 Aktualny gracz posiada trzy karty o~numerze~5. Odrzucenie jednej z~nich nie~jest dobrym pomysłem, gdyż uniemożliwi skompletowanie któregoś ze~stosów --~w~talii znajduje~się tylko pięć kopii karty o~numerze~5, po~jednej dla każdego z~kolorów. Najbezpieczniejszą opcją jest odrzucenie karty, o~której gracz nie posiada żadnych informacji.
 
-Drugi gracz może bez żadnych negatywnych konsekwencji odrzucić niebieską kartę o~numerze~4, mimo, że~zna tylko jej kolor. Wiemy, że~aktualny gracz posiada niebieską kartę o~numerze~5, zatem, niezależnie od~numeru częściowo ujawnionej karty, nigdy nie~będzie istniała już możliwość jej poprawnego zagrania.
+Drugi gracz może bez żadnych negatywnych konsekwencji odrzucić niebieską kartę o~numerze~4, mimo że~zna tylko jej kolor. Wiemy, że~aktualny gracz posiada niebieską kartę o~numerze~5, zatem, niezależnie od~numeru częściowo ujawnionej karty, nigdy nie~będzie istniała już możliwość jej poprawnego zagrania.
 
 \subsection*{Które podpowiedzi są przydatne?}
 
 Aby móc rozpocząć dokładanie kart do~białego stosu, potrzeba najpierw zagrać białą kartę o~numerze~1. Mogą to~zrobić zarówno trzeci, jak i~czwarty gracz, toteż udzielenie podpowiedzi jednemu z~nich przybliży grupę do~wyczekiwanego zagrania.
 
-Zauważmy, że~najbardziej opłacalną akcją jest udzielenie trzeciemu graczowi podpowiedzi, która częściowo ujawnia karty wszystkie karty o~numerze~1. Ruch ten informuje o~trzech kartach jednocześnie, a~gdy biała karta o~numerze~1 zostanie zagrana, pozostałe karty o~numerze~1 będzie można odrzucić bez żadnych negatywnych konsekwencji, gdyż na~planszy nigdy nie~będzie istniała już możliwość ich poprawnego zagrania.
+Zauważmy, że~najbardziej opłacalną akcją jest udzielenie trzeciemu graczowi podpowiedzi, która częściowo ujawnia wszystkie jego karty o~numerze~1. Ruch ten~informuje o~trzech kartach jednocześnie, a~gdy biała karta o~numerze~1 zostanie zagrana, pozostałe karty o~numerze~1 będzie można odrzucić bez żadnych negatywnych konsekwencji, gdyż na~planszy nigdy nie~będzie istniała już możliwość ich poprawnego zagrania.
 
 \chapter{Strategie sztucznej inteligencji}
 
@@ -155,7 +155,7 @@ Z~racji na kooperacyjną konstrukcję Hanabi, sama emulacja typowych zachowań 
 
 Istnieją dwa główne czynniki, które sprawiają, że~analiza stanu gry w~Hanabi jest trudnym zadaniem. Są~to: niepełna informacja o~aktualnym etapie rozgrywki, a~także losowość kart dobieranych z~talii. Udowodniono, że~nawet w~uproszczonej wersji gry, w~której uczestnicy mogą patrzeć na~swoje karty, problem perfekcyjnego zagrania jest NP-zupełny\cite{NP-Complete}. Sprawia to, że~próba rozwiązania zagadnienia w~sposób siłowy jest nieefektywna. Fakt ten, połączony z~trudnością opracowania funkcji oceniającej jakość zagrania, wyklucza użycie części możliwych rozwiązań problemu, takich jak algorytm alfa-beta.
 
-Aby zredukować trudność znalezienia perfekcyjnego zagrania, grupa Facebook Research zaproponowała rozwiązanie bazujące na~drzewie poszukiwań Monte Carlo\cite{MCTS}. Każdy z~graczy dysponuje zbiorem predefiniowanych akcji, dostosowywanych odpowiednio do~aktualnego stanu rozgrywki poprzez analizę prawdopodobieństwa zagrań, które mogą wykonać współuczestnicy. Algorytm bierze pod uwagę także szanse aktualnego gracza na~posiadanie w~ręce kart, które mogły zostać wylosowane z~talii. Aby przyspieszyć działanie programu, głębokość drzewa poszukiwań jest ograniczana, a agenci wykonują predefiniowane akcje i~nie~eksplorują nowych opcji, jeśli wiązałoby~się to~z~przekroczeniem zadanego limitu obliczeń.
+Aby zredukować trudność znalezienia perfekcyjnego zagrania, grupa Facebook Research zaproponowała rozwiązanie bazujące na~drzewie poszukiwań Monte Carlo\cite{MCTS}. Każdy z~graczy dysponuje zbiorem predefiniowanych akcji, dostosowywanych odpowiednio do~aktualnego stanu rozgrywki poprzez analizę prawdopodobieństwa zagrań, które mogą wykonać współuczestnicy. Algorytm bierze pod uwagę także szanse aktualnego gracza na~posiadanie w~ręce kart, które mogły zostać wylosowane z~talii. Aby~przyspieszyć działanie programu, głębokość drzewa poszukiwań jest ograniczana, a~agenci wykonują predefiniowane akcje i~nie~eksplorują nowych opcji, jeśli~wiązałoby~się to~z~przekroczeniem zadanego limitu obliczeń.
 
 Takie podejście pozwala na~uzyskanie bardzo wysokich wyników, sięgających nawet 24.61~punktów w~rozgrywce dla dwóch graczy. Działanie algorytmu jest jednak kosztowne obliczeniowo, nawet przy znacznym ograniczeniu zakresu dokonywanych poszukiwań. Do~osiągnięcia tak wysokich punktacji potrzeba olbrzymich ilości obliczeń, które, z~racji na możliwość ich zrównoleglenia, są~najczęściej dokonywane na~nowoczesnych kartach graficznych. Wyłączenie agentom możliwości dokonywania dodatkowych poszukiwań degeneruje ich do~postaci agentów regułowych, którzy, choć na~każdą akcję potrzebują zużycia istotnie mniejszej ilości zasobów, wciąż osiągają imponujący wynik 23~punktów.
 
@@ -165,21 +165,21 @@ Innym sposobem na~zaimplementowanie programu grającego w~Hanabi jest użycie al
 
 Wadą tego algorytmu jest konieczność wyuczenia agenta odpowiednich zachowań. Odbywa~się to~poprzez zapewnienie mu~zestawu danych, na~których mógłby zdobyć doświadczenie. W~zależności od~uzyskiwanych wyników, decyzje algorytmu są~nagradzane lub karane. Dobranie odpowiednio różnorodnego zbioru uczącego, w~parze z~funkcjami kwalifikującymi, pozwala programowi nie~tylko na~rozpoznawanie i~radzenie sobie z~najczęściej występującymi sytuacjami, ale i~generalizację zachowań, potrzebną do~wybrnięcia ze~stanów gry, które nie~zostały dotychczas napotkane.
 
-Należy pamiętać, że~nieodpowiedni dobór zbioru uczącego lub funkcji, które oceniają poczynania agenta, potrafi doprowadzić do~anomalii w~procesie zdobywania wiedzy. Jeżeli zestawy testowe będą zbyt homogeniczne i~zbyt liczne w~stosunku do~osiągalnej liczby stanów rozgrywki, może dojść do~przeuczenia modelu, z~kolei zbyt krótka nauka nie~przygotuje programu do~nietypowych sytuacji. Nieprawidłowości w~procedurach klasyfikujących, choć mniej zauważalne, także potrafią doprowadzić do~niepożądanych sytuacji, tak jak miało to~miejsce w~przypadku programu grającego w~produkcje na~platformę Nintendo Entertainment System. Agent ten korzystał z~algorytmów uczących, których celem było maksymalizowanie wyników w~grach takich jak Mario czy~Pac-Man. W~sytuacjach, które prowadziły do~niechybnej przegranej, program nauczył~się wstrzymywać rozgrywkę na~zawsze\cite{Mario}.
+Należy pamiętać, że~nieodpowiedni dobór zbioru uczącego lub funkcji, które oceniają poczynania agenta, potrafi doprowadzić do~anomalii w~procesie zdobywania wiedzy. Jeżeli zestawy testowe będą zbyt homogeniczne i~zbyt liczne w~stosunku do~osiągalnej liczby stanów rozgrywki, może dojść do~przeuczenia modelu, z~kolei zbyt krótka nauka nie~przygotuje programu do~nietypowych sytuacji. Nieprawidłowości w~procedurach klasyfikujących, choć mniej zauważalne, także potrafią doprowadzić do~niepożądanych sytuacji, tak jak miało to~miejsce w~przypadku programu grającego w~produkcje na~platformę Nintendo Entertainment System. Agent ten~korzystał z~algorytmów uczących, których celem było maksymalizowanie wyników w~grach takich jak Mario czy~Pac-Man. W~sytuacjach, które prowadziły do~niechybnej przegranej, program nauczył~się wstrzymywać rozgrywkę na~zawsze\cite{Mario}.
 
 \section{Naginanie zasad gry}
 
-W~oficjalnych zasadach gry nie~ma~wyszczególnionego przymusu udzielania podpowiedzi, które ujawniałyby jakiekolwiek karty. Jeżeli wybierzemy gracza, który nie~posiada żadnych czerwonych kart i~zdecydujemy się na~podpowiedzenie mu~czerwonego koloru, tura jest pomijana za~cenę żetonu podpowiedzi. Choć taki ruch wydaje~się~nie mieć sensu, gdyż podpowiedź można wykorzystać w~produktywny sposób, otwiera on~możliwość poważnego nagięcia zasad gry. Jeżeli każdej z~możliwych podpowiedzi przypiszemy unikatową wartość numeryczną, możemy za~ich pomocą przekazywać innym graczom informacje liczbowe. Jest to~powód, dla~którego możliwość udzielania pustych podpowiedzi jest uznawana w~społeczności graczy Hanabi za~kontrowersyjną, toteż w~niektórych edycjach gry została ona zakazana.
+W~oficjalnych zasadach gry nie~ma~wyszczególnionego przymusu udzielania podpowiedzi, które ujawniałyby jakiekolwiek karty. Jeżeli wybierzemy gracza, który nie~posiada żadnych czerwonych kart i~zdecydujemy się na~podpowiedzenie mu~czerwonego koloru, tura jest pomijana za~cenę żetonu podpowiedzi. Choć taki ruch wydaje~się~nie mieć sensu, gdyż podpowiedź można wykorzystać w~produktywny sposób, otwiera on~możliwość poważnego nagięcia zasad gry. Jeżeli każdej z~możliwych podpowiedzi przypiszemy unikatową wartość numeryczną, możemy za~ich~pomocą przekazywać innym graczom informacje liczbowe. Jest to~powód, dla~którego możliwość udzielania pustych podpowiedzi jest uznawana w~społeczności graczy Hanabi za~kontrowersyjną, toteż w~niektórych edycjach gry została ona zakazana.
 
 Fakt ten można wykorzystać do~stworzenia agenta, który za~pomocą pozornie bezwartościowych ruchów udziela podpowiedzi wszystkim graczom jednocześnie. Agent, który rozgrywa aktualną turę, oblicza idealne zagrania dla~innych uczestników rozgrywki, a~następnie szyfruje je~do~postaci liczbowej. Kolejni gracze, znając podaną przez poprzednika wartość, po~rozpatrzeniu optymalnych zagrań innych graczy, są~w~stanie wywnioskować, jaki ruch powinni wykonać.
 
-Według badań z 2017 roku\cite{HatPlayer}, agent ten uzyskuje maksymalną liczbę punktów średnio w~92\%~rozgrywanych gier, co~jest wynikiem bliskim optymalnemu. To~imponujący rezultat, zarówno ze~względu na~bardzo szybkie działanie algorytmu, jak i~jego nadzwyczajną efektywność.
+Według badań z 2017 roku\cite{HatPlayer}, agent ten uzyskuje maksymalną liczbę punktów średnio w~92\%~rozgrywanych gier, co~jest wynikiem bliskim optymalnemu. To~imponujący rezultat, zarówno ze~względu na~bardzo szybkie działanie algorytmu, jak~i~jego nadzwyczajną efektywność.
 
 Niestety, taki sposób gry całkowicie zawodzi, gdy jeden z~graczy wyłamie~się z~konwencji narzuconej przez protokół komunikacji. Dodatkowo, algorytm działa wyłącznie w~rozgrywkach na~czterech oraz pięciu graczy, gdyż głównym powodem jego sukcesu jest możliwość przekazywania w~każdej z~podpowiedzi maksymalnej ilości informacji, toteż~zmniejszenie liczby graczy powoduje znaczne zredukowanie efektywności ruchów. Są~to~powody, dla których agent ten nie~nadaje~się do~rozgrywki z~człowiekiem.
 
 \chapter{Funkcjonalna realizacja SI}
 
-W~celu zbadania zaprezentowanych sposobów tworzenia sztucznej inteligencji, która potrafiłaby grać w~Hanabi, zaimplementowaliśmy dziewięciu agentów. Aby umożliwić testowanie ich możliwości, opracowaliśmy także graficzny interfejs (patrz: \hyperref[fig:gui]{Rysunek 2.1}), pozwalający użytkownikowi na~aktywne uczestnictwo w~rozgrywce, złożonej z~dowolnie dobranego przez niego składu graczy komputerowych.
+W~celu zbadania zaprezentowanych sposobów tworzenia sztucznej inteligencji, która potrafiłaby grać w~Hanabi, zaimplementowaliśmy dziewięciu agentów. Aby~umożliwić testowanie ich możliwości, opracowaliśmy także graficzny interfejs (patrz: \hyperref[fig:gui]{\textbf{Rysunek 2.1}}), pozwalający użytkownikowi na~aktywne uczestnictwo w~rozgrywce, złożonej z~dowolnie dobranego przez niego składu graczy komputerowych.
 
 Siedmiu agentów jest opartych o~systemy regułowe, różniące~się stopniem zaawansowania wdrażanych strategii. Aby usprawnić działanie jednego z~agentów regułowych, użyliśmy bayesowskiej metody optymalizacji hiperparametrów, korzystającej z~procesów gaussowskich. Ostatni z~zaprezentowanych agentów stosuje algorytm uczący ze~wzmocnieniem, oparty o~funkcje heurystyczne generalizujące stan gry, wspomagane procesami decyzyjnymi Monte Carlo.
 
@@ -288,7 +288,7 @@ SmartCheater usprawnia poczynania agenta Cheater. Program oszukuje, dzięki czem
 	\label{fig:SmartCheater}
 \end{figure}
 
-Jak można oczekiwać po~agencie, który posuwa~się do~oszustwa bliskiego doskonałemu, jego wyniki są~bardzo wysokie --~nawet w~przypadku partii na~dwóch graczy, które cechują~się największymi dysproporcjami w~rozgrywce. Warto zauważyć, że~istnieją rozdania cechujące~się tak wysokim stopniem trudności, że~nawet ten agent uzyskuje w~nich mniej niż 20~punktów.
+Jak można oczekiwać po~agencie, który posuwa~się do~oszustwa bliskiego doskonałemu, jego wyniki są~bardzo wysokie --~nawet w~przypadku partii na~dwóch graczy, które cechują~się największymi dysproporcjami w~rozgrywce. Warto zauważyć, że~istnieją rozdania cechujące~się tak wysokim stopniem trudności, że~nawet ten~agent uzyskuje w~nich mniej niż 20~punktów.
 
 \section{Agent Erratic}
 
@@ -296,10 +296,10 @@ Strategia agenta Erratic polega na~wykonywaniu serii przypadkowych ruchów, któ
 
 \subsection*{Schemat działania}
 
-\begin{itemize}
+\begin{enumerate}
 	\item Wylosuj z~równym prawdopodobieństwem jeden z~rodzajów legalnych akcji (zagraj kartę, odrzuć kartę, udziel podpowiedzi innemu uczestnikowi rozgrywki).
 	\item Losowo wybierz szczegóły ruchu, a~następnie go~wykonaj.
-\end{itemize}
+\end{enumerate}
 
 
 \subsection*{Osiągi}
@@ -312,7 +312,7 @@ Strategia agenta Erratic polega na~wykonywaniu serii przypadkowych ruchów, któ
 	\label{fig:Erratic}
 \end{figure}
 
-Agent wykonujący wyłącznie losowe ruchy jest pierwszym tu~opisanym, który nie~oszukuje. Niestety, jak można było przewidywać, w~zdecydowanej większości gier uzyskuje on~wynik 0~lub~1~punktów. Jest to~spowodowane brakiem mechanizmu, który powstrzymywałby go~przed zagrywaniem kart, które nie~są~bezpieczne, toteż zagrania mają małą szansę na~bycie poprawnymi. Choć istnieje szansa na~wykonanie akcji udzielenia podpowiedzi, które w~tym przypadku są~bezużyteczne, ruch nie~zaburza wyników, gdyż wykorzystanie żetonu podpowiedzi nie~prowadzi do~eskalacji progresu gry (jeżeli nie~dobrano ostatniej karty z~talii).
+Agent wykonujący wyłącznie losowe ruchy jest pierwszym tu~opisanym, który nie~oszukuje. Niestety, jak można było przewidywać, w~zdecydowanej większości gier uzyskuje on~wynik 0~lub~1~punktów. Jest to~spowodowane brakiem mechanizmu, który powstrzymywałby go~przed zagrywaniem kart, które nie~są~bezpieczne, toteż~zagrania mają małą szansę na~bycie poprawnymi. Choć istnieje szansa na~wykonanie akcji udzielenia podpowiedzi, które w~tym przypadku są~bezużyteczne, ruch nie~zaburza wyników, gdyż wykorzystanie żetonu podpowiedzi nie~prowadzi do~eskalacji progresu gry (jeżeli nie~dobrano ostatniej karty z~talii).
 
 \section{Agent StoppedClock}
 
@@ -342,9 +342,9 @@ Agent ma~nikłą szansę na~uzyskanie wysokich wyników, a~jego konstrukcja nigd
 
 \section{Agent SimpleDistrustful}
 
-Agent SimpleDistrustful imituje postępowanie człowieka, który po~raz pierwszy gra w~Hanabi: wykonuje wyłącznie bezpieczne ruchy, lecz robi to~umiejętnie, gdyż potrafi przeprowadzać pewne wnioskowania, które na~jego miejscu mogłyby dokonać osoby o~podstawowej znajomości zasad. Program nie~udziela zbędnych podpowiedzi, stroni od~odrzucania kart, które mogą~się jeszcze przydać, a~także rozumie, że~niektóre karty zawsze można bezpiecznie zagrać lub odrzucić --~mimo posiadania o~nich niepełnej informacji.
+Agent SimpleDistrustful imituje postępowanie człowieka, który po~raz pierwszy gra w~Hanabi: wykonuje wyłącznie bezpieczne ruchy, lecz czyni to~umiejętnie, gdyż~potrafi przeprowadzać pewne wnioskowania, które na~jego miejscu mogłyby dokonać osoby o~podstawowej znajomości zasad. Program nie~udziela zbędnych podpowiedzi, stroni od~odrzucania kart, które mogą~się jeszcze przydać, a~także rozumie, że~niektóre karty zawsze można bezpiecznie zagrać lub odrzucić --~mimo posiadania o~nich niepełnej informacji.
 
-Nazwa agenta jest bezpośrednio powiązana z~jego strategią: agent nie~ufa, że~współuczestnicy rozgrywki mogą próbować przekazywać mu~informacje inne niż te, które są~podyktowane zasadami gry. Jego sposób postępowania jest podyktowany wyłącznie informacjami o~ujawnionych kartach, a~istnienie implicytnego protokołu komunikacji nie~jest rozważane.
+Nazwa agenta jest bezpośrednio powiązana z~jego strategią: agent nie~ufa, że~współuczestnicy rozgrywki mogą próbować przekazywać mu~informacje inne niż~te, które są~podyktowane zasadami gry. Jego sposób postępowania jest podyktowany wyłącznie informacjami o~ujawnionych kartach, a~istnienie implicytnego protokołu komunikacji nie~jest rozważane.
 
 \subsection*{Nowe pojęcia}
 
@@ -355,7 +355,7 @@ Nazwa agenta jest bezpośrednio powiązana z~jego strategią: agent nie~ufa, że
 	
 	\item \textbf{Wartościowa podpowiedź}:
 	
-	Zdarzają się~sytuacje, w~których udzielanie pewnych informacji jest niepożądane. Przykładowo: jeżeli dwóch lub więcej uczestników rozgrywki posiada kopię danej karty, warto skupić~się na~ujawnianiu wyłącznie jednej z~nich. Wartościowa podpowiedź to~taka, która unika udzielania informacji, jeżeli w~poźniejszych etapach rozgrywki okażą~się one być nieprzydatne. Przykładowo: załóżmy, że~gracze X~i~Y posiadają po~jednej kopii danej karty. Dodatkowo, jej kolor został już ujawniony graczowi~X, lecz nie graczowi~Y, a~numer karty nie jest znany żadnemu z~nich. W~takiej sytuacji wystarczy udzielić graczowi X tylko jednej informacji, by~w~pełni ujawnić kartę. Akcja częściowego ujawnienia karty gracza~Y nie~jest wartościowa, gdyż można w~zamian w~pełni ujawnić kartę gracza~X, co~jest ważniejsze dla dalszego przebiegu rozgrywki. Choć gracz~Y nie~otrzyma informacji o~karcie, nie~przeszkadza to~w~dalszej rozgrywce --~odrzucenie karty nie~wiąże~się z~żadnymi konsekwencjami, gdyż nie~jest ona w~danym momencie krytyczna.
+	Zdarzają się~sytuacje, w~których udzielanie pewnych informacji jest niepożądane. Przykładowo: jeżeli dwóch lub więcej uczestników rozgrywki posiada kopię danej karty, warto skupić~się na~ujawnianiu wyłącznie jednej z~nich. Wartościowa podpowiedź to~taka, która unika udzielania informacji, jeżeli w~poźniejszych etapach rozgrywki okażą~się one być nieprzydatne. Przykładowo: załóżmy, że~gracze X~i~Y posiadają po~jednej kopii danej karty. Dodatkowo, jej kolor został już ujawniony graczowi~X, lecz nie graczowi~Y, a~numer karty nie jest znany żadnemu z~nich. W~takiej sytuacji wystarczy udzielić graczowi X tylko jednej informacji, by~w~pełni ujawnić kartę. Akcja częściowego ujawnienia karty gracza~Y nie~jest wartościowa, gdyż można w~zamian w~pełni ujawnić kartę gracza~X, co~jest ważniejsze dla dalszego przebiegu rozgrywki. Choć gracz~Y nie~otrzyma informacji o~karcie, nie~przeszkadza to~w~dalszej rozgrywce --~odrzucenie karty nie~wiąże~się z~żadnymi konsekwencjami, gdyż~nie~jest ona w~danym momencie krytyczna.
 
 	\item \textbf{Najbliższy gracz}:
 	
@@ -387,9 +387,9 @@ Agent nie~uzyskuje wysokich wyników, gdyż opiera swoje działania na~przecięt
 
 \section{Agent Distrustful}
 
-Agent Distrustful dopracowuje strategię stosowaną przez SimpleDistrustful. Agent nadal gra zachowawczo i~nie ufa współuczestnikom rozgrywki, lecz ma~do~dyspozycji maksymalnie rozszerzony system dedukcji. Aby zminimalizować prawdopodobieństwo odrzucania kart krytycznych, został on~dodatkowo usprawniony o~konwencję, która chroni najnowsze karty poprzez nadawanie im~wysokich priorytetów. Aby zwiększyć potencjalną przydatność każdej z~dokonywanych akcji, agent dynamicznie dostosowuje swój sposób postępowania do~aktualnego stanu rozgrywki i~zmienia priorytety manewrów, w~zależności od~liczby pozostałych żetonów podpowiedzi. Pozwala to~na~dopasowywanie przyjmowanej taktyki, przy jednoczesnym zachowaniu zasad ugruntowanych przez narzuconą strategię.
+Agent Distrustful dopracowuje strategię stosowaną przez SimpleDistrustful. Program nadal gra zachowawczo i~nie ufa współuczestnikom rozgrywki, lecz ma~do~dyspozycji maksymalnie rozszerzony system dedukcji. Aby zminimalizować prawdopodobieństwo odrzucania kart krytycznych, został on~dodatkowo usprawniony o~konwencję, która chroni najnowsze karty poprzez nadawanie im~wysokich priorytetów. Aby~zwiększyć potencjalną przydatność każdej z~dokonywanych akcji, agent dynamicznie dostosowuje swój sposób postępowania do~aktualnego stanu rozgrywki i~zmienia priorytety manewrów, w~zależności od~liczby pozostałych żetonów podpowiedzi. Pozwala to~na~dopasowywanie przyjmowanej taktyki, przy jednoczesnym zachowaniu zasad ugruntowanych przez narzuconą strategię.
 
-Dotychczas przedstawieni agenci korzystali z~systemów regułowych w~celu ustalenia priorytetów udzielanych podpowiedzi. Agent Distrustful jest pierwszym, który wykorzystuje funkcje heurystyczne do~oceny przydatności ruchów. Każdej z~możliwych podpowiedzi przypisywana jest wartość numeryczna, która określa jej istotność w~kontekście stanu rozgrywki, o~którym agent posiada ograniczoną informację. Udzielenie podpowiedzi polega na~znalezieniu tej z~nich, której funkcja heurystyczna przypisuje najwyższą wartość. Dodatkowo, aby uniknąć sytuacji, w~których udzielenie podpowiedzi prowadzi do~mało znaczącego progresu w~rozgrywce, wartości numeryczne ocen muszą przekraczać wartość pułapu jakościowego, który został znaleziony eksperymentalnie.
+Dotychczas przedstawieni agenci korzystali z~systemów regułowych w~celu ustalenia priorytetów udzielanych podpowiedzi. Agent Distrustful jest pierwszym, który wykorzystuje funkcje heurystyczne do~oceny przydatności ruchów. Każdej z~możliwych podpowiedzi przypisywana jest wartość numeryczna, która określa jej istotność w~kontekście stanu rozgrywki, o~którym agent posiada ograniczoną informację. Udzielenie podpowiedzi polega na~znalezieniu tej z~nich, której funkcja heurystyczna przypisuje najwyższą wartość. Dodatkowo, aby uniknąć sytuacji, w~których udzielenie podpowiedzi prowadzi do~mało znaczącego progresu w~rozgrywce, wartości numeryczne ocen muszą przekraczać wartość pułapu jakościowego. Jego wartość została znaleziona eksperymentalnie.
 
 \subsection*{Nowe pojęcia}
 
@@ -400,13 +400,13 @@ Dotychczas przedstawieni agenci korzystali z~systemów regułowych w~celu ustale
 	
 	\item \textbf{Najstarsza (najmłodsza) karta}:
 	
-	Definicja starszeństwa karty jest odmienna od~tej znanej z~brydża lub pokera. Najstarsza (najmłodsza) karta to~taka, która znajduje~się w~ręce danego gracza od~największej (najmniejszej) liczby tur, w~porównaniu do~innych jego kart --~w~przypadku konfliktu za~najstarszą (najmłodszą) kartę uznawana jest ta~umiejscowiona najbardziej na~lewo (prawo).
+	Definicja starszeństwa karty jest odmienna od~tej znanej z~brydża lub pokera. Najstarsza (najmłodsza) karta to~taka, która znajduje~się w~ręce danego gracza od~największej (najmniejszej) liczby tur, w~porównaniu do~innych jego~kart --~w~przypadku konfliktu za~najstarszą (najmłodszą) kartę uznawana jest ta~umiejscowiona najbardziej na~lewo (prawo).
 
 \end{itemize}
 
 \subsection*{Schemat działania}
 
-Agent jest złożony z~siedmiu modułów, które są~rozważane po~kolei w~jednej z~trzech konfiguracji. Każdy moduł, poza ostatnim w~sekwencji, może zawieść. Ich kolejność zależy od~liczby posiadanych żetonów podpowiedzi:
+Agent jest złożony z~siedmiu modułów, które są~rozważane po~kolei w~jednej z~trzech konfiguracji. Każdy moduł, poza ostatnim w~sekwencji, może zawieść. Ich~kolejność zależy od~liczby posiadanych żetonów podpowiedzi:
 
 \begin{itemize}
 	\item Mniej niż 3~żetony: sekwencja 1, 2, 5, 3, 4, 7 (moduł 6 nie jest używany).
@@ -462,7 +462,7 @@ Każda z~kart jest oceniana z~osobna przy użyciu funkcji heurystycznych. Za~ost
 	\item odległość właściciela karty od~gracza udzielającego podpowiedzi.
 \end{itemize}
 
-O~ostatecznej formie modułów, a~także kolejności ich rozpatrywania, zdecydowała manualna analiza rozgrywek przeprowadzanych przez agenta. Aby usprawnić zachowanie programu, badaliśmy jego sposób postępowania w~krytycznych momentach rozgrywki, po~czym decydowaliśmy o~zmianie wag, dodaniu nowych modułów lub zmianie ich kolejności tak, by~algorytm uwzględniał pożądane zachowania.
+O~ostatecznej formie modułów, a~także kolejności ich rozpatrywania, zdecydowała manualna analiza rozgrywek przeprowadzanych przez agenta. Aby usprawnić zachowanie programu, badaliśmy jego sposób postępowania w~krytycznych momentach rozgrywki, a~następnie decydowaliśmy o~zmianie wag, dodaniu nowych modułów lub zmianie ich kolejności tak, by~algorytm uwzględniał pożądane zachowania.
 
 Początkowo, moduł numer~1 (``Necessary tip'') przyjmował inną formę. Agent był szczególnie ostrożny i~zawsze ostrzegał kolejnego gracza, jeżeli ten mógł odrzucić kartę krytyczną. W~praktyce doprowadzało to~do~powstawania cykli, w~których gracze naprzemiennie udzielali podpowiedzi i~odrzucali karty, przez co~częstotliwość zagrań jednego z~uczestników rozgrywki drastycznie spadała. Choć pierwotny moduł znacznie pogarszał wyniki agenta Distrustful, jego zrewidowana wersja jest punktem centralnym kolejnego, bardziej zaawansowanego agenta.
 
@@ -482,9 +482,9 @@ Mimo znacznego wzmocnienia strategii agenta SimpleDistrustful, osiągane wyniki 
 
 Poprzedników agenta Trustful nękają dwa zasadnicze problemy. Są~to: trudność związana z~efektywnym przekazywaniem informacji, a~także wystrzeganie~się zagrań, które nie są~bezpieczne. Obie te~przeszkody można pokonać poprzez ustanowienie protokołu komunikacji, który nadaje niektórym akcjom dodatkowego, implicytnego znaczenia, rozumianego przez pozostałych uczestników rozgrywki. Podpowiedzi udzielane przez agenta przekazują nie~tylko informacje o~kartach, ale i~plan działania na~kolejne tury. Aby częściowo rozwiązać problem ograniczonej liczby żetonów podpowiedzi, program potrafi, przy spełnieniu odpowiednich warunków, wykonywać ruchy, które nie~są~inferowalne, lecz mają bardzo wysokie prawdopodobieństwo bycia bezpiecznymi.
 
-Protokół komunikacji dzieli wszystkie podpowiedzi na~dwie kategorie: obietnice i~komunikaty. Gracze rozpoznają typy podpowiedzi za~pomocą algorytmu, po~czym wnioskują, jakie dodatkowe informacje próbują im~przekazać inni uczestnicy rozgrywki. Ujawnianie kart udziela informacji, których poprawność jest zagwarantowana przez reguły rządzące grą, lecz wnioski, które nie~są~implikowane przez zasady, mogą być fałszywe. Obietnice pozwalają na~oszczędzanie żetonów podpowiedzi, lecz mogą doprowadzić do~utraty żetonów życia.
+Protokół komunikacji dzieli wszystkie podpowiedzi na~dwie kategorie: obietnice i~komunikaty. Gracze rozpoznają typy podpowiedzi za~pomocą algorytmu, a~następnie wnioskują, jakie dodatkowe informacje próbują im~przekazać inni uczestnicy rozgrywki. Ujawnianie kart udziela informacji o~poprawności zagwarantowanej przez reguły rządzące grą, lecz wnioski, które nie~są~implikowane przez zasady, mogą być fałszywe. Obietnice pozwalają na~oszczędzanie żetonów podpowiedzi, lecz mogą doprowadzić do~utraty żetonów życia.
 
-Agent Trustful, w~przeciwieństwie do~agenta Distrustful, może wykonywać niepoprawne zagrania, gdyż ufa, że~inni gracze nigdy nie~działają na~szkodę grupy.
+Agent Trustful, w~przeciwieństwie do~agenta Distrustful, może wykonywać niepoprawne zagrania, gdyż ufa, że~współuczestnicy rozgrywki nigdy nie~starają~się działać na~szkodę innych graczy.
 
 \subsection*{Nowe pojęcia}
 
@@ -500,6 +500,8 @@ Agent Trustful, w~przeciwieństwie do~agenta Distrustful, może wykonywać niepo
 	\item \textbf{Podpowiedź ratunkowa}:
 	
 	Heurystycznie wartościowa podpowiedź, która jest udzielana najbliższemu z~graczy. Podpowiedź ratunkowa ignoruje możliwość udzielania informacji innym uczestnikom rozgrywki, gdyż priorytetyzuje ``uratowanie'' najbliższego gracza z~nieprzychylnej sytuacji. Podpowiedź ratunkowa może być obietnicą lub komunikatem.
+	
+	\newpage
 	
 	\item \textbf{Weto}:
 	
@@ -520,7 +522,7 @@ Agent posiada dwie kategorie podpowiedzi: obietnice oraz komunikaty. Ustalenie i
 
 Podpowiedzi są~najczęściej uznawane za~obietnice. Zjawisko to~jest szczególnie korzystne, gdyż większość zagrań nie wymaga pełnego ujawnienia kart, co~pozwala na~oszczędne dysponowanie ograniczoną liczbą żetonów podpowiedzi.
 
-Agent jest złożony z~dziesięciu modułów, które są~rozważane po~kolei w~jednej z~czterech konfiguracji. Każdy moduł, poza ostatnim w~sekwencji, może zawieść. Ich kolejność zależy od~liczby posiadanych żetonów podpowiedzi:
+Agent jest złożony z~dziesięciu modułów, które są~rozważane po~kolei w~jednej z~czterech konfiguracji. Każdy moduł, poza ostatnim w~sekwencji, może zawieść. Ich~kolejność zależy od~liczby posiadanych żetonów podpowiedzi:
 
 \begin{itemize}
 	\item Mniej niż 3~żetony: sekwencja 1, 2, 3, 9, 4, 5, 10 (moduły 6, 7, 8 nie są używane).
@@ -528,7 +530,9 @@ Agent jest złożony z~dziesięciu modułów, które są~rozważane po~kolei w~j
 	\item 6~lub~7 żetonów: sekwencja 1, 2, 3, 4, 5, 9, 6, 7, 10 (moduł 8 nie jest używany).
 	\item Dokładnie 8~żetonów: sekwencja 1, 2, 3, 4, 5, 6, 7, 8, 9, 10.
 \end{itemize}
-Używane moduły to:
+
+\newpage
+\noindent Używane moduły to:
 
 \begin{enumerate}
 	\item \underline{``Necessary tip''}:
@@ -599,7 +603,7 @@ Podpowiadanie kart w~trybie obietnicy rzadko przebiega w~bezproblemowy sposób: 
 
 Udzielanie podpowiedzi podlega pewnemu rygorowi, lecz czasami potencjalny zysk z~udzielenia informacji o~wielu kartach naraz przeważa nad ryzykiem związanym z~niepoprawnością obietnicy. Ponieważ agent stara~się zachowywać co~najmniej jeden żeton podpowiedzi na~takie przypadki, ryzyko niefortunnego zagrania drastycznie spada. Niestety, nadal może dojść do~sytuacji, w~których gracze tracą żetony życia poprzez niepoprawne zagrania. Aby temu zapobiec, agent ogranicza zaufanie do~innych graczy, gdy w~grze pozostał ostatni żeton życia --~zagrywane są~wyłącznie te~karty objęte obietnicą, które zostały podpowiedziane pojedynczo. W~ten sposób całkowicie eliminowane jest ryzyko niebezpiecznych zagrań, lecz agent nadal nie~degeneruje swojej strategii do~tej znanej z~agenta Distrustful.
 
-Strategia agenta nie~jest~przystosowana do~rozgrywek dwuosobowych, gdyż udzielenie dowolnej podpowiedzi wetuje kartę, która miała szansę być właśnie zagrana --~prowadzi to~do konieczności omijania systemu wetowania obietnic. Można to~osiągnąć wyłącznie poprzez wykonanie jednej z~pozostałych akcji, co~jest trudnym zadaniem, gdyż wiąże~się ono~z koniecznością dobrej znajomości własnych kart.
+Strategia agenta nie~jest~przystosowana do~rozgrywek dwuosobowych, gdyż~udzielenie dowolnej podpowiedzi wetuje kartę, która miała szansę być właśnie zagrana --~prowadzi to~do konieczności omijania systemu wetowania obietnic. Można to~osiągnąć wyłącznie poprzez wykonanie jednej z~pozostałych akcji, co~jest trudnym zadaniem, gdyż wiąże~się ono~z koniecznością dobrej znajomości własnych kart.
 
 \subsection*{Osiągi}
 
@@ -615,7 +619,7 @@ Agent Trustful nie tylko potrafi przekroczyć próg 20~punktów, ale i~zdarza mu
 
 \section{Agent BayesianTrustful}
 
-Agent BayesianTrustful stanowi próbę odnalezienia nowych wag funkcji heurystycznych agenta Trustful, które pierwotnie zostały dobrane manualnie. W~tym celu użyliśmy bayesowskiej metody optymalizacji hiperparametrów, korzystającej z~procesów gaussowskich.
+Agent BayesianTrustful stanowi próbę odnalezienia nowych wag funkcji heurystycznych agenta Trustful, które pierwotnie zostały dobrane manualnie. W~tym~celu użyliśmy bayesowskiej metody optymalizacji hiperparametrów, korzystającej z~procesów gaussowskich.
 
 \subsection*{Podstawy teoretyczne}
 
@@ -702,7 +706,7 @@ Funkcje oceniające nie~są~narzucone odgórnie. Każda z~nich wydaje werdykt w~
 
 Najwyższe osiągi i~największą swobodę nauki można osiągnąć poprzez przekazywanie funkcjom oceniającym struktur, które dokładnie odwzorowują obserwowany stan rozgrywki. Dane, które musiałyby być zawarte w~takim obiekcie, to~między innymi: kolejność kart w~rękach graczy, status stosów zagranych kart, listy odrzuconych oraz niedobranych kart, a~także historia ruchów poszczególnych graczy. Niestety, ze~względu na~bardzo dużą liczbę unikalnych stanów gry, użycie takiego obiektu jest niepraktyczne, gdyż długość procesu uczenia stałaby~się nieakceptowalna. Należałoby rozważyć ponad $10^{12}$ stanów --~zakładając, że~potrafimy zbadać w~ciągu jednej sekundy około 500 z~nich, pojedyncze odwiedzenie każdego elementu drzewa stanów trwałoby ponad 63~lata. Aby zredukować złożoność algorytmu, zdecydowaliśmy~się na~upraszczanie stanów gry przy użyciu funkcji heurystycznych. Pod uwagę brane są~wyłącznie informacje niezbędne do~efektywnego rozpoznawania ogólnych sytuacji, w~których może znaleźć~się agent.
 
-Informacje o~stanie gry są~przechowywane jako kolekcja wektorów, które zawierają zestaw danych o~wybranym obiekcie gry, reprezentującym pewną ograniczoną abstrakcję stanu rozgrywki. Informacje są~przechowywane w~formie liczbowej z~ograniczonego zakresu, co~pozwala na~zredukowanie liczby stanów rozgrywki. Wyróżniamy trzy rodzaje kontenerów o~(między innymi) następujących składowych:
+Informacje o~stanie gry są~przechowywane jako kolekcja wektorów, które zawierają zestaw danych o~wybranym obiekcie gry, reprezentującym pewną abstrakcję stanu rozgrywki. Informacje są~przechowywane w~formie liczbowej z~ograniczonego zakresu, co~pozwala na~zredukowanie liczby stanów rozgrywki. Wyróżniamy trzy rodzaje kontenerów o~(między innymi) następujących składowych:
 
 \begin{enumerate}
 	\item Pojedyncze karty aktualnego gracza (około $10^5$ unikalnych stanów):
@@ -734,7 +738,7 @@ Informacje o~stanie gry są~przechowywane jako kolekcja wektorów, które zawier
 		\end{itemize}
 \end{enumerate}
 
-Niektóre ze~składowych obiektów zostały pominięte. Podane oszacowania liczby unikalnych stanów zostały oszacowane, ze~względu na~trudność dokładnego policzenia, ile z~nich jest~nieosiągalnych.
+Niektóre ze~składowych obiektów zostały pominięte. Podane liczby unikalnych stanów zostały oszacowane, z~powodu trudności dotyczących dokładnego policzenia, ile z~nich jest~nieosiągalnych.
 
 Aby maksymalnie uszczuplić liczbę możliwych stanów gry, większość wymienionych wartości została dodatkowo ograniczona. Przykładowo, faktyczna wartość składowej oznaczonej symbolem $\otimes$ wynosi $\min{(2, N)}$, gdzie $N$ to~wyliczona wartość pomiędzy 0~a~5. Taki zabieg pozwala na~grupowanie podobnych stanów gry i~umożliwia wnioskowanie o~sytuacjach, które nie~zostały uprzednio zbadane.
 
@@ -746,7 +750,7 @@ Początkowo, wartości liczbowe zwracane przez funkcje oceniające zawierają s
 
 Po~dokonaniu analizy heurystycznej ruchów, wykonywana jest akcja, która otrzymała najwyższą notę. Aby wymusić dodatkowe losowe błądzenia, agent ma~stałą szansę na~wykonanie arbitralnego ruchu (zagranie, odrzucenie i~podpowiedź są~jednakowo prawdopodobne), która wynosi 1\%. Funkcjonalność ta~jest aktywna wyłącznie wtedy, gdy program znajduje~się w~trybie nauki.
 
-Na~koniec każdej z~tur, agent rozważa efekty wybranej akcji. Jeżeli program wykonał poprawne zagranie lub odrzucił bezużyteczną kartę, funkcje oceniające ten ruch są~nagradzane. Bonus otrzymują także funkcje, które zdecydowały o~udzieleniu podpowiedzi dotyczącej danej karty. Podobnie, jeżeli zagranie było niepoprawne lub została odrzucona karta krytyczna (bądź taka, którą można było zagrać), funkcje są~karane. Z~uwagi na~trudność natychmiastowego oszacowania poprawności akcji udzielenia podpowiedzi, te~ruchy są~oceniane dopiero po~zakończeniu rozgrywki.
+Na~koniec każdej z~tur, agent rozważa efekty wybranej akcji. Jeżeli program wykonał poprawne zagranie lub odrzucił bezużyteczną kartę, funkcje oceniające ten ruch są~nagradzane. Bonus otrzymują także funkcje, które zdecydowały o~udzieleniu podpowiedzi dotyczącej danej karty. Podobnie, jeżeli zagranie było niepoprawne lub~została odrzucona karta krytyczna (bądź taka, którą można było zagrać), funkcje są~karane. Z~uwagi na~trudność natychmiastowego oszacowania poprawności akcji udzielenia podpowiedzi, te~ruchy są~oceniane dopiero po~zakończeniu rozgrywki.
 
 W~zależności od~tego, czy po~ukończeniu partii agent uzyskał wynik wyższy od~mediany punktów z~ostatniego tysiąca rozgrywek, wszystkie akcje dokonane w~trakcie gry są~nagradzane lub karane. Zmiana jest wprost proporcjonalna do~różnicy pomiędzy uzyskanym wynikiem a~medianą. Funkcja oceniająca, która dokonuje wyboru głównej akcji, korzysta z~tego mechanizmu w~największym stopniu.
 
@@ -827,9 +831,9 @@ Strategia wypracowana przez agentów jest wyjątkowo trudna do~zrozumienia, gdy�
  	\label{table:summary}		
  \end{table}
  
-Najlepsze średnie wyniki agentów, którzy nie~oszukują, oscylują pomiędzy 19.07 punktów w~rozgrywkach dwuosobowych a~20.83 punktów w~rozgrywkach czteroosobowych, co, według instrukcji (patrz: \hyperref[fig:scores]{Rysunek 2.2}), jest dobrym rezultatem. Agenci nie~osiągają zaprezentowanych przez badaczy z~Google i~Facebooka wyników rzędu 24.5 punktów, lecz ich ruchy są~wykonywane niemal natychmiastowo, co~pozwala na~komfortową rozgrywkę z~człowiekiem na~komputerach osobistych.
+Najlepsze średnie wyniki agentów, którzy nie~oszukują, oscylują pomiędzy 19.07 punktów w~rozgrywkach dwuosobowych a~20.83 punktów w~rozgrywkach czteroosobowych, co, według instrukcji (patrz: \hyperref[fig:scores]{\textbf{Rysunek 2.2}}), jest dobrym rezultatem. Agenci nie~osiągają zaprezentowanych przez badaczy z~Google'a i~Facebooka wyników rzędu 24.5 punktów, lecz ich ruchy są~wykonywane niemal natychmiastowo, co~pozwala na~komfortową rozgrywkę z~człowiekiem na~komputerach osobistych.
  
- Agent BayesianTrustful4 uzyskał aż~trzy z~czterech najwyższych średnich punktów spośród agentów, którzy nie~oszukują. Lepszym wyborem do~partii na trzech graczy byłby jednak agent BayesianTrustful2 --~choć jego wynik jest nieco niższy, różnica w~odchyleniu standardowym jest na~tyle znacząca, by~móc chcieć go~wybrać w~celu uzyskania bardziej stabilnego przebiegu rozgrywki. Podobne rozumowanie skłania do~zastąpienia BayesianTrustful2 agentem Reinforced2 w~rozgrywkach dwuosobowych.
+ Agent BayesianTrustful4 uzyskał aż~trzy z~czterech najwyższych średnich punktów spośród agentów, którzy nie~oszukują. Lepszym wyborem do~partii na trzech graczy byłby jednak agent BayesianTrustful2 --~choć jego wyniki są~nieco niższe, różnica w~odchyleniu standardowym jest na~tyle znacząca, by~móc chcieć go~wybrać w~celu uzyskania bardziej stabilnego przebiegu rozgrywki. Podobne rozumowanie skłania do~zastąpienia BayesianTrustful2 agentem Reinforced2 w~rozgrywkach dwuosobowych.
 
 \chapter{Niestandardowe modele rozgrywki}
 \label{sec:xy}
@@ -922,7 +926,7 @@ Choć agenci Reinforced2 oraz Reinforced4 osiągają zadowalające wyniki, mogą
 
 Rozgrywki mieszane, w~których agenci Reinforced2 oraz Reinforced4 uczyliby~się od~siebie nawzajem, mogłyby dać ciekawe efekty. Istnieje możliwość, że~wypracowaliby oni nowy protokół komunikacji, który, łącząc strategie obu agentów, potrafiłby osiągać wysokie i~stabilne wyniki, niezależnie od~liczby graczy.
 
-W~pracy nie~zbadano możliwości stworzenia agenta, który dostosowywałby swój sposób postępowania w~zależności od~akcji, których dokonywaliby inni uczestnicy rozgrywki. Algorytm, który potrafiłby dynamicznie dostosowywać swoją strategię, mógłby osiągać bardzo wysokie wyniki zarówno w~potyczkach XY, jak i~grach, w~których uczestniczy człowiek.
+W~pracy nie~zbadano możliwości stworzenia agenta, który dostosowywałby swój sposób postępowania w~zależności od~akcji, których dokonywaliby inni uczestnicy rozgrywki. Algorytm, potrafiący dynamicznie zmieniać swoją strategię, mógłby osiągać bardzo wysokie wyniki zarówno w~potyczkach XY, jak i~grach, w~których uczestniczy człowiek.
 
 Protokół komunikacji agenta Trustful został oparty o~nasze własne spostrzeżenia, zdobyte podczas obserwacji rozgrywek ludzkich graczy. Nie wykluczamy istnienia bardziej zaawansowanych strategii (przykładowo: opartych o~obserwacje zachowań profesjonalnych graczy Hanabi), które pozwoliłyby na~uzyskanie wyższych wyników.
 
