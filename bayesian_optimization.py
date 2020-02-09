@@ -26,8 +26,7 @@ def play_function(d0, d1, d2, g0, g1, g2, g3, g4, g5, g6, g7, r0, r1, r2, r3, r4
     while played_games < games_to_play:
         played_games += 1
 
-        p = [players.TrustfulParamInjection(), players.TrustfulParamInjection(),
-             players.TrustfulParamInjection(), players.TrustfulParamInjection()]
+        p = [players.TrustfulParamInjection(), players.TrustfulParamInjection()]
 
         game = Game(p, logger, log=False, learning_state=parameters)
 
@@ -58,7 +57,7 @@ optimizer = bayes_opt.BayesianOptimization(
 )
 
 load_logs(optimizer, logs=["./logs.json"])
-#logger1 = JSONLogger(path="./logs4.json")
+#logger = JSONLogger(path="./logs.json")
 #optimizer.subscribe(Events.OPTMIZATION_STEP, logger1)
 
 print("New optimizer is now aware of {} points.".format(len(optimizer.space)))
