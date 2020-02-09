@@ -22,6 +22,16 @@ class Reinforced:
         self.point_of_uselessness = {}
         self.oldest_card = {}
 
+    def __str__(self):
+        return self.name
+
+    def inject_info(self, player_number, logger, learning_state, name_suffix=''):
+        self.player_number = player_number
+        self.logger = logger
+        self.learning = False
+        self.learning_state = learning_state
+        self.name += name_suffix
+
     def initialize_player(self, round_info):
         self.learning = True
         self.number_of_players = round_info.number_of_players

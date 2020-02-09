@@ -7,7 +7,7 @@ from copy import deepcopy
 debug = False
 
 
-class TrustfulParamInjection(BasePlayer):
+class TrustfulParamInjection:
     def __init__(self, *args):
         super(TrustfulParamInjection, self).__init__(*args)
         self.name = 'Trustful Tester'
@@ -17,6 +17,16 @@ class TrustfulParamInjection(BasePlayer):
         self.risky_tip = []
         self.information_tip = []
         self.hand_size = 5
+
+    def __str__(self):
+        return self.name
+
+    def inject_info(self, player_number, logger, learning_state, name_suffix=''):
+        self.player_number = player_number
+        self.logger = logger
+        self.learning = False
+        self.learning_state = learning_state
+        self.name += name_suffix
 
     def initialize_card_hint_history(self, round_info):
         original_player_number = round_info.player_turn
