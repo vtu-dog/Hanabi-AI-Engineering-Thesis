@@ -595,7 +595,7 @@ Poza czynnikami wyszczególnionymi podczas analizy agenta Distrustful, na~werdyk
 	\item czy karta jest pod działaniem efektu obietnicy,
 	\item czy podpowiedź zniweczy przydatną obietnicę,
 	\item czy podpowiedź jest ryzykowna,
-	\item kolejność ujawnianych kart w~ręce,
+	\item czy zagrywanie podpowiadanych kart od~lewej do~prawej byłoby bezpieczne,
 	\item liczba pozostałych żetonów życia.
 \end{itemize}
 
@@ -832,9 +832,11 @@ Strategia wypracowana przez agentów jest wyjątkowo trudna do~zrozumienia, gdy�
  	\label{table:summary}		
  \end{table}
  
-Najlepsze średnie wyniki agentów, którzy nie~oszukują, oscylują pomiędzy 19.07 punktów w~rozgrywkach dwuosobowych a~20.83 punktów w~rozgrywkach czteroosobowych, co, według instrukcji (patrz: \hyperref[fig:scores]{\textbf{Rysunek 2.2}}), jest dobrym rezultatem. Agenci nie~osiągają zaprezentowanych przez badaczy z~Google'a i~Facebooka wyników rzędu 24.5 punktów, lecz ich ruchy są~wykonywane niemal natychmiastowo, co~pozwala na~komfortową rozgrywkę z~człowiekiem na~komputerach osobistych.
- 
- Agent BayesianTrustful4 uzyskał aż~trzy z~czterech najwyższych średnich punktów spośród agentów, którzy nie~oszukują. Lepszym wyborem do~partii na trzech graczy byłby jednak agent BayesianTrustful2 --~choć jego wyniki są~nieco niższe, różnica w~odchyleniu standardowym jest na~tyle znacząca, by~móc chcieć go~wybrać w~celu uzyskania bardziej stabilnego przebiegu rozgrywki. Podobne rozumowanie skłania do~zastąpienia BayesianTrustful2 agentem Reinforced2 w~rozgrywkach dwuosobowych.
+Najlepsze średnie wyniki agentów, którzy nie~oszukują, oscylują pomiędzy 19.07 punktów w~rozgrywkach dwuosobowych a~20.83 punktów w~rozgrywkach czteroosobowych, co, według instrukcji (patrz: \hyperref[fig:scores]{\textbf{Rysunek 2.2}}), jest dobrym rezultatem. Uważamy~się za~wprawnych graczy --~osiągi najbardziej zaawansowanych agentów pokrywają~się z~naszymi.
+
+Agent BayesianTrustful4 uzyskał aż~trzy z~czterech najwyższych średnich punktów spośród agentów, którzy nie~oszukują. Lepszym wyborem do~partii na trzech graczy byłby jednak agent BayesianTrustful2 --~choć jego wyniki są~nieco niższe, różnica w~odchyleniu standardowym jest na~tyle znacząca, by~móc chcieć go~wybrać w~celu uzyskania bardziej stabilnego przebiegu rozgrywki. Podobne rozumowanie skłania do~zastąpienia BayesianTrustful2 agentem Reinforced2 w~rozgrywkach dwuosobowych.
+
+Agenci nie~osiągają zaprezentowanych przez badaczy z~Google'a i~Facebooka wyników rzędu 24.5 punktów, lecz ich ruchy są~wykonywane niemal natychmiastowo, co~pozwala na~komfortową rozgrywkę z~człowiekiem na~komputerach osobistych.
 
 \chapter{Niestandardowe modele rozgrywki}
 \label{sec:xy}
@@ -990,6 +992,80 @@ Główny katalog projektu zawiera programy, które pozwalają na~kontynuowanie j
 	\item Program odpowiedzialny za~optymalizację hiperparametrów metodą bayesowską zawarty jest w~pliku $bayesian\_optimization.py$.
 	\item Wyniki eksperymentów dokonywanych na~agentach można znaleźć w~notatniku $benchmark.ipynb$. Do otworzenia pliku potrzebne będzie zainstalowanie programu Jupyter Notebook$\footnote{Instrukcja instalacji programu Jupyter Notebook: \href{https://jupyter.org/install}{\textbf{link}} (term. wiz. 09.02.2020)}$.
 \end{itemize}
+
+\chapter{Podział prac}
+
+\enlargethispage{\baselineskip}
+
+\begin{table}[H]
+	\centering
+	\captionsetup{format=hang}
+	\begin{tabular}{ r|c|c| }	
+ 		\multicolumn{1}{r}{}	
+ 		 & \multicolumn{1}{c}{Wojciech Jarząbek}		
+ 		 & \multicolumn{1}{c}{Jacek Leja} \\		
+ 		\cline{2-3}
+ 		Szkielet programu & **** & ** \\
+ 		\cline{2-3}
+ 		Tworzenie interfejsu graficznego & ***** & * \\
+ 		\cline{2-3}
+ 		Koncepcje agentów & ** & ***** \\
+ 		\cline{2-3}
+ 		Tworzenie agenta Cheater & ***** & * \\
+ 		\cline{2-3}
+ 		Tworzenie agenta SmartCheater & ** & **** \\
+ 		\cline{2-3}
+ 		Tworzenie agenta Erratic & ** & **** \\
+ 		\cline{2-3}
+ 		Tworzenie agenta StoppedClock & *** & *** \\
+ 		\cline{2-3}
+ 		Tworzenie agenta SimpleDistrustful & ** & **** \\
+ 		\cline{2-3}
+ 		Tworzenie agenta Distrustful & * & ***** \\
+ 		\cline{2-3}
+ 		Tworzenie agenta Trustful & * & ***** \\
+ 		\cline{2-3}
+ 		Tworzenie agentów BayesianTrustful & *** & *** \\
+ 		\cline{2-3}
+ 		Tworzenie agentów Reinforced & * & ***** \\
+ 		\cline{2-3}
+ 		Testy poprawnościowe i wydajnościowe & *** & *** \\
+ 		\cline{2-3}
+ 		Dostrajanie parametrów agentów & ** & **** \\
+ 		\cline{2-3}
+ 	\end{tabular}		
+ 	\caption{Tworzenie aplikacji}		
+ \end{table}
+ 
+ \begin{table}[H]
+	\centering
+	\captionsetup{format=hang}
+	\begin{tabular}{ r|c|c| }	
+ 		\multicolumn{1}{r}{}	
+ 		 & \multicolumn{1}{c}{Wojciech Jarząbek}		
+ 		 & \multicolumn{1}{c}{Jacek Leja} \\		
+ 		\cline{2-3}
+ 		Rozdział 1 & ***** & * \\
+ 		\cline{2-3}
+ 		Rozdział 2 & ***** & * \\
+ 		\cline{2-3}
+ 		Rozdział 3 & ***** & * \\
+ 		\cline{2-3}
+ 		Rozdział 4 & **** & *** \\
+ 		\cline{2-3}
+ 		Rozdział 5 & **** & ** \\
+ 		\cline{2-3}
+ 		Rozdział 6 & **** & ** \\
+ 		\cline{2-3}
+ 		Rozdział 7 & **** & ** \\
+ 		\cline{2-3}
+ 		Dodatki & ***** & * \\
+ 		\cline{2-3}
+ 		Korekta pracy & *** & *** \\
+ 		\cline{2-3}
+ 	\end{tabular}		
+ 	\caption{Pisanie pracy}		
+ \end{table}
 
 \begin{thebibliography}{4}
 
